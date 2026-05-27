@@ -682,7 +682,8 @@
 const tg      = window.Telegram?.WebApp;
 const API     = "https://bot.tota.click";
 const STAKES  = [250, 500, 750, 1000, 5000, 10000];
-const COOLDOWN= 3;
+const _urlParams = new URLSearchParams(window.location.search);
+const COOLDOWN= parseInt(_urlParams.get('cooldown') || '3', 10);
 const MEDALS  = ["🥇","🥈","🥉","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"];
 
 if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#0f0c29'); tg.setBackgroundColor('#0f0c29'); }
