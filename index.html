@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>🎰 لعبة الحظ - وضع التجربة</title>
+  <title>🎰 لعبة الحظ</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -55,15 +55,6 @@
       box-shadow: 0 2px 10px rgba(39,174,96,0.4);
     }
     .btn-add-money:active { transform: scale(0.95); }
-    .free-mode-badge {
-      background: rgba(52,152,219,0.3);
-      border: 1px solid #3498db;
-      border-radius: 20px;
-      padding: 3px 12px;
-      font-size: 11px;
-      color: #85c1e9;
-      font-weight: 600;
-    }
     .tabs {
       display: flex;
       width: 92%;
@@ -286,13 +277,6 @@
     }
     .period-filters { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px; }
     #admin-tab-btn { display: none; }
-    .free-badge-header {
-      background: rgba(52,152,219,0.2);
-      border-radius: 16px;
-      padding: 2px 10px;
-      font-size: 10px;
-      color: #85c1e9;
-    }
     @media (max-width: 480px) {
       .wheel-wrapper { width: 200px; height: 200px; }
       #wheel { width: 200px; height: 200px; }
@@ -306,7 +290,6 @@
 <div class="header">
   <div class="header-title">🎰 لعبة الحظ</div>
   <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-    <span class="free-badge-header">🎮 تجريبي</span>
     <button class="btn-add-money" onclick="addFreeMoney()">➕ زيادة 5000</button>
     <div class="balance-box" id="balance-display" onclick="refreshBalance()">💰 0</div>
   </div>
@@ -341,9 +324,6 @@
       <div class="res-icon" id="res-icon">🎉</div>
       <div class="res-title" id="res-title">مبروك!</div>
       <div class="res-sub" id="res-sub"></div>
-    </div>
-    <div style="margin-top:8px; font-size:11px; color:rgba(255,255,255,0.35); text-align:center;">
-      ⚡ وضع التجربة: تلعب حتى لو الرصيد صفر، والفوز يزيد الرصيد
     </div>
   </div>
 
@@ -392,11 +372,9 @@
 
 <script>
 // ============================================================
-// 🎮 وضع التجربة: تلعب بدون فلوس، الفوز يزيد الرصيد
+// 🎮 الوضع الحقيقي: النتائج من السيرفر
 // ============================================================
-const FREE_PLAY_MODE = true;  // تفعيل الوضع التجريبي
 
-// الرصيد المحلي (يتم مزامنته مع السيرفر)
 let localBalance = 0;
 let selectedStake = 500;
 let isSpinning = false;
@@ -408,7 +386,7 @@ let currentPeriod = 'TODAY';
 const tg = window.Telegram?.WebApp;
 const API = "https://bot.tota.click";
 const STAKES = [250, 500, 750, 1000, 5000, 10000];
-const COOLDOWN = 2; // كولداون 2 ثانية للتجربة
+const COOLDOWN = 3;
 const initData = tg?.initData || "";
 
 // ===== دوال مساعدة =====
@@ -433,15 +411,11 @@ function authFetch(url, opts = {}) {
   return fetch(url, opts);
 }
 
-// ===== زر إضافة فلوس مجاني مع مزامنة السيرفر =====
+// ===== زر إضافة فلوس مع مزامنة السيرفر =====
 function addFreeMoney() {
   const amount = 5000;
   
-  // عرض رسالة فورية
-  showResult('win', '⏳', 'جاري الإضافة...', '');
-  
   if (initData) {
-    // محاولة إضافة الرصيد عبر السيرفر
     fetch(`${API}/api/lucky/add_free`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -450,35 +424,26 @@ function addFreeMoney() {
         amount: amount 
       })
     })
-    .then(res => {
-      if (!res.ok) throw new Error('Server error');
-      return res.json();
-    })
+    .then(res => res.json())
     .then(data => {
       if (data.balance !== undefined) {
-        // تحديث الرصيد من السيرفر
         updateBalanceUI(data.balance);
         showResult('win', '💰', 'تمت الإضافة!', `+${amount.toLocaleString('ar')} نقطة`);
         launchConfetti();
-      } else {
-        throw new Error('Invalid response');
       }
     })
     .catch(() => {
-      // في حال فشل السيرفر، نضيف محلياً فقط
       const newBalance = (localBalance || 0) + amount;
       updateBalanceUI(newBalance);
-      showResult('win', '💰', 'تمت الإضافة محلياً!', `+${amount.toLocaleString('ar')} نقطة (غير متزامن)`);
+      showResult('win', '💰', 'تمت الإضافة محلياً!', `+${amount.toLocaleString('ar')} نقطة`);
     });
   } else {
-    // بدون initData نضيف محلياً فقط
     const newBalance = (localBalance || 0) + amount;
     updateBalanceUI(newBalance);
     showResult('win', '💰', 'تمت الإضافة!', `+${amount.toLocaleString('ar')} نقطة`);
     launchConfetti();
   }
   
-  // إخفاء الرسالة بعد 3 ثواني
   setTimeout(() => {
     document.getElementById('result-inline').classList.remove('show');
   }, 3000);
@@ -567,6 +532,14 @@ function playWin() {
     o.start(t); o.stop(t+0.25);
   });
 }
+function playLose() {
+  const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type = 'sawtooth'; o.frequency.value = 300;
+  g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+  o.start(); o.stop(audioCtx.currentTime + 0.3);
+}
 function launchConfetti() {
   const colors = ['#ffd200','#27ae60','#e74c3c','#3498db','#f39c12'];
   for (let i=0; i<35; i++) {
@@ -590,7 +563,7 @@ function showResult(type, icon, title, sub) {
   document.getElementById('res-sub').textContent = sub;
 }
 
-// ===== اللعبة الرئيسية =====
+// ===== اللعبة الرئيسية - نتائج حقيقية من السيرفر =====
 async function startSpin() {
   if (isSpinning) return;
   if (!initData) {
@@ -612,7 +585,7 @@ async function startSpin() {
   document.getElementById('result-inline').className = 'result-inline';
   cvs.classList.add('spinning');
 
-  // ===== وضع التجربة: نلعب حتى لو الرصيد صفر =====
+  // ===== طلب النتيجة من السيرفر =====
   let data;
   try {
     const resp = await fetch(`${API}/api/lucky/play`, {
@@ -620,31 +593,25 @@ async function startSpin() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
         init_data: initData, 
-        stake: selectedStake,
-        free_mode: true  // إشارة للسيرفر أنه وضع تجريبي
+        stake: selectedStake
       })
     });
     data = await resp.json();
-    
-    // === وضع التجربة: نعدل النتيجة ===
-    if (FREE_PLAY_MODE) {
-      // دائماً نجعل النتيجة فوز (للتجربة)
-      data.outcome = 'win';
-      // نضيف مكافأة 50% من الرهان
-      const bonus = Math.floor(selectedStake * 0.5);
-      data.earned = selectedStake + bonus;
-      // نضيف للرصيد المحلي
-      const newBal = (localBalance || 0) + data.earned;
-      data.new_balance = newBal;
-      updateBalanceUI(newBal);
-    }
   } catch(e) {
     data = { error: 'network' };
   }
 
+  // معالجة الأخطاء
   if (data.error) {
     cvs.classList.remove('spinning');
-    showResult('lose', '⚠️', 'خطأ', data.error);
+    const msgs = {
+      insufficient_balance: ['😕', 'رصيدك لا يكفي', 'اختر رهاناً أقل أو أضف فلوس'],
+      cooldown: ['⏳', 'انتظر قليلاً', ''],
+      unauthorized: ['🔒', 'غير مصرح', 'افتح اللعبة من البوت'],
+      network: ['📡', 'خطأ في الاتصال', 'تحقق من الإنترنت'],
+    };
+    const [icon, title, sub] = msgs[data.error] || ['⚠️', 'خطأ', data.error];
+    showResult('lose', icon, title, sub);
     isSpinning = false;
     document.getElementById('spin-btn').disabled = false;
     return;
@@ -652,13 +619,21 @@ async function startSpin() {
 
   localStorage.setItem('_lgs', Date.now().toString());
 
-  // اختيار القطاع (دائماً فوز في الوضع التجريبي)
-  const targetSeg = [0,3][Math.floor(Math.random()*2)];
+  // ===== تحديد القطاع حسب النتيجة من السيرفر =====
+  let targetSeg;
+  if (data.outcome === 'win') {
+    targetSeg = [0,3][Math.floor(Math.random()*2)];
+  } else if (data.outcome === 'lose') {
+    targetSeg = [1,4][Math.floor(Math.random()*2)];
+  } else {
+    targetSeg = [2,5][Math.floor(Math.random()*2)];
+  }
+
   let stopAngle = ((360 - (targetSeg + 0.5) * SA) % 360 + 360) % 360;
   let diff = (stopAngle - ((rotation%360)+360)%360 + 360) % 360;
   if (diff < 45) diff += 360;
-  const finalRot = rotation + 4*360 + diff;
-  const duration = 3000;
+  const finalRot = rotation + 5*360 + diff;
+  const duration = 3500;
   const startTime = performance.now();
   const startRot = rotation;
   let lastSeg = -1;
@@ -666,7 +641,7 @@ async function startSpin() {
   await new Promise(resolve => {
     function frame(t) {
       const p = Math.min((t - startTime) / duration, 1);
-      const e = 1 - Math.pow(1 - p, 3);
+      const e = 1 - Math.pow(1 - p, 4);
       rotation = startRot + (finalRot - startRot) * e;
       drawWheel(rotation % 360);
       const cs = Math.floor(((rotation % 360) / 360) * N);
@@ -679,22 +654,31 @@ async function startSpin() {
 
   cvs.classList.remove('spinning');
   
-  // تحديث الرصيد
+  // ===== تحديث الرصيد والإحصائيات =====
   if (data.new_balance !== undefined) {
     updateBalanceUI(data.new_balance);
   }
   
   plays++;
-  wins++;
+  if (data.outcome === 'win') wins++;
+  if (data.outcome === 'lose') loses++;
   document.getElementById('st-plays').textContent = plays;
   document.getElementById('st-wins').textContent = wins;
   document.getElementById('st-loses').textContent = loses;
 
-  playWin();
-  showResult('win', '🎉', 'فوز!', `ربحت ${(data.earned || selectedStake).toLocaleString('ar')} نقطة`);
-  launchConfetti();
+  // ===== عرض النتيجة =====
+  if (data.outcome === 'win') {
+    playWin();
+    showResult('win', '🎉', 'فوز!', `ربحت +${data.earned.toLocaleString('ar')} نقطة`);
+    launchConfetti();
+  } else if (data.outcome === 'lose') {
+    playLose();
+    showResult('lose', '😢', 'خسارة', `خسرت ${Math.abs(data.earned).toLocaleString('ar')} نقطة`);
+  } else {
+    showResult('retry', '🔁', 'إعادة', 'لا خصم ولا إضافة');
+  }
 
-  // الكولداون
+  // ===== الكولداون =====
   const wrap = document.getElementById('cd-wrap'), bar = document.getElementById('cd-bar');
   wrap.style.display = 'block';
   bar.style.transition = 'none';
@@ -713,9 +697,7 @@ async function loadStats() {
   try {
     const me = await (await authFetch(`${API}/api/lucky/me`)).json();
     document.getElementById('my-name-display').textContent = me.name || 'اللاعب';
-    if (me.balance !== undefined) {
-      updateBalanceUI(me.balance);
-    }
+    if (me.balance !== undefined) updateBalanceUI(me.balance);
     document.getElementById('my-balance-display').textContent = fmtPts(me.balance || localBalance);
   } catch(e) {}
   try {
@@ -778,11 +760,8 @@ async function refreshBalance() {
   try {
     const r = await authFetch(`${API}/api/lucky/balance`);
     const d = await r.json();
-    if (d.balance !== undefined) {
-      updateBalanceUI(d.balance);
-    }
+    if (d.balance !== undefined) updateBalanceUI(d.balance);
   } catch(e) {
-    // في حال فشل الاتصال نستخدم الرصيد المحلي
     updateBalanceUI(localBalance || 0);
   }
 }
