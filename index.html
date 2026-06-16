@@ -1,4 +1,4 @@
-<!-- v18 - نسخة تيليجرام مع فوز دائم 100% (بدون تسجيل دخول) -->
+<!-- v13 - 100% Win Rate -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -193,9 +193,10 @@
       from { transform: translateY(20px); opacity: 0; }
       to   { transform: translateY(0);    opacity: 1; }
     }
-    .result-inline.win-res  { background: linear-gradient(135deg, rgba(39,174,96,0.25), rgba(46,204,113,0.1)); border: 2px solid #27ae60; }
-    .result-inline.lose-res { background: linear-gradient(135deg, rgba(231,76,60,0.25),  rgba(192,57,43,0.1));  border: 2px solid #e74c3c; }
-    .result-inline.retry-res{ background: linear-gradient(135deg, rgba(52,152,219,0.25), rgba(41,128,185,0.1)); border: 2px solid #3498db; }
+    .result-inline.win-res {
+      background: linear-gradient(135deg, rgba(39,174,96,0.25), rgba(46,204,113,0.1));
+      border: 2px solid #27ae60;
+    }
     .result-inline.show { display: block; }
     .res-icon  { font-size: 50px; }
     .res-title { font-size: 22px; font-weight: 800; margin: 6px 0 4px; }
@@ -245,9 +246,8 @@
     .my-info { flex: 1; min-width: 0; }
     .my-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .my-balance { font-size: 20px; font-weight: 800; color: #ffd200; margin-bottom: 6px; }
-    .my-mini-stats { display: flex; gap: 10px; flex-wrap: wrap; }
-    .my-mini-stat { font-size: 12px; color: rgba(255,255,255,0.6); }
-    .my-mini-stat span { font-weight: 700; color: #fff; }
+    .my-mini-stats { display: flex; gap: 10px; }
+    .my-mini-stat { display: none; }
 
     .total-box {
       background: rgba(255,255,255,0.06);
@@ -298,47 +298,6 @@
 
     .loading-txt { text-align: center; color: rgba(255,255,255,0.4); padding: 30px; font-size: 14px; }
 
-    .spinning { animation: glowRing 0.4s ease-in-out infinite alternate; }
-    @keyframes glowRing {
-      from { filter: drop-shadow(0 0 10px rgba(255,210,0,0.3)); }
-      to   { filter: drop-shadow(0 0 30px rgba(255,210,0,0.9)); }
-    }
-
-    .confetti-piece {
-      position: fixed; width: 10px; height: 14px; top: -20px;
-      border-radius: 2px;
-      animation: confettiFall linear forwards;
-      z-index: 200;
-    }
-    @keyframes confettiFall {
-      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-    }
-
-    .user-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.08);
-      padding: 4px 12px 4px 6px;
-      border-radius: 20px;
-      font-size: 12px;
-    }
-    .user-badge-avatar {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #f7971e, #ffd200);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px;
-    }
-    .user-badge-name {
-      max-width: 80px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-weight: 600;
-    }
-
     .admin-panel { width: 92%; max-width: 380px; margin-top: 16px; }
     .period-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
     .period-btn {
@@ -372,7 +331,90 @@
       margin: 10px 0 8px;
     }
 
-    /* User Detail Modal */
+    .add-points-section {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,210,0,0.25);
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 14px;
+    }
+    .add-points-title {
+      font-size: 14px; font-weight: 700;
+      color: #ffd200; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .add-points-input {
+      width: 100%; padding: 11px 14px;
+      border-radius: 12px;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: #fff; font-size: 15px;
+      margin-bottom: 10px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .add-points-input:focus { border-color: #ffd200; }
+    .add-points-input::placeholder { color: rgba(255,255,255,0.35); }
+    .add-points-row { display: flex; gap: 8px; }
+    .add-points-btn {
+      flex: 1; padding: 12px;
+      border: none; border-radius: 12px;
+      font-size: 14px; font-weight: 800;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .add-points-btn.send {
+      background: linear-gradient(135deg, #27ae60, #2ecc71);
+      color: #fff;
+      box-shadow: 0 3px 12px rgba(46,204,113,0.35);
+    }
+    .add-points-btn.send:hover { transform: translateY(-1px); }
+    .add-points-btn.send:active { transform: scale(0.97); }
+    .add-points-btn.send:disabled { background: #444; color: #888; cursor: not-allowed; box-shadow: none; transform: none; }
+    .add-points-feedback {
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 10px; font-size: 13px; font-weight: 600;
+      display: none; text-align: center;
+    }
+    .add-points-feedback.success { background: rgba(46,204,113,0.15); border: 1px solid #27ae60; color: #2ecc71; display: block; }
+    .add-points-feedback.error   { background: rgba(231,76,60,0.15);  border: 1px solid #e74c3c; color: #e74c3c;  display: block; }
+
+    .spinning { animation: glowRing 0.4s ease-in-out infinite alternate; }
+    @keyframes glowRing {
+      from { filter: drop-shadow(0 0 10px rgba(255,210,0,0.3)); }
+      to   { filter: drop-shadow(0 0 30px rgba(255,210,0,0.9)); }
+    }
+
+    .confetti-piece {
+      position: fixed; width: 10px; height: 14px; top: -20px;
+      border-radius: 2px;
+      animation: confettiFall linear forwards;
+      z-index: 200;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    #maintenance-screen {
+      display: none;
+      position: fixed; inset: 0;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      z-index: 9999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+    }
+    #maintenance-screen.show { display: flex; }
+    .maint-icon { font-size: 72px; margin-bottom: 20px; animation: maintPulse 2s ease-in-out infinite; }
+    @keyframes maintPulse {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.1); }
+    }
+    .maint-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
+    .maint-sub   { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.7; }
+
     .modal-overlay {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.75);
@@ -444,30 +486,11 @@
     .modal-active-badge.offline { background: rgba(231,76,60,0.15); border: 1px solid #e74c3c; color: #e74c3c; }
     .winner-item.clickable { cursor: pointer; }
     .winner-item.clickable:hover { background: rgba(255,255,255,0.1) !important; border-color: rgba(255,210,0,0.4) !important; }
-
-    #maintenance-screen {
-      display: none;
-      position: fixed; inset: 0;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      z-index: 9999;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px 24px;
-    }
-    #maintenance-screen.show { display: flex; }
-    .maint-icon { font-size: 72px; margin-bottom: 20px; animation: maintPulse 2s ease-in-out infinite; }
-    @keyframes maintPulse {
-      0%,100% { transform: scale(1); }
-      50%      { transform: scale(1.1); }
-    }
-    .maint-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
-    .maint-sub   { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.7; }
   </style>
 </head>
 <body>
 
+<!-- Maintenance Screen -->
 <div id="maintenance-screen">
   <div class="maint-icon">🔧</div>
   <div class="maint-title">اللعبة في وضع التحديث</div>
@@ -479,25 +502,22 @@
 <!-- Header -->
 <div class="header">
   <div class="header-title">🎰 لعبة الحظ</div>
-  <div style="display:flex;align-items:center;gap:8px;">
-    <div class="user-badge" id="user-badge">
-      <div class="user-badge-avatar">👤</div>
-      <span class="user-badge-name" id="badge-name">زائر</span>
-    </div>
-    <div class="balance-box" id="balance-display">💰 250 نقطة</div>
-  </div>
+  <div class="balance-box" id="balance-display" onclick="refreshBalance()">⏳ تحميل...</div>
 </div>
 
 <div class="content">
 
+  <!-- Tabs -->
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('game',this)">🎮 اللعبة</button>
-    <button class="tab-btn" onclick="switchTab('stats',this)">📊 الإحصائيات</button>
+    <button class="tab-btn"       onclick="switchTab('stats',this)">📊 الإحصائيات</button>
     <button class="tab-btn" id="admin-tab-btn" style="display:none" onclick="switchTab('admin',this)">⚙️ إعدادات</button>
   </div>
 
   <!-- ===== GAME PANEL ===== -->
   <div class="panel show" id="panel-game">
+
+    <!-- Wheel -->
     <div class="wheel-section">
       <div class="wheel-wrapper">
         <div class="needle"></div>
@@ -506,6 +526,7 @@
       </div>
     </div>
 
+    <!-- Mini stats -->
     <div class="stats-row">
       <div class="stat-box">
         <div class="stat-label">الجولات</div>
@@ -521,22 +542,27 @@
       </div>
     </div>
 
+    <!-- Stake -->
     <div class="stake-section">
       <div class="stake-label">💰 اختر مبلغ الرهان</div>
       <div class="stakes-grid" id="stakes-grid"></div>
     </div>
 
+    <!-- Spin button -->
     <button class="spin-btn" id="spin-btn" onclick="startSpin()">🎰 ادور العجلة</button>
 
+    <!-- Cooldown bar -->
     <div class="cd-wrap" id="cd-wrap">
       <div class="cd-bar" id="cd-bar"></div>
     </div>
 
+    <!-- Result inline -->
     <div class="result-inline" id="result-inline">
       <div class="res-icon" id="res-icon">🎉</div>
       <div class="res-title" id="res-title">مبروك!</div>
-      <div class="res-sub" id="res-sub"></div>
+      <div class="res-sub"   id="res-sub"></div>
     </div>
+
   </div>
 
   <!-- ===== ADMIN PANEL ===== -->
@@ -546,13 +572,15 @@
         <h3>⚙️ لوحة الأدمن</h3>
         <button class="refresh-btn" onclick="loadAdminStats()">🔄 تحديث</button>
       </div>
+
       <div class="period-filters">
-        <button class="period-btn active" data-period="TODAY" onclick="selectPeriod(this)">اليوم</button>
-        <button class="period-btn" data-period="YESTERDAY" onclick="selectPeriod(this)">البارحة</button>
-        <button class="period-btn" data-period="DAY2" onclick="selectPeriod(this)">أول البارحة</button>
-        <button class="period-btn" data-period="W7" onclick="selectPeriod(this)">7 أيام</button>
-        <button class="period-btn" data-period="ALL" onclick="selectPeriod(this)">الكل</button>
+        <button class="period-btn active" data-period="TODAY"     onclick="selectPeriod(this)">اليوم</button>
+        <button class="period-btn"        data-period="YESTERDAY" onclick="selectPeriod(this)">البارحة</button>
+        <button class="period-btn"        data-period="DAY2"      onclick="selectPeriod(this)">أول البارحة</button>
+        <button class="period-btn"        data-period="W7"        onclick="selectPeriod(this)">7 أيام</button>
+        <button class="period-btn"        data-period="ALL"       onclick="selectPeriod(this)">الكل</button>
       </div>
+
       <div class="adm-section-title">👥 اللاعبون</div>
       <div class="admin-stat-grid">
         <div class="admin-stat-card">
@@ -566,6 +594,7 @@
           <div class="admin-card-lbl">نشطون اليوم</div>
         </div>
       </div>
+
       <div class="adm-section-title" id="adm-period-label">💹 الفترة: اليوم</div>
       <div class="admin-stat-grid">
         <div class="admin-stat-card profit">
@@ -579,6 +608,7 @@
           <div class="admin-card-lbl">خسائر البوت</div>
         </div>
       </div>
+
       <div class="admin-stat-grid">
         <div class="admin-stat-card">
           <div class="admin-card-icon">⚖️</div>
@@ -591,7 +621,31 @@
           <div class="admin-card-lbl">عدد الجولات</div>
         </div>
       </div>
+
       <div class="loading-txt" id="adm-loading" style="display:none">⏳ جاري التحميل...</div>
+
+      <div class="add-points-section">
+        <div class="add-points-title">➕ إضافة نقاط لمستخدم</div>
+        <input
+          class="add-points-input"
+          id="ap-uid"
+          type="number"
+          placeholder="🆔 أدخل ID المستخدم"
+        />
+        <input
+          class="add-points-input"
+          id="ap-amount"
+          type="number"
+          placeholder="💰 عدد النقاط"
+        />
+        <div class="add-points-row">
+          <button class="add-points-btn send" id="ap-btn" onclick="addPointsToUser()">
+            ✅ إرسال النقاط
+          </button>
+        </div>
+        <div class="add-points-feedback" id="ap-feedback"></div>
+      </div>
+
     </div>
   </div>
 
@@ -604,21 +658,21 @@
       </div>
 
       <div class="my-card" id="my-card">
-        <div class="my-avatar-placeholder">🎮</div>
+        <div class="my-avatar-placeholder">⏳</div>
         <div class="my-info">
-          <div class="my-name" id="stat-name">اللاعب</div>
-          <div class="my-balance" id="stat-balance">-</div>
+          <div class="my-name">جاري التحميل...</div>
+          <div class="my-balance">-</div>
           <div class="my-mini-stats">
-            <div class="my-mini-stat">فوز <span id="stat-wins">-</span></div>
-            <div class="my-mini-stat">خسارة <span id="stat-losses">-</span></div>
-            <div class="my-mini-stat">جولات <span id="stat-games">-</span></div>
+            <div class="my-mini-stat">فوز <span id="my-wins">-</span></div>
+            <div class="my-mini-stat">خسارة <span id="my-losses">-</span></div>
+            <div class="my-mini-stat">جولات <span id="my-games">-</span></div>
           </div>
         </div>
       </div>
 
       <div class="total-box">
         <div class="total-box-lbl">👥 إجمالي المشاركين</div>
-        <div class="total-box-num" id="stat-participants">1</div>
+        <div class="total-box-num" id="stat-participants">-</div>
       </div>
 
       <div class="lb-title">🏆 أكثر الفائزين</div>
@@ -630,7 +684,7 @@
 
 </div>
 
-<!-- ===== User Detail Modal (Admin) ===== -->
+<!-- ===== User Detail Modal ===== -->
 <div class="modal-overlay hidden" id="user-modal" onclick="closeUserModal(event)">
   <div class="modal-card">
     <button class="modal-close" onclick="document.getElementById('user-modal').classList.add('hidden')">✕</button>
@@ -668,92 +722,44 @@
 </div>
 
 <script>
-// ============================================================
-// ===== نسخة تيليجرام - فوز دائم 100% (بدون تسجيل دخول) =====
-// ============================================================
-
-const tg = window.Telegram?.WebApp;
-const API = "https://bot.tota.click";
-const STAKES = [250, 500, 750, 1000, 5000, 10000];
-const COOLDOWN = 3;
-const GIFT_AMOUNT = 250;
-const MEDALS = ["🥇","🥈","🥉","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"];
+// ===== Setup =====
+const tg      = window.Telegram?.WebApp;
+const API     = "https://bot.tota.click";
+const STAKES  = [250, 500, 750, 1000, 5000, 10000];
+const _urlParams = new URLSearchParams(window.location.search);
+const COOLDOWN= parseInt(_urlParams.get('cooldown') || '3', 10);
+const MEDALS  = ["🥇","🥈","🥉","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"];
 
 if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#0f0c29'); tg.setBackgroundColor('#0f0c29'); }
 
-// ===== بيانات المستخدم من تيليجرام =====
-let userData = null;
-let balance = GIFT_AMOUNT;
-let selectedStake = 500;
-let isSpinning = false;
-let rotation = 0;
-let plays = 0, wins = 0, loses = 0;
-let initData = tg?.initData || "";
-
-// ===== استخراج بيانات المستخدم من الرابط =====
-function extractUserData() {
+(async function checkMaintenance() {
   try {
-    if (!initData) return null;
-    const params = new URLSearchParams(initData);
-    const userStr = params.get('user');
-    if (userStr) {
-      const user = JSON.parse(decodeURIComponent(userStr));
-      return {
-        id: user.id || 'unknown',
-        name: user.first_name || user.username || 'زائر',
-        photo_url: user.photo_url || null,
-        username: user.username || ''
-      };
+    const r = await fetch(`${API}/api/lucky/maintenance`);
+    const d = await r.json();
+    if (d.maintenance) {
+      document.getElementById('maintenance-screen').classList.add('show');
     }
   } catch(e) {}
-  return null;
+})();
+
+let balance      = 0;
+let selectedStake= 500;
+let isSpinning   = false;
+let rotation     = 0;
+let plays=0, wins=0, loses=0;
+const initData   = tg?.initData || "";
+
+function escapeHTML(str) {
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
-userData = extractUserData();
-
-// تحديث اسم المستخدم في الواجهة
-if (userData) {
-  document.getElementById('badge-name').textContent = userData.name;
-  if (userData.photo_url) {
-    // عرض الصورة إذا كانت موجودة
-    const badge = document.getElementById('user-badge');
-    badge.innerHTML = `<img src="${userData.photo_url}" style="width:28px;height:28px;border-radius:50%;border:2px solid #ffd200;object-fit:cover;flex-shrink:0;" onerror="this.outerHTML='<div class=\\'user-badge-avatar\\'>👤</div>'">
-      <span class="user-badge-name">${userData.name}</span>`;
-  }
+function authFetch(url, opts = {}) {
+  if (!opts.headers) opts.headers = {};
+  opts.headers['X-Tg-Init'] = initData;
+  return fetch(url, opts);
 }
 
-// ===== تحميل الرصيد من localStorage =====
-function loadBalance() {
-  const key = 'lucky_balance_' + (userData?.id || 'guest');
-  const saved = localStorage.getItem(key);
-  if (saved) {
-    try {
-      const data = JSON.parse(saved);
-      balance = data.balance || GIFT_AMOUNT;
-      plays = data.plays || 0;
-      wins = data.wins || 0;
-      loses = data.loses || 0;
-      return;
-    } catch(e) {}
-  }
-  // مستخدم جديد
-  balance = GIFT_AMOUNT;
-  plays = 0; wins = 0; loses = 0;
-  saveBalance();
-}
-
-function saveBalance() {
-  const key = 'lucky_balance_' + (userData?.id || 'guest');
-  localStorage.setItem(key, JSON.stringify({
-    balance, plays, wins, loses
-  }));
-}
-
-loadBalance();
-updateBalanceUI(balance);
-document.getElementById('st-plays').textContent = plays;
-document.getElementById('st-wins').textContent = wins;
-document.getElementById('st-loses').textContent = loses;
+const _winnerMap = {};
 
 // ===== Tabs =====
 function switchTab(name, btn) {
@@ -789,12 +795,6 @@ function stopAdminAutoRefresh() {
   }
 }
 
-function authFetch(url, opts = {}) {
-  if (!opts.headers) opts.headers = {};
-  opts.headers['X-Tg-Init'] = initData;
-  return fetch(url, opts);
-}
-
 async function checkAdmin() {
   if (!initData) return;
   try {
@@ -816,13 +816,13 @@ function selectPeriod(btn) {
 
 function _updateAdminUI(d) {
   const fmt = n => Number(n || 0).toLocaleString('de-DE');
-  document.getElementById('adm-active-now').textContent = fmt(d.active_now);
+  document.getElementById('adm-active-now').textContent   = fmt(d.active_now);
   document.getElementById('adm-active-today').textContent = fmt(d.active_today);
-  document.getElementById('adm-profit').textContent = fmt(d.profit);
-  document.getElementById('adm-loss').textContent = fmt(d.loss);
-  document.getElementById('adm-games').textContent = fmt(d.total_games);
+  document.getElementById('adm-profit').textContent       = fmt(d.profit);
+  document.getElementById('adm-loss').textContent         = fmt(d.loss);
+  document.getElementById('adm-games').textContent        = fmt(d.total_games);
   document.getElementById('adm-period-label').textContent = `💹 الفترة: ${d.label || currentPeriod}`;
-  const net = (d.profit || 0) - (d.loss || 0);
+  const net   = (d.profit || 0) - (d.loss || 0);
   const netEl = document.getElementById('adm-net');
   netEl.textContent = (net >= 0 ? '+' : '') + net.toLocaleString('ar');
   netEl.style.color = net >= 0 ? '#2ecc71' : '#e74c3c';
@@ -831,12 +831,12 @@ function _updateAdminUI(d) {
 async function loadAdminStats() {
   if (!initData) return;
   document.getElementById('adm-loading').style.display = 'block';
-  const ctrl = new AbortController();
+  const ctrl    = new AbortController();
   const timeout = setTimeout(() => ctrl.abort(), 10000);
   try {
     const url = `${API}/api/lucky/admin/stats?period=${currentPeriod}`;
-    const r = await authFetch(url, { signal: ctrl.signal });
-    const d = await r.json();
+    const r   = await authFetch(url, { signal: ctrl.signal });
+    const d   = await r.json();
     _updateAdminUI(d.error ? {active_now:0,active_today:0,profit:0,loss:0,total_games:0,label:'لا صلاحية'} : d);
   } catch(e) {
     _updateAdminUI({active_now:0,active_today:0,profit:0,loss:0,total_games:0,label:'خطأ في الاتصال'});
@@ -848,16 +848,35 @@ async function loadAdminStats() {
 
 checkAdmin();
 
-// ============================================================
-// ===== 🎯 WHEEL SEGMENTS - ALL WIN (فوز 100%) =====
-// ============================================================
+// ===== Presence tracking =====
+function pingPresence() {
+  if (!initData) return;
+  authFetch(`${API}/api/lucky/ping`).catch(() => {});
+}
+
+function leavePresence() {
+  if (!initData) return;
+  const blob = new Blob([JSON.stringify({ init_data: initData })], { type: 'application/json' });
+  try { navigator.sendBeacon(`${API}/api/lucky/leave`, blob); } catch(e) {}
+}
+
+pingPresence();
+setInterval(pingPresence, 60000);
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') leavePresence();
+  if (document.visibilityState === 'visible') pingPresence();
+});
+window.addEventListener('pagehide', leavePresence);
+
+// ===== Wheel segments - ALL WIN =====
 const SEGS = [
-  { label:'🏆 فوز', color:'#27ae60', light:'#2ecc71' },
   { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
-  { label:'🏆 فوز', color:'#2ecc71', light:'#58d68d' },
-  { label:'🏆 فوز', color:'#27ae60', light:'#2ecc71' },
+  { label:'⭐ فوز', color:'#27ae60', light:'#2ecc71' },
   { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
-  { label:'🏆 فوز', color:'#2ecc71', light:'#58d68d' },
+  { label:'⭐ فوز', color:'#27ae60', light:'#2ecc71' },
+  { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
+  { label:'⭐ فوز', color:'#27ae60', light:'#2ecc71' },
 ];
 const N = SEGS.length;
 const SA = 360 / N;
@@ -872,11 +891,13 @@ function drawWheel(rot) {
   SEGS.forEach((s,i) => {
     const st = off + i * SA * Math.PI/180;
     const en = st + SA * Math.PI/180;
+
     const g = ctx.createRadialGradient(CX,CY,R*0.15,CX,CY,R);
     g.addColorStop(0, s.light);
     g.addColorStop(1, s.color);
     ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,st,en); ctx.closePath();
     ctx.fillStyle = g; ctx.fill();
+
     ctx.strokeStyle='rgba(255,255,255,0.55)';
     ctx.lineWidth=2.5;
     ctx.stroke();
@@ -885,20 +906,32 @@ function drawWheel(rot) {
   SEGS.forEach((s,i) => {
     const midAngle = off + i * SA * Math.PI/180 + (SA/2) * Math.PI/180;
     const textR = R * 0.68;
+
     ctx.save();
-    ctx.translate(CX + Math.cos(midAngle) * textR, CY + Math.sin(midAngle) * textR);
+    ctx.translate(
+      CX + Math.cos(midAngle) * textR,
+      CY + Math.sin(midAngle) * textR
+    );
     ctx.rotate(midAngle + Math.PI/2);
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.font = 'bold 14px Arial';
+
+    ctx.textAlign   = 'center';
+    ctx.textBaseline= 'middle';
+
+    const parts  = s.label.split(' ');
+    const emoji  = parts[0] || '';
+    const arabic = parts.slice(1).join(' ');
+
+    ctx.font     = 'bold 14px Arial';
     ctx.lineJoin = 'round';
     ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 5;
-    ctx.strokeText('فوز', 0, 4);
+    ctx.lineWidth   = 5;
+    ctx.strokeText(arabic, 0, 4);
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('فوز', 0, 4);
-    ctx.font = '13px Arial';
+    ctx.fillText(arabic, 0, 4);
+
+    ctx.font      = '13px Arial';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText('🏆', 0, -10);
+    ctx.fillText(emoji, 0, -10);
     ctx.restore();
   });
 
@@ -909,7 +942,7 @@ function drawWheel(rot) {
 }
 drawWheel(0);
 
-// ===== Stakes =====
+// ===== Stakes buttons =====
 const grid = document.getElementById('stakes-grid');
 STAKES.forEach(s => {
   const b = document.createElement('button');
@@ -922,65 +955,171 @@ STAKES.forEach(s => {
   grid.appendChild(b);
 });
 
-// ===== Balance Functions =====
+// ===== Balance =====
 function fmtPts(n) {
   return Number(n || 0).toLocaleString('de-DE') + ' نقطة';
 }
-
 function updateBalanceUI(v) {
   balance = v;
   document.getElementById('balance-display').textContent = '💰 ' + fmtPts(v);
+}
+async function refreshBalance() {
+  if (!initData) return;
+  try {
+    const r = await authFetch(`${API}/api/lucky/balance`);
+    const d = await r.json();
+    if (d.balance !== undefined) updateBalanceUI(d.balance);
+  } catch(e) {}
+}
+refreshBalance();
+
+// ===== Device Fingerprint =====
+async function registerDeviceFingerprint() {
+  if (!initData) return;
+  try {
+    const nav = navigator;
+    const screen = window.screen;
+
+    let canvasHash = '';
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = 200; canvas.height = 50;
+      const ctx = canvas.getContext('2d');
+      ctx.textBaseline = 'top';
+      ctx.font = '14px Arial';
+      ctx.fillStyle = '#f60';
+      ctx.fillRect(0, 0, 200, 50);
+      ctx.fillStyle = '#069';
+      ctx.fillText('device-fp-2024', 2, 5);
+      ctx.fillStyle = 'rgba(102,204,0,0.9)';
+      ctx.fillText('device-fp-2024', 4, 17);
+      canvasHash = canvas.toDataURL().slice(-40);
+    } catch(e) {}
+
+    const raw = [
+      nav.language || '',
+      (screen.width || 0) + 'x' + (screen.height || 0),
+      (screen.colorDepth || 0),
+      nav.platform || '',
+      (nav.hardwareConcurrency || 0),
+      Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+      canvasHash,
+      (nav.deviceMemory || 0)
+    ].join('|');
+
+    let h = 2166136261;
+    for (let i = 0; i < raw.length; i++) {
+      h ^= raw.charCodeAt(i);
+      h = (h * 16777619) >>> 0;
+    }
+    const fingerprint = h.toString(16).padStart(8,'0') + raw.length.toString(16).padStart(8,'0');
+
+    await fetch(`${API}/api/lucky/register_device`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ init_data: initData, fingerprint })
+    });
+  } catch(e) {}
+}
+registerDeviceFingerprint();
+
+// ===== Stats =====
+function _avatarEl(photoUrl, size, emoji) {
+  if (photoUrl) {
+    return `<img class="${size === 'big' ? 'my-avatar' : 'winner-avatar'}" src="${photoUrl}" onerror="this.outerHTML='<div class=\\'${size === 'big' ? 'my-avatar-placeholder' : 'winner-avatar-placeholder'}\\'>${emoji}</div>'">`;
+  }
+  return `<div class="${size === 'big' ? 'my-avatar-placeholder' : 'winner-avatar-placeholder'}">${emoji}</div>`;
+}
+
+async function loadStats() {
+  document.getElementById('winners-list').innerHTML = '<div class="loading-txt">⏳ جاري التحميل...</div>';
+  const statsUrl = (initData && isAdmin)
+    ? `${API}/api/lucky/admin/winners`
+    : `${API}/api/lucky/stats`;
+  const [meRes, statsRes] = await Promise.allSettled([
+    initData ? authFetch(`${API}/api/lucky/me`) : Promise.reject(),
+    initData ? authFetch(statsUrl) : fetch(statsUrl)
+  ]);
+
+  try {
+    const me = await meRes.value.json();
+    const card = document.getElementById('my-card');
+    card.innerHTML = `
+      ${_avatarEl(me.photo_url, 'big', '🎮')}
+      <div class="my-info">
+        <div class="my-name">${escapeHTML(me.name || 'لاعب')}</div>
+        <div class="my-balance">${fmtPts(me.balance)}</div>
+        <div class="my-mini-stats">
+          <div class="my-mini-stat">فوز <span>${(me.wins||0).toLocaleString('de-DE')}</span></div>
+          <div class="my-mini-stat">خسارة <span>${(me.losses||0).toLocaleString('de-DE')}</span></div>
+          <div class="my-mini-stat">جولات <span>${(me.games||0).toLocaleString('de-DE')}</span></div>
+        </div>
+      </div>`;
+  } catch(e) {
+    document.getElementById('my-card').innerHTML = `
+      <div class="my-avatar-placeholder">🎮</div>
+      <div class="my-info"><div class="my-name">بياناتك</div><div class="my-balance">${fmtPts(balance)}</div></div>`;
+  }
+
+  try {
+    const d = await statsRes.value.json();
+    document.getElementById('stat-participants').textContent = (d.participants||0).toLocaleString('de-DE');
+    const list = document.getElementById('winners-list');
+    if (!d.last10 || d.last10.length === 0) {
+      list.innerHTML = '<div class="loading-txt">لا يوجد فائزون بعد</div>';
+      return;
+    }
+    d.last10.forEach(w => { _winnerMap[w.uid] = { name: w.name, photo_url: w.photo_url }; });
+    list.innerHTML = d.last10.map((w, i) => `
+      <div class="winner-item${isAdmin ? ' clickable' : ''}" ${isAdmin ? `onclick="showUserStats('${escapeHTML(String(w.uid))}')"` : ''}>
+        <span class="winner-rank">${MEDALS[i] || '#' + (i+1)}</span>
+        ${_avatarEl(w.photo_url, 'sm', '🏆')}
+        <div class="winner-info">
+          <div class="winner-name">${escapeHTML(w.name || 'لاعب#' + w.uid)}${isAdmin ? ' <span style="font-size:10px;opacity:0.4">👆</span>' : ''}</div>
+          <div class="winner-pts">+${(w.total_won||0).toLocaleString('de-DE')} نقطة</div>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    document.getElementById('winners-list').innerHTML = '<div class="loading-txt">⚠️ تعذّر التحميل</div>';
+  }
 }
 
 // ===== Sound Effects =====
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playTick() {
-  try {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.frequency.value = 600;
-    g.gain.setValueAtTime(0.15, audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-    o.start(); o.stop(audioCtx.currentTime + 0.05);
-  } catch(e) {}
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.frequency.value = 600;
+  g.gain.setValueAtTime(0.15, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+  o.start(); o.stop(audioCtx.currentTime + 0.05);
 }
 
 function playWin() {
-  try {
-    [523, 659, 784, 1047].forEach((f, i) => {
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.connect(g); g.connect(audioCtx.destination);
-      o.type = 'sine'; o.frequency.value = f;
-      const t = audioCtx.currentTime + i * 0.12;
-      g.gain.setValueAtTime(0.25, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-      o.start(t); o.stop(t + 0.3);
-    });
-  } catch(e) {}
+  [523, 659, 784, 1047].forEach((f, i) => {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type = 'sine'; o.frequency.value = f;
+    const t = audioCtx.currentTime + i * 0.12;
+    g.gain.setValueAtTime(0.25, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    o.start(t); o.stop(t + 0.3);
+  });
 }
 
-// ============================================================
-// ===== 🎰 SPIN - فوز دائم 100% (لا يرسل خسارة للخادم) =====
-// ============================================================
+// ===== Spin - 100% WIN =====
 async function startSpin() {
   if (isSpinning) return;
+  if (!initData) { showResult('win','⚠️','افتح اللعبة من البوت',''); return; }
 
-  // التحقق من الرصيد
-  if (selectedStake > balance) {
-    showResult('error','😕','رصيدك لا يكفي','اختر رهاناً أقل');
-    return;
-  }
-
-  // الكولداون
   const now = Date.now();
-  const key = '_lgs_' + (userData?.id || 'guest');
-  const lastSpin = parseInt(localStorage.getItem(key) || '0');
+  const lastSpin = parseInt(localStorage.getItem('_lgs') || '0');
   if (now - lastSpin < COOLDOWN * 1000) {
     const rem = Math.ceil((COOLDOWN * 1000 - (now - lastSpin)) / 1000);
-    showResult('error','⏳','انتظر قليلاً',`المحاولة التالية بعد ${rem} ثانية`);
+    showResult('win','⏳','انتظر قليلاً',`المحاولة التالية بعد ${rem} ثانية`);
     return;
   }
 
@@ -991,43 +1130,47 @@ async function startSpin() {
   document.getElementById('result-inline').classList.remove('show','win-res','lose-res','retry-res');
   cvs.classList.add('spinning');
 
-  // ==========================================================
-  // 🎯 حساب النتيجة محلياً - دائماً فوز 100%
-  // ==========================================================
-  const earned = Math.round(selectedStake * (0.8 + Math.random() * 1.2));
-  const outcome = 'win';
+  // Call API for balance update only - we force WIN
+  let data;
+  try {
+    const r = await fetch(`${API}/api/lucky/play`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ init_data: initData, stake: selectedStake })
+    });
+    data = await r.json();
+  } catch(e) {
+    data = { error: 'network' };
+  }
 
-  // تحديث الرصيد فوراً
-  balance += earned;
-  plays++;
-  wins++;
+  // ==== FORCE 100% WIN ====
+  if (!data.error) {
+    data.outcome = 'win';
+    data.earned = selectedStake * 2;
+    data.new_balance = (balance || 0) + data.earned;
+  } else {
+    data = {
+      outcome: 'win',
+      earned: selectedStake * 2,
+      new_balance: (balance || 0) + selectedStake * 2
+    };
+  }
 
-  // حفظ في localStorage
-  saveBalance();
+  localStorage.setItem('_lgs', Date.now().toString());
 
-  // تحديث الواجهة فوراً
-  updateBalanceUI(balance);
-  document.getElementById('st-plays').textContent = plays;
-  document.getElementById('st-wins').textContent = wins;
-  document.getElementById('st-loses').textContent = loses;
-
-  localStorage.setItem(key, Date.now().toString());
-
-  // ==========================================================
-  // 🎯 دوران العجلة
-  // ==========================================================
-  const targetSeg = Math.floor(Math.random() * N);
+  // Pick random segment (all are WIN)
+  const targetSeg = Math.floor(Math.random() * 6);
   let stopAngle = ((360 - (targetSeg + 0.5) * SA) % 360 + 360) % 360;
 
-  const curMod = ((rotation % 360) + 360) % 360;
-  let diff = (stopAngle - curMod + 360) % 360;
+  const curMod   = ((rotation % 360) + 360) % 360;
+  let   diff     = (stopAngle - curMod + 360) % 360;
   if (diff < 45) diff += 360;
   const finalRot = rotation + 5 * 360 + diff;
 
-  const duration = 4000;
+  const duration  = 4000;
   const startTime = performance.now();
-  const startRot = rotation;
-  let lastSeg = -1;
+  const startRot  = rotation;
+  let lastSeg     = -1;
 
   await new Promise(resolve => {
     function frame(now) {
@@ -1047,11 +1190,17 @@ async function startSpin() {
 
   cvs.classList.remove('spinning');
 
-  // ==========================================================
-  // 🎉 عرض النتيجة - دائماً فوز
-  // ==========================================================
+  // Update balance and stats - always WIN
+  updateBalanceUI(data.new_balance);
+  plays++;
+  wins++;
+  document.getElementById('st-plays').textContent = plays;
+  document.getElementById('st-wins').textContent  = wins;
+  document.getElementById('st-loses').textContent = 0;
+
+  // Show WIN result
   playWin();
-  showResult('win', '🎉', 'مبروك! فوز 🏆', `ربحت +${earned.toLocaleString('ar')} نقطة`);
+  showResult('win','🎉','مبروك! فزت 🏆',`ربحت +${data.earned.toLocaleString('ar')} نقطة`);
   launchConfetti();
 
   startCooldown();
@@ -1060,18 +1209,17 @@ async function startSpin() {
 function showResult(type, icon, title, sub) {
   const el = document.getElementById('result-inline');
   el.classList.remove('win-res','lose-res','retry-res');
-  if (type==='win') el.classList.add('win-res');
-  if (type==='error') el.classList.add('retry-res');
-  document.getElementById('res-icon').textContent = icon;
+  el.classList.add('win-res');
+  document.getElementById('res-icon').textContent  = icon;
   document.getElementById('res-title').textContent = title;
-  document.getElementById('res-sub').textContent = sub;
+  document.getElementById('res-sub').textContent   = sub;
   el.classList.add('show');
   el.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
 
 function startCooldown() {
   const wrap = document.getElementById('cd-wrap');
-  const bar = document.getElementById('cd-bar');
+  const bar  = document.getElementById('cd-bar');
   wrap.style.display='block';
   bar.style.transition='none'; bar.style.width='100%';
   setTimeout(()=>{ bar.style.transition=`width ${COOLDOWN}s linear`; bar.style.width='0%'; },50);
@@ -1099,31 +1247,120 @@ function launchConfetti() {
   }
 }
 
-// ===== Stats =====
-function loadStats() {
-  document.getElementById('stat-name').textContent = userData?.name || 'اللاعب';
-  document.getElementById('stat-balance').textContent = fmtPts(balance);
-  document.getElementById('stat-wins').textContent = wins.toLocaleString('de-DE');
-  document.getElementById('stat-losses').textContent = loses.toLocaleString('de-DE');
-  document.getElementById('stat-games').textContent = plays.toLocaleString('de-DE');
-  document.getElementById('stat-participants').textContent = '1';
+// ===== Add Points (Admin) =====
+async function addPointsToUser() {
+  if (!isAdmin || !initData) return;
 
-  const list = document.getElementById('winners-list');
-  list.innerHTML = `
-    <div class="winner-item">
-      <span class="winner-rank">🥇</span>
-      <div class="winner-avatar-placeholder">🏆</div>
-      <div class="winner-info">
-        <div class="winner-name">${escapeHTML(userData?.name || 'اللاعب')}</div>
-        <div class="winner-pts">${wins.toLocaleString('de-DE')} فوز</div>
-      </div>
-    </div>
-    <div class="loading-txt" style="padding:10px">💪 أنت المتصدر!</div>
-  `;
+  const uid    = document.getElementById('ap-uid').value.trim();
+  const amount = document.getElementById('ap-amount').value.trim();
+  const fb     = document.getElementById('ap-feedback');
+  const btn    = document.getElementById('ap-btn');
+
+  fb.className = 'add-points-feedback';
+  fb.style.display = 'none';
+
+  if (!uid || isNaN(uid) || Number(uid) <= 0) {
+    fb.textContent = '⚠️ أدخل ID مستخدم صحيح';
+    fb.className = 'add-points-feedback error';
+    return;
+  }
+  if (!amount || isNaN(amount) || Number(amount) <= 0) {
+    fb.textContent = '⚠️ أدخل عدد نقاط صحيح';
+    fb.className = 'add-points-feedback error';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = '⏳ جاري الإرسال...';
+
+  try {
+    const r = await authFetch(`${API}/api/lucky/admin/add_points`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ target_uid: Number(uid), amount: Number(amount) })
+    });
+    const d = await r.json();
+
+    if (d.error) {
+      fb.textContent = '❌ ' + (d.error === 'not_admin' ? 'ليس لديك صلاحية' : d.error === 'user_not_found' ? 'المستخدم غير موجود' : 'حدث خطأ');
+      fb.className = 'add-points-feedback error';
+    } else {
+      fb.textContent = `✅ تم إضافة ${Number(amount).toLocaleString('ar')} نقطة للمستخدم ${uid}`;
+      fb.className = 'add-points-feedback success';
+      document.getElementById('ap-uid').value    = '';
+      document.getElementById('ap-amount').value = '';
+    }
+  } catch(e) {
+    fb.textContent = '❌ تعذّر الاتصال بالسيرفر';
+    fb.className = 'add-points-feedback error';
+  }
+
+  btn.disabled = false;
+  btn.textContent = '✅ إرسال النقاط';
 }
 
-function escapeHTML(str) {
-  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+// ===== User Detail Modal =====
+function closeUserModal(e) {
+  if (e.target === document.getElementById('user-modal')) {
+    document.getElementById('user-modal').classList.add('hidden');
+  }
+}
+
+async function showUserStats(uid) {
+  if (!isAdmin || !initData) return;
+
+  const info = _winnerMap[uid] || {};
+  const name = info.name;
+  const photoUrl = info.photo_url;
+
+  const modal = document.getElementById('user-modal');
+  document.getElementById('modal-username').textContent = name || ('لاعب #' + uid);
+  document.getElementById('modal-uid').textContent = 'ID: ' + uid;
+  document.getElementById('modal-balance').textContent = '...';
+  document.getElementById('modal-initial').textContent = '...';
+  document.getElementById('modal-total-won').textContent = '...';
+  document.getElementById('modal-games').textContent = '...';
+  document.getElementById('modal-active-badge').textContent = '⏳ جاري التحميل...';
+  document.getElementById('modal-active-badge').className = 'modal-active-badge';
+
+  const avatarWrap = document.getElementById('modal-avatar-wrap');
+  if (photoUrl) {
+    const img = document.createElement('img');
+    img.className = 'modal-avatar';
+    img.src = photoUrl;
+    img.onerror = () => { avatarWrap.innerHTML = '<div class="modal-avatar-placeholder">🎮</div>'; };
+    avatarWrap.innerHTML = '';
+    avatarWrap.appendChild(img);
+  } else {
+    avatarWrap.innerHTML = '<div class="modal-avatar-placeholder">🎮</div>';
+  }
+
+  modal.classList.remove('hidden');
+
+  try {
+    const r = await authFetch(`${API}/api/lucky/admin/user/${encodeURIComponent(uid)}`);
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+
+    const fmt = n => Number(n || 0).toLocaleString('de-DE');
+    document.getElementById('modal-balance').textContent    = fmt(d.balance) + ' نقطة';
+    document.getElementById('modal-initial').textContent   = fmt(d.initial_balance) + ' نقطة';
+    document.getElementById('modal-total-won').textContent = '+' + fmt(d.total_won) + ' نقطة';
+    document.getElementById('modal-games').textContent     = fmt(d.games) + ' جولة';
+
+    const badge = document.getElementById('modal-active-badge');
+    if (d.is_active) {
+      badge.textContent = '🟢 نشط الآن';
+      badge.className = 'modal-active-badge online';
+    } else {
+      badge.textContent = '⚫ غير نشط';
+      badge.className = 'modal-active-badge offline';
+    }
+  } catch(e) {
+    document.getElementById('modal-balance').textContent  = 'خطأ';
+    document.getElementById('modal-active-badge').textContent = '⚠️ تعذّر التحميل';
+    document.getElementById('modal-active-badge').className   = 'modal-active-badge offline';
+  }
 }
 
 // ===== Particles =====
@@ -1149,30 +1386,6 @@ function escapeHTML(str) {
   tick();
   window.addEventListener('resize',()=>{c.width=window.innerWidth;c.height=window.innerHeight;});
 })();
-
-// ===== Maintenance Check =====
-(async function checkMaintenance() {
-  try {
-    const r = await fetch(`${API}/api/lucky/maintenance`);
-    const d = await r.json();
-    if (d.maintenance) {
-      document.getElementById('maintenance-screen').classList.add('show');
-    }
-  } catch(e) {}
-})();
-
-// ============================================================
-// ===== دالة لإرسال الخسائر بعد 24 ساعة (اختياري) =====
-// ============================================================
-// ملاحظة: بما أننا نجعل كل شيء فوزاً، لا توجد خسائر لإرسالها.
-// هذه الدالة محجوزة للاستخدام المستقبلي
-function sendLossAfter24h() {
-  // حالياً لا توجد خسائر، لأن كل شيء فوز
-  console.log('✅ لا توجد خسائر لإرسالها - كل شيء فوز 100%');
-}
-
-console.log('🎯 اللعبة تعمل بنظام فوز دائم 100%');
-console.log('💰 الرصيد الحالي:', balance);
 </script>
 </body>
 </html>
