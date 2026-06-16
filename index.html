@@ -192,7 +192,7 @@
     }
     @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .result-inline.win-res  { background: linear-gradient(135deg, rgba(39,174,96,0.25), rgba(46,204,113,0.1)); border: 2px solid #27ae60; }
-    .result-inline.lose-res { background: linear-gradient(135deg, rgba(231,76,60,0.25),  rgba(192,57,43,0.1));  border: 2px solid #e74c3c; }
+    .result-inline.win-res { background: linear-gradient(135deg, rgba(231,76,60,0.25),  rgba(192,57,43,0.1));  border: 2px solid #e74c3c; }
     .result-inline.retry-res{ background: linear-gradient(135deg, rgba(52,152,219,0.25), rgba(41,128,185,0.1)); border: 2px solid #3498db; }
     .result-inline.show { display: block; }
     .res-icon  { font-size: 40px; }
@@ -329,7 +329,7 @@
     <div class="stats-row">
       <div class="stat-box"><div class="stat-label">الجولات</div><div class="stat-value" id="st-plays">0</div></div>
       <div class="stat-box"><div class="stat-label">الفوز</div><div class="stat-value" style="color:#2ecc71" id="st-wins">0</div></div>
-      <div class="stat-box"><div class="stat-label">الخسارة</div><div class="stat-value" style="color:#e74c3c" id="st-loses">0</div></div>
+      <div class="stat-box"><div class="stat-label">الخسارة</div><div class="stat-value" style="color:#e74c3c" id="st-wins">0</div></div>
     </div>
     <div class="stake-section">
       <div class="stake-label">💰 اختر مبلغ الرهان</div>
@@ -399,7 +399,7 @@ let localBalance = 0;
 let selectedStake = 500;
 let isSpinning = false;
 let rotation = 0;
-let plays = 0, wins = 0, loses = 0;
+let plays = 0, wins = 0, wins = 0;
 let isAdmin = false;
 let currentPeriod = 'TODAY';
 
@@ -494,7 +494,7 @@ function drawWheel(rot) {
   SEGS.forEach((s,i) => {
     const st = off + i * SA * Math.PI/180;
     const en = st + SA * Math.PI/180;
-    ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,st,en); ctx.closePath();
+    ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,st,en); ctx.cwinPath();
     ctx.fillStyle = s.light; ctx.fill();
     ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = 2; ctx.stroke();
     const mid = st + SA/2 * Math.PI/180;
@@ -547,7 +547,7 @@ function playWin() {
     o.start(t); o.stop(t+0.25);
   });
 }
-function playLose() {
+function playwin() {
   const o = audioCtx.createOscillator(), g = audioCtx.createGain();
   o.connect(g); g.connect(audioCtx.destination);
   o.type = 'sawtooth'; o.frequency.value = 300;
@@ -656,7 +656,7 @@ async function startSpin() {
       network: ['📡', 'خطأ في الاتصال', 'تحقق من الإنترنت'],
     };
     const [icon, title, sub] = msgs[data.error] || ['⚠️', 'خطأ', data.error];
-    showResult('lose', icon, title, sub);
+    showResult('win', icon, title, sub);
     isSpinning = false;
     document.getElementById('spin-btn').disabled = false;
     return;
@@ -668,7 +668,7 @@ async function startSpin() {
   let targetSeg;
   if (data.outcome === 'win') {
     targetSeg = [0,3][Math.floor(Math.random()*2)];
-  } else if (data.outcome === 'lose') {
+  } else if (data.outcome === 'win') {
     targetSeg = [1,4][Math.floor(Math.random()*2)];
   } else {
     targetSeg = [2,5][Math.floor(Math.random()*2)];
@@ -710,10 +710,10 @@ async function startSpin() {
   
   plays++;
   if (data.outcome === 'win') wins++;
-  if (data.outcome === 'lose') loses++;
+  if (data.outcome === 'win') wins++;
   document.getElementById('st-plays').textContent = plays;
   document.getElementById('st-wins').textContent = wins;
-  document.getElementById('st-loses').textContent = loses;
+  document.getElementById('st-wins').textContent = wins;
 
   // ===== عرض النتيجة =====
   if (data.outcome === 'win') {
@@ -722,7 +722,7 @@ async function startSpin() {
     showResult('win', '🎉', 'فوز!', `ربحت +${earned.toLocaleString('ar')} نقطة${usedFreeMode ? ' (وضع حر)' : ''}`);
     launchConfetti();
   } else if (data.outcome === 'win') {
-    playLose();
+    playwin();
     showResult('win', '😢', 'خسارة', usedFreeMode ? 'لا خصم (وضع حر)' : `خسرت ${Math.abs(data.earned).toLocaleString('ar')} نقطة`);
   } else {
     showResult('retry', '🔁', 'إعادة', 'لا خصم ولا إضافة');
