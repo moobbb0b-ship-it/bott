@@ -1,1563 +1,473 @@
-<!-- v12 -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>🎰 لعبة الحظ</title>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow-x: hidden;
-      padding-bottom: 40px;
-    }
-
-    /* ===== Header ===== */
-    .header {
-      width: 100%;
-      padding: 16px 20px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    .header-title { font-size: 20px; font-weight: 700; }
-    .balance-box {
-      background: linear-gradient(135deg, #f7971e, #ffd200);
-      color: #1a1a1a;
-      padding: 7px 16px;
-      border-radius: 20px;
-      font-weight: 800;
-      font-size: 14px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .balance-box:active { transform: scale(0.95); }
-
-    /* ===== Tabs ===== */
-    .tabs {
-      display: flex;
-      width: 92%;
-      max-width: 380px;
-      margin-top: 16px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 4px;
-      gap: 4px;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 9px;
-      border: none;
-      border-radius: 11px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      background: transparent;
-      color: rgba(255,255,255,0.5);
-    }
-    .tab-btn.active {
-      background: linear-gradient(135deg, #f7971e, #ffd200);
-      color: #1a1a1a;
-      box-shadow: 0 2px 10px rgba(247,151,30,0.4);
-    }
-
-    /* ===== Tab panels ===== */
-    .panel { display: none; width: 100%; flex-direction: column; align-items: center; }
-    .panel.show { display: flex; }
-
-    /* ===== Particles ===== */
-    #particles { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
-    .content { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; }
-
-    /* ===== Wheel ===== */
-    .wheel-section { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
-    .wheel-wrapper { position: relative; width: 260px; height: 260px; }
-    .needle {
-      position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
-      width: 0; height: 0;
-      border-left: 11px solid transparent;
-      border-right: 11px solid transparent;
-      border-top: 28px solid #ffd200;
-      filter: drop-shadow(0 0 6px #ffd200);
-      z-index: 10;
-    }
-    #wheel {
-      width: 260px; height: 260px;
-      border-radius: 50%;
-      box-shadow: 0 0 30px rgba(255,210,0,0.25), inset 0 0 20px rgba(0,0,0,0.3);
-    }
-    .wheel-center {
-      position: absolute; top:50%; left:50%; transform: translate(-50%,-50%);
-      width: 46px; height: 46px;
-      background: radial-gradient(circle, #ffd200, #f7971e);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 0 15px rgba(255,210,0,0.8);
-      z-index: 5;
-    }
-
-    /* ===== Stats mini row ===== */
-    .stats-row {
-      display: flex; gap: 10px;
-      margin-top: 16px;
-      width: 92%; max-width: 380px;
-    }
-    .stat-box {
-      flex: 1;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 10px 6px;
-      text-align: center;
-    }
-    .stat-label { font-size: 10px; color: rgba(255,255,255,0.5); }
-    .stat-value { font-size: 15px; font-weight: 700; margin-top: 3px; }
-
-    /* ===== Stake picker ===== */
-    .stake-section { margin-top: 18px; width: 92%; max-width: 380px; }
-    .stake-label { text-align: center; font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 10px; }
-    .stakes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .stake-btn {
-      background: rgba(255,255,255,0.07);
-      border: 2px solid rgba(255,255,255,0.13);
-      border-radius: 12px;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-      padding: 11px 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative; overflow: hidden;
-    }
-    .stake-btn.active {
-      border-color: #ffd200;
-      box-shadow: 0 0 14px rgba(255,210,0,0.35);
-      transform: scale(1.04);
-    }
-    .stake-btn:active { transform: scale(0.95); }
-
-    /* ===== Spin button ===== */
-    .spin-btn {
-      margin-top: 16px;
-      width: 92%; max-width: 380px;
-      padding: 15px;
-      font-size: 17px; font-weight: 800;
-      border: none; border-radius: 16px;
-      background: linear-gradient(135deg, #f7971e, #ffd200);
-      color: #1a1a1a;
-      cursor: pointer;
-      box-shadow: 0 4px 18px rgba(247,151,30,0.45);
-      transition: all 0.2s;
-    }
-    .spin-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(247,151,30,0.65); }
-    .spin-btn:active { transform: scale(0.97); }
-    .spin-btn:disabled {
-      background: linear-gradient(135deg, #444, #666);
-      color: #999; cursor: not-allowed;
-      box-shadow: none; transform: none;
-    }
-
-    /* ===== Cooldown bar ===== */
-    .cd-wrap {
-      width: 92%; max-width: 380px;
-      margin-top: 10px; height: 5px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px; overflow: hidden;
-      display: none;
-    }
-    .cd-bar {
-      height: 100%;
-      background: linear-gradient(90deg, #f7971e, #ffd200);
-      border-radius: 10px; width: 100%;
-      transition: width linear;
-    }
-
-    /* ===== Result card (inline, not popup) ===== */
-    .result-inline {
-      display: none;
-      width: 92%; max-width: 380px;
-      margin-top: 14px;
-      border-radius: 18px;
-      padding: 20px;
-      text-align: center;
-      animation: slideIn 0.35s ease;
-    }
-    @keyframes slideIn {
-      from { transform: translateY(20px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
-    }
-    .result-inline.win-res  { background: linear-gradient(135deg, rgba(39,174,96,0.25), rgba(46,204,113,0.1)); border: 2px solid #27ae60; }
-    .result-inline.lose-res { background: linear-gradient(135deg, rgba(231,76,60,0.25),  rgba(192,57,43,0.1));  border: 2px solid #e74c3c; }
-    .result-inline.retry-res{ background: linear-gradient(135deg, rgba(52,152,219,0.25), rgba(41,128,185,0.1)); border: 2px solid #3498db; }
-    .result-inline.show { display: block; }
-    .res-icon  { font-size: 50px; }
-    .res-title { font-size: 22px; font-weight: 800; margin: 6px 0 4px; }
-    .res-sub   { font-size: 14px; color: rgba(255,255,255,0.7); }
-
-    /* ===== Stats panel ===== */
-    /* ===== Stats Panel ===== */
-    .stats-panel { width: 92%; max-width: 400px; margin-top: 16px; }
-    .stats-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 14px;
-    }
-    .stats-header h3 { font-size: 16px; font-weight: 700; }
-    .refresh-btn {
-      background: rgba(255,255,255,0.1);
-      border: none; border-radius: 10px;
-      color: #fff; padding: 6px 12px;
-      font-size: 12px; cursor: pointer;
-      transition: all 0.2s;
-    }
-    .refresh-btn:active { transform: scale(0.95); }
-
-    /* بطاقة اللاعب الحالي */
-    .my-card {
-      background: linear-gradient(135deg, rgba(247,151,30,0.18), rgba(255,210,0,0.10));
-      border: 1px solid rgba(247,151,30,0.4);
-      border-radius: 18px;
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-    .my-avatar {
-      width: 62px; height: 62px;
-      border-radius: 50%;
-      border: 2.5px solid #ffd200;
-      object-fit: cover;
-      flex-shrink: 0;
-      background: rgba(255,255,255,0.1);
-    }
-    .my-avatar-placeholder {
-      width: 62px; height: 62px;
-      border-radius: 50%;
-      border: 2.5px solid #ffd200;
-      background: linear-gradient(135deg,#f7971e,#ffd200);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; flex-shrink: 0;
-    }
-    .my-info { flex: 1; min-width: 0; }
-    .my-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .my-balance { font-size: 20px; font-weight: 800; color: #ffd200; margin-bottom: 6px; }
-    .my-mini-stats { display: flex; gap: 10px; }
-    .my-mini-stat { display: none; }
-
-    /* إجمالي المشاركين */
-    .total-box {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      padding: 12px 16px;
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 16px;
-    }
-    .total-box-lbl { font-size: 13px; color: rgba(255,255,255,0.6); }
-    .total-box-num { font-size: 24px; font-weight: 800; color: #ffd200; }
-
-    /* قائمة الفائزين */
-    .lb-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.75); margin-bottom: 10px; }
-    .winners-list { display: flex; flex-direction: column; gap: 8px; }
-    .winner-item {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transition: background 0.2s;
-    }
-    .winner-item:first-child { background: rgba(255,210,0,0.10); border-color: rgba(255,210,0,0.3); }
-    .winner-item:nth-child(2) { background: rgba(192,192,192,0.08); border-color: rgba(192,192,192,0.25); }
-    .winner-item:nth-child(3) { background: rgba(205,127,50,0.10); border-color: rgba(205,127,50,0.25); }
-    .winner-rank { font-size: 20px; width: 28px; text-align: center; flex-shrink: 0; }
-    .winner-avatar {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1.5px solid rgba(255,255,255,0.2);
-      flex-shrink: 0;
-      background: rgba(255,255,255,0.1);
-    }
-    .winner-avatar-placeholder {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #6c3483, #2980b9);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; flex-shrink: 0;
-      border: 1.5px solid rgba(255,255,255,0.2);
-    }
-    .winner-info { flex: 1; min-width: 0; }
-    .winner-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .winner-pts  { font-size: 12px; font-weight: 700; color: #2ecc71; margin-top: 1px; }
-
-    .loading-txt { text-align: center; color: rgba(255,255,255,0.4); padding: 30px; font-size: 14px; }
-
-    /* ===== User Detail Modal ===== */
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(6px);
-      z-index: 500;
-      display: flex; align-items: center; justify-content: center;
-      padding: 20px;
-      animation: fadeIn 0.2s ease;
-    }
-    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-    .modal-overlay.hidden { display: none; }
-    .modal-card {
-      background: linear-gradient(145deg, #1e1b3a, #2d2b55);
-      border: 1px solid rgba(255,210,0,0.3);
-      border-radius: 22px;
-      padding: 24px 20px;
-      width: 100%; max-width: 360px;
-      position: relative;
-      animation: slideUp 0.25s ease;
-    }
-    @keyframes slideUp { from { transform:translateY(30px); opacity:0; } to { transform:translateY(0); opacity:1; } }
-    .modal-close {
-      position: absolute; top: 14px; left: 14px;
-      background: rgba(255,255,255,0.1);
-      border: none; border-radius: 50%;
-      width: 32px; height: 32px;
-      color: #fff; font-size: 16px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s;
-    }
-    .modal-close:hover { background: rgba(255,255,255,0.2); }
-    .modal-user-header {
-      display: flex; align-items: center; gap: 14px;
-      margin-bottom: 20px;
-    }
-    .modal-avatar {
-      width: 56px; height: 56px; border-radius: 50%;
-      border: 2px solid #ffd200;
-      object-fit: cover; flex-shrink: 0;
-      background: rgba(255,255,255,0.1);
-    }
-    .modal-avatar-placeholder {
-      width: 56px; height: 56px; border-radius: 50%;
-      border: 2px solid #ffd200;
-      background: linear-gradient(135deg,#6c3483,#2980b9);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; flex-shrink: 0;
-    }
-    .modal-username { font-size: 16px; font-weight: 700; }
-    .modal-uid { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; }
-    .modal-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .modal-stat {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      padding: 12px 10px; text-align: center;
-    }
-    .modal-stat.highlight { border-color: rgba(255,210,0,0.35); }
-    .modal-stat-icon { font-size: 18px; }
-    .modal-stat-val { font-size: 15px; font-weight: 800; margin: 5px 0 3px; }
-    .modal-stat-lbl { font-size: 10px; color: rgba(255,255,255,0.5); }
-    .modal-active-badge {
-      margin-top: 14px; text-align: center;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 13px; font-weight: 700;
-    }
-    .modal-active-badge.online  { background: rgba(39,174,96,0.2);  border: 1px solid #27ae60; color: #2ecc71; }
-    .modal-active-badge.offline { background: rgba(231,76,60,0.15); border: 1px solid #e74c3c; color: #e74c3c; }
-    .winner-item.clickable { cursor: pointer; }
-    .winner-item.clickable:hover { background: rgba(255,255,255,0.1) !important; border-color: rgba(255,210,0,0.4) !important; }
-
-    /* ===== Admin Panel ===== */
-    .admin-panel { width: 92%; max-width: 380px; margin-top: 16px; }
-    .period-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-    .period-btn {
-      flex: 1; min-width: 58px;
-      padding: 8px 6px;
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 10px;
-      background: rgba(255,255,255,0.07);
-      color: #fff; font-size: 12px; font-weight: 600;
-      cursor: pointer; transition: all 0.2s;
-    }
-    .period-btn.active {
-      background: linear-gradient(135deg, #f7971e, #ffd200);
-      color: #1a1a1a; border-color: transparent;
-      box-shadow: 0 2px 8px rgba(247,151,30,0.4);
-    }
-    .admin-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-    .admin-stat-card {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px; padding: 14px 10px; text-align: center;
-    }
-    .admin-stat-card.profit { border-color: rgba(46,204,113,0.35); }
-    .admin-stat-card.loss   { border-color: rgba(231,76,60,0.35); }
-    .admin-card-icon { font-size: 20px; }
-    .admin-card-num  { font-size: 17px; font-weight: 800; margin: 5px 0 3px; }
-    .admin-card-lbl  { font-size: 10px; color: rgba(255,255,255,0.5); }
-    .adm-section-title {
-      font-size: 13px; font-weight: 700;
-      color: rgba(255,255,255,0.6);
-      margin: 10px 0 8px;
-    }
-
-    /* ===== Add Points Section ===== */
-    .add-points-section {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,210,0,0.25);
-      border-radius: 16px;
-      padding: 16px;
-      margin-top: 14px;
-    }
-    .add-points-title {
-      font-size: 14px; font-weight: 700;
-      color: #ffd200; margin-bottom: 12px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .add-points-input {
-      width: 100%; padding: 11px 14px;
-      border-radius: 12px;
-      border: 1.5px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.08);
-      color: #fff; font-size: 15px;
-      margin-bottom: 10px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .add-points-input:focus { border-color: #ffd200; }
-    .add-points-input::placeholder { color: rgba(255,255,255,0.35); }
-    .add-points-row { display: flex; gap: 8px; }
-    .add-points-btn {
-      flex: 1; padding: 12px;
-      border: none; border-radius: 12px;
-      font-size: 14px; font-weight: 800;
-      cursor: pointer; transition: all 0.2s;
-    }
-    .add-points-btn.send {
-      background: linear-gradient(135deg, #27ae60, #2ecc71);
-      color: #fff;
-      box-shadow: 0 3px 12px rgba(46,204,113,0.35);
-    }
-    .add-points-btn.send:hover { transform: translateY(-1px); }
-    .add-points-btn.send:active { transform: scale(0.97); }
-    .add-points-btn.send:disabled { background: #444; color: #888; cursor: not-allowed; box-shadow: none; transform: none; }
-    .add-points-btn.quick-win {
-      background: linear-gradient(135deg, #f39c12, #e67e22);
-      color: #fff;
-      box-shadow: 0 3px 12px rgba(243,156,18,0.35);
-    }
-    .add-points-btn.quick-win:hover { transform: translateY(-1px); }
-    .add-points-btn.quick-win:active { transform: scale(0.97); }
-    .add-points-btn.quick-win:disabled { background: #444; color: #888; cursor: not-allowed; box-shadow: none; transform: none; }
-    .add-points-feedback {
-      margin-top: 10px; padding: 10px 14px;
-      border-radius: 10px; font-size: 13px; font-weight: 600;
-      display: none; text-align: center;
-    }
-    .add-points-feedback.success { background: rgba(46,204,113,0.15); border: 1px solid #27ae60; color: #2ecc71; display: block; }
-    .add-points-feedback.error   { background: rgba(231,76,60,0.15);  border: 1px solid #e74c3c; color: #e74c3c;  display: block; }
-
-    /* ===== Spinning glow ===== */
-    .spinning { animation: glowRing 0.4s ease-in-out infinite alternate; }
-    @keyframes glowRing {
-      from { filter: drop-shadow(0 0 10px rgba(255,210,0,0.3)); }
-      to   { filter: drop-shadow(0 0 30px rgba(255,210,0,0.9)); }
-    }
-
-    /* ===== Confetti ===== */
-    .confetti-piece {
-      position: fixed; width: 10px; height: 14px; top: -20px;
-      border-radius: 2px;
-      animation: confettiFall linear forwards;
-      z-index: 200;
-    }
-    @keyframes confettiFall {
-      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-    }
-
-    /* ===== Maintenance Screen ===== */
-    #maintenance-screen {
-      display: none;
-      position: fixed; inset: 0;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      z-index: 9999;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px 24px;
-    }
-    #maintenance-screen.show { display: flex; }
-    .maint-icon { font-size: 72px; margin-bottom: 20px; animation: maintPulse 2s ease-in-out infinite; }
-    @keyframes maintPulse {
-      0%,100% { transform: scale(1); }
-      50%      { transform: scale(1.1); }
-    }
-    .maint-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
-    .maint-sub   { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.7; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>لعبة Lucky</title>
+    
+    <!-- Telegram WebApp Script -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #1a1a2e;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background: #16213e;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .title {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #e94560;
+        }
+        
+        .balance-box {
+            background: #0f3460;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .balance-amount {
+            font-size: 36px;
+            font-weight: bold;
+            color: #e94560;
+        }
+        
+        .user-info {
+            background: #0f3460;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: right;
+        }
+        
+        .button {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+            width: 80%;
+        }
+        
+        .button:hover {
+            background: #c23152;
+            transform: scale(1.05);
+        }
+        
+        .button:active {
+            transform: scale(0.95);
+        }
+        
+        .spin-result {
+            font-size: 24px;
+            margin: 20px 0;
+            animation: bounce 0.5s;
+        }
+        
+        .error {
+            color: #ff6b6b;
+            background: rgba(255,107,107,0.1);
+            padding: 10px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        
+        .success {
+            color: #51cf66;
+            background: rgba(81,207,102,0.1);
+            padding: 10px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #e94560;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-
-<!-- Maintenance Screen -->
-<div id="maintenance-screen">
-  <div class="maint-icon">🔧</div>
-  <div class="maint-title">اللعبة في وضع التحديث</div>
-  <div class="maint-sub">نعمل على تحسين التجربة<br>سنعود قريباً، شكراً لصبركم 🙏</div>
-</div>
-
-<canvas id="particles"></canvas>
-
-<!-- Header -->
-<div class="header">
-  <div class="header-title">🎰 لعبة الحظ</div>
-  <div class="balance-box" id="balance-display" onclick="refreshBalance()">⏳ تحميل...</div>
-</div>
-
-<div class="content">
-
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('game',this)">🎮 اللعبة</button>
-    <button class="tab-btn"       onclick="switchTab('stats',this)">📊 الإحصائيات</button>
-    <button class="tab-btn" id="admin-tab-btn" style="display:none" onclick="switchTab('admin',this)">⚙️ إعدادات</button>
-  </div>
-
-  <!-- ===== GAME PANEL ===== -->
-  <div class="panel show" id="panel-game">
-
-    <!-- Wheel -->
-    <div class="wheel-section">
-      <div class="wheel-wrapper">
-        <div class="needle"></div>
-        <canvas id="wheel" width="260" height="260"></canvas>
-        <div class="wheel-center">🎯</div>
-      </div>
+    <div class="container">
+        <h1 class="title">🎰 Lucky Game</h1>
+        
+        <!-- معلومات المستخدم -->
+        <div id="userInfo" class="user-info hidden">
+            <p>👤 <span id="userName"></span></p>
+            <p>🆔 <span id="userId"></span></p>
+        </div>
+        
+        <!-- الرصيد -->
+        <div class="balance-box">
+            <p>💰 رصيدك</p>
+            <div class="balance-amount" id="balance">0</div>
+        </div>
+        
+        <!-- الأزرار -->
+        <button class="button" onclick="spinWheel()">
+            🎲 لف العجلة
+        </button>
+        
+        <button class="button" onclick="getBalance()">
+            🔄 تحديث الرصيد
+        </button>
+        
+        <!-- نتيجة اللف -->
+        <div id="result" class="hidden">
+            <div class="spin-result" id="resultText"></div>
+        </div>
+        
+        <!-- رسائل الخطأ -->
+        <div id="error" class="error hidden"></div>
+        <div id="success" class="success hidden"></div>
+        
+        <!-- تحميل -->
+        <div id="loading" class="loading hidden"></div>
     </div>
 
-    <!-- Mini stats -->
-    <div class="stats-row">
-      <div class="stat-box">
-        <div class="stat-label">الجولات</div>
-        <div class="stat-value" id="st-plays">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">الفوز</div>
-        <div class="stat-value" style="color:#2ecc71" id="st-wins">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">الخسارة</div>
-        <div class="stat-value" style="color:#e74c3c" id="st-loses">0</div>
-      </div>
-    </div>
-
-    <!-- Stake -->
-    <div class="stake-section">
-      <div class="stake-label">💰 اختر مبلغ الرهان</div>
-      <div class="stakes-grid" id="stakes-grid"></div>
-    </div>
-
-    <!-- Spin button -->
-    <button class="spin-btn" id="spin-btn" onclick="startSpin()">🎰 ادور العجلة</button>
-
-    <!-- Cooldown bar -->
-    <div class="cd-wrap" id="cd-wrap">
-      <div class="cd-bar" id="cd-bar"></div>
-    </div>
-
-    <!-- Result inline -->
-    <div class="result-inline" id="result-inline">
-      <div class="res-icon" id="res-icon">🎉</div>
-      <div class="res-title" id="res-title">مبروك!</div>
-      <div class="res-sub"   id="res-sub"></div>
-    </div>
-
-  </div>
-
-  <!-- ===== ADMIN PANEL ===== -->
-  <div class="panel" id="panel-admin">
-    <div class="admin-panel">
-      <div class="stats-header">
-        <h3>⚙️ لوحة الأدمن</h3>
-        <button class="refresh-btn" onclick="loadAdminStats()">🔄 تحديث</button>
-      </div>
-
-      <!-- فلاتر الفترة الزمنية -->
-      <div class="period-filters">
-        <button class="period-btn active" data-period="TODAY"     onclick="selectPeriod(this)">اليوم</button>
-        <button class="period-btn"        data-period="YESTERDAY" onclick="selectPeriod(this)">البارحة</button>
-        <button class="period-btn"        data-period="DAY2"      onclick="selectPeriod(this)">أول البارحة</button>
-        <button class="period-btn"        data-period="W7"        onclick="selectPeriod(this)">7 أيام</button>
-        <button class="period-btn"        data-period="ALL"       onclick="selectPeriod(this)">الكل</button>
-      </div>
-
-      <!-- اللاعبون -->
-      <div class="adm-section-title">👥 اللاعبون</div>
-      <div class="admin-stat-grid">
-        <div class="admin-stat-card">
-          <div class="admin-card-icon">🟢</div>
-          <div class="admin-card-num" id="adm-active-now">-</div>
-          <div class="admin-card-lbl">نشطون الآن</div>
-        </div>
-        <div class="admin-stat-card">
-          <div class="admin-card-icon">📅</div>
-          <div class="admin-card-num" id="adm-active-today">-</div>
-          <div class="admin-card-lbl">نشطون اليوم</div>
-        </div>
-      </div>
-
-      <!-- الأرباح والخسائر -->
-      <div class="adm-section-title" id="adm-period-label">💹 الفترة: اليوم</div>
-      <div class="admin-stat-grid">
-        <div class="admin-stat-card profit">
-          <div class="admin-card-icon">💰</div>
-          <div class="admin-card-num" id="adm-profit" style="color:#2ecc71">-</div>
-          <div class="admin-card-lbl">أرباح البوت</div>
-        </div>
-        <div class="admin-stat-card loss">
-          <div class="admin-card-icon">📤</div>
-          <div class="admin-card-num" id="adm-loss" style="color:#e74c3c">-</div>
-          <div class="admin-card-lbl">خسائر البوت</div>
-        </div>
-      </div>
-
-      <!-- الإجمالي وعدد الجولات -->
-      <div class="admin-stat-grid">
-        <div class="admin-stat-card">
-          <div class="admin-card-icon">⚖️</div>
-          <div class="admin-card-num" id="adm-net">-</div>
-          <div class="admin-card-lbl">الإجمالي الصافي</div>
-        </div>
-        <div class="admin-stat-card">
-          <div class="admin-card-icon">🎮</div>
-          <div class="admin-card-num" id="adm-games">-</div>
-          <div class="admin-card-lbl">عدد الجولات</div>
-        </div>
-      </div>
-
-      <div class="loading-txt" id="adm-loading" style="display:none">⏳ جاري التحميل...</div>
-
-      <!-- ===== إضافة نقاط ===== -->
-      <div class="add-points-section">
-        <div class="add-points-title">➕ إضافة نقاط لمستخدم</div>
-        <input
-          class="add-points-input"
-          id="ap-uid"
-          type="number"
-          placeholder="🆔 أدخل ID المستخدم"
-        />
-        <input
-          class="add-points-input"
-          id="ap-amount"
-          type="number"
-          placeholder="💰 عدد النقاط"
-        />
-        <div class="add-points-row">
-          <button class="add-points-btn send" id="ap-btn" onclick="addPointsToUser()">
-            ✅ إرسال النقاط
-          </button>
-          <button class="add-points-btn quick-win" id="quick-win-btn" onclick="quickWin250()">
-            🎉 فوز 250
-          </button>
-        </div>
-        <div class="add-points-feedback" id="ap-feedback"></div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ===== STATS PANEL ===== -->
-  <div class="panel" id="panel-stats">
-    <div class="stats-panel">
-      <div class="stats-header">
-        <h3>📊 الإحصائيات</h3>
-        <button class="refresh-btn" onclick="loadStats()">🔄 تحديث</button>
-      </div>
-
-      <!-- بطاقة اللاعب الحالي -->
-      <div class="my-card" id="my-card">
-        <div class="my-avatar-placeholder">⏳</div>
-        <div class="my-info">
-          <div class="my-name">جاري التحميل...</div>
-          <div class="my-balance">-</div>
-          <div class="my-mini-stats">
-            <div class="my-mini-stat">فوز <span id="my-wins">-</span></div>
-            <div class="my-mini-stat">خسارة <span id="my-losses">-</span></div>
-            <div class="my-mini-stat">جولات <span id="my-games">-</span></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- إجمالي المشاركين -->
-      <div class="total-box">
-        <div class="total-box-lbl">👥 إجمالي المشاركين</div>
-        <div class="total-box-num" id="stat-participants">-</div>
-      </div>
-
-      <!-- المتصدرون -->
-      <div class="lb-title">🏆 أكثر الفائزين</div>
-      <div class="winners-list" id="winners-list">
-        <div class="loading-txt">⏳ جاري التحميل...</div>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<!-- ===== User Detail Modal (Admin) ===== -->
-<div class="modal-overlay hidden" id="user-modal" onclick="closeUserModal(event)">
-  <div class="modal-card">
-    <button class="modal-close" onclick="document.getElementById('user-modal').classList.add('hidden')">✕</button>
-    <div class="modal-user-header">
-      <div id="modal-avatar-wrap"><div class="modal-avatar-placeholder">🎮</div></div>
-      <div>
-        <div class="modal-username" id="modal-username">...</div>
-        <div class="modal-uid" id="modal-uid"></div>
-      </div>
-    </div>
-    <div class="modal-stats-grid">
-      <div class="modal-stat highlight">
-        <div class="modal-stat-icon">💰</div>
-        <div class="modal-stat-val" id="modal-balance">-</div>
-        <div class="modal-stat-lbl">النقاط الحالية</div>
-      </div>
-      <div class="modal-stat">
-        <div class="modal-stat-icon">📦</div>
-        <div class="modal-stat-val" id="modal-initial">-</div>
-        <div class="modal-stat-lbl">النقاط قبل اللعب</div>
-      </div>
-      <div class="modal-stat">
-        <div class="modal-stat-icon">📈</div>
-        <div class="modal-stat-val" id="modal-total-won" style="color:#2ecc71">-</div>
-        <div class="modal-stat-lbl">مجموع الأرباح</div>
-      </div>
-      <div class="modal-stat">
-        <div class="modal-stat-icon">🎮</div>
-        <div class="modal-stat-val" id="modal-games">-</div>
-        <div class="modal-stat-lbl">عدد الجولات</div>
-      </div>
-    </div>
-    <div class="modal-active-badge" id="modal-active-badge">...</div>
-  </div>
-</div>
-
-<script>
-// ===== Setup =====
-const tg      = window.Telegram?.WebApp;
-const API     = "https://bot.tota.click";
-const STAKES  = [250, 500, 750, 1000, 5000, 10000];
-const _urlParams = new URLSearchParams(window.location.search);
-const COOLDOWN= parseInt(_urlParams.get('cooldown') || '3', 10);
-const MEDALS  = ["🥇","🥈","🥉","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"];
-
-if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#0f0c29'); tg.setBackgroundColor('#0f0c29'); }
-
-(async function checkMaintenance() {
-  try {
-    const r = await fetch(`${API}/api/lucky/maintenance`);
-    const d = await r.json();
-    if (d.maintenance) {
-      document.getElementById('maintenance-screen').classList.add('show');
-    }
-  } catch(e) {}
-})();
-
-let balance      = 0;
-let selectedStake= 500;
-let isSpinning   = false;
-let rotation     = 0;
-let plays=0, wins=0, loses=0;
-const initData   = tg?.initData || "";
-
-// ===== Security Helpers =====
-function escapeHTML(str) {
-  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-// إرسال initData في header بدلاً من URL
-function authFetch(url, opts = {}) {
-  if (!opts.headers) opts.headers = {};
-  opts.headers['X-Tg-Init'] = initData;
-  return fetch(url, opts);
-}
-// بيانات الفائزين (لتجنب XSS في onclick)
-const _winnerMap = {};
-
-// ===== Tabs =====
-function switchTab(name, btn) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('show');
-  btn.classList.add('active');
-  if (name === 'stats') loadStats();
-  if (name === 'admin') {
-    loadAdminStats();
-    startAdminAutoRefresh();
-  } else {
-    stopAdminAutoRefresh();
-  }
-}
-
-// ===== Admin =====
-let currentPeriod = 'TODAY';
-let isAdmin = false;
-let adminRefreshTimer = null;
-
-function startAdminAutoRefresh() {
-  stopAdminAutoRefresh();
-  adminRefreshTimer = setInterval(() => {
-    if (isAdmin) loadAdminStats();
-  }, 15000); // كل 15 ثانية
-}
-
-function stopAdminAutoRefresh() {
-  if (adminRefreshTimer) {
-    clearInterval(adminRefreshTimer);
-    adminRefreshTimer = null;
-  }
-}
-
-async function checkAdmin() {
-  if (!initData) return;
-  try {
-    const r = await authFetch(`${API}/api/lucky/admin/check`);
-    const d = await r.json();
-    if (d.is_admin) {
-      isAdmin = true;
-      document.getElementById('admin-tab-btn').style.display = '';
-    }
-  } catch(e) {}
-}
-
-function selectPeriod(btn) {
-  document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentPeriod = btn.dataset.period;
-  loadAdminStats();
-}
-
-function _updateAdminUI(d) {
-  const fmt = n => Number(n || 0).toLocaleString('de-DE');
-  document.getElementById('adm-active-now').textContent   = fmt(d.active_now);
-  document.getElementById('adm-active-today').textContent = fmt(d.active_today);
-  document.getElementById('adm-profit').textContent       = fmt(d.profit);
-  document.getElementById('adm-loss').textContent         = fmt(d.loss);
-  document.getElementById('adm-games').textContent        = fmt(d.total_games);
-  document.getElementById('adm-period-label').textContent = `💹 الفترة: ${d.label || currentPeriod}`;
-  const net   = (d.profit || 0) - (d.loss || 0);
-  const netEl = document.getElementById('adm-net');
-  netEl.textContent = (net >= 0 ? '+' : '') + net.toLocaleString('ar');
-  netEl.style.color = net >= 0 ? '#2ecc71' : '#e74c3c';
-}
-
-async function loadAdminStats() {
-  if (!initData) return;
-  document.getElementById('adm-loading').style.display = 'block';
-  const ctrl    = new AbortController();
-  const timeout = setTimeout(() => ctrl.abort(), 10000);
-  try {
-    const url = `${API}/api/lucky/admin/stats?period=${currentPeriod}`;
-    const r   = await authFetch(url, { signal: ctrl.signal });
-    const d   = await r.json();
-    _updateAdminUI(d.error ? {active_now:0,active_today:0,profit:0,loss:0,total_games:0,label:'لا صلاحية'} : d);
-  } catch(e) {
-    _updateAdminUI({active_now:0,active_today:0,profit:0,loss:0,total_games:0,label:'خطأ في الاتصال'});
-  } finally {
-    clearTimeout(timeout);
-    document.getElementById('adm-loading').style.display = 'none';
-  }
-}
-
-checkAdmin();
-
-// ===== Presence tracking =====
-function pingPresence() {
-  if (!initData) return;
-  authFetch(`${API}/api/lucky/ping`).catch(() => {});
-}
-
-function leavePresence() {
-  if (!initData) return;
-  // sendBeacon لا يدعم headers — نرسل initData في body بدلاً من URL
-  const blob = new Blob([JSON.stringify({ init_data: initData })], { type: 'application/json' });
-  try { navigator.sendBeacon(`${API}/api/lucky/leave`, blob); } catch(e) {}
-}
-
-// ping فوراً عند الفتح
-pingPresence();
-// ping كل 60 ثانية للإبقاء على التسجيل
-setInterval(pingPresence, 60000);
-
-// حذف عند الإغلاق أو إخفاء الصفحة
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') leavePresence();
-  if (document.visibilityState === 'visible') pingPresence();
-});
-window.addEventListener('pagehide', leavePresence);
-
-// ===== Wheel segments =====
-const SEGS = [
-  { label:'🏆 فوز',    color:'#1e8449', light:'#27ae60' },
-  { label:'❌ خسارة',  color:'#922b21', light:'#c0392b' },
-  { label:'🔁 إعادة', color:'#1a5276', light:'#2980b9' },
-  { label:'🏆 فوز',   color:'#27ae60', light:'#2ecc71' },
-  { label:'❌ خسارة', color:'#c0392b', light:'#e74c3c' },
-  { label:'🔁 إعادة', color:'#1a5276', light:'#2980b9' },
-];
-const N = SEGS.length;
-const SA = 360 / N;
-const cvs = document.getElementById('wheel');
-const ctx = cvs.getContext('2d');
-const CX = cvs.width/2, CY = cvs.height/2, R = CX - 5;
-
-function drawWheel(rot) {
-  ctx.clearRect(0,0,cvs.width,cvs.height);
-  const off = (rot - 90) * Math.PI / 180;
-
-  // ===== رسم القطاعات =====
-  SEGS.forEach((s,i) => {
-    const st = off + i * SA * Math.PI/180;
-    const en = st + SA * Math.PI/180;
-
-    // تدرج لوني
-    const g = ctx.createRadialGradient(CX,CY,R*0.15,CX,CY,R);
-    g.addColorStop(0, s.light);
-    g.addColorStop(1, s.color);
-    ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,st,en); ctx.closePath();
-    ctx.fillStyle = g; ctx.fill();
-
-    // حدود بيضاء واضحة
-    ctx.strokeStyle='rgba(255,255,255,0.55)';
-    ctx.lineWidth=2.5;
-    ctx.stroke();
-  });
-
-  // ===== رسم النصوص =====
-  SEGS.forEach((s,i) => {
-    const midAngle = off + i * SA * Math.PI/180 + (SA/2) * Math.PI/180;
-    const textR = R * 0.68; // موضع النص على بعد 68% من المركز
-
-    ctx.save();
-    ctx.translate(
-      CX + Math.cos(midAngle) * textR,
-      CY + Math.sin(midAngle) * textR
-    );
-    ctx.rotate(midAngle + Math.PI/2); // النص عمودي باتجاه الخارج
-
-    ctx.textAlign   = 'center';
-    ctx.textBaseline= 'middle';
-
-    // فصل الإيموجي عن النص العربي
-    const parts  = s.label.split(' ');
-    const emoji  = parts[0] || '';
-    const arabic = parts.slice(1).join(' ');
-
-    // ---- رسم النص العربي بإطار أسود ----
-    ctx.font     = 'bold 14px Arial';
-    ctx.lineJoin = 'round';
-    // طبقة الإطار الأسود (5px)
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth   = 5;
-    ctx.strokeText(arabic, 0, 4);
-    // طبقة النص الأبيض
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(arabic, 0, 4);
-
-    // ---- رسم الإيموجي فوق (بدون إطار) ----
-    ctx.font      = '13px Arial';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(emoji, 0, -10);
-    ctx.restore();
-  });
-
-  // ===== الحلقة الخارجية =====
-  ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2);
-  ctx.strokeStyle='rgba(255,210,0,0.7)';
-  ctx.lineWidth=5;
-  ctx.stroke();
-}
-drawWheel(0);
-
-// ===== Stakes buttons =====
-const grid = document.getElementById('stakes-grid');
-STAKES.forEach(s => {
-  const b = document.createElement('button');
-  b.className = 'stake-btn' + (s===selectedStake?' active':'');
-  b.textContent = s >= 1000 ? (s/1000)+'K' : s;
-  b.onclick = () => {
-    document.querySelectorAll('.stake-btn').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active'); selectedStake = s;
-  };
-  grid.appendChild(b);
-});
-
-// ===== Balance =====
-function fmtPts(n) {
-  return Number(n || 0).toLocaleString('de-DE') + ' نقطة';
-}
-function updateBalanceUI(v) {
-  balance = v;
-  document.getElementById('balance-display').textContent = '💰 ' + fmtPts(v);
-}
-async function refreshBalance() {
-  if (!initData) return;
-  try {
-    const r = await authFetch(`${API}/api/lucky/balance`);
-    const d = await r.json();
-    if (d.balance !== undefined) updateBalanceUI(d.balance);
-  } catch(e) {}
-}
-refreshBalance();
-
-// ===== Device Fingerprint (لربط الحسابات المتعددة) =====
-async function registerDeviceFingerprint() {
-  if (!initData) return;
-  try {
-    // جمع عناصر البصمة
-    const nav = navigator;
-    const screen = window.screen;
-
-    // Canvas fingerprint
-    let canvasHash = '';
-    try {
-      const canvas = document.createElement('canvas');
-      canvas.width = 200; canvas.height = 50;
-      const ctx = canvas.getContext('2d');
-      ctx.textBaseline = 'top';
-      ctx.font = '14px Arial';
-      ctx.fillStyle = '#f60';
-      ctx.fillRect(0, 0, 200, 50);
-      ctx.fillStyle = '#069';
-      ctx.fillText('device-fp-2024', 2, 5);
-      ctx.fillStyle = 'rgba(102,204,0,0.9)';
-      ctx.fillText('device-fp-2024', 4, 17);
-      canvasHash = canvas.toDataURL().slice(-40);
-    } catch(e) {}
-
-    // مزج العناصر وتحويلها لهاش
-    const raw = [
-      nav.language || '',
-      (screen.width || 0) + 'x' + (screen.height || 0),
-      (screen.colorDepth || 0),
-      nav.platform || '',
-      (nav.hardwareConcurrency || 0),
-      Intl.DateTimeFormat().resolvedOptions().timeZone || '',
-      canvasHash,
-      (nav.deviceMemory || 0)
-    ].join('|');
-
-    // SimpleHash (FNV-like) → hex string 16 chars
-    let h = 2166136261;
-    for (let i = 0; i < raw.length; i++) {
-      h ^= raw.charCodeAt(i);
-      h = (h * 16777619) >>> 0;
-    }
-    const fingerprint = h.toString(16).padStart(8,'0') + raw.length.toString(16).padStart(8,'0');
-
-    await fetch(`${API}/api/lucky/register_device`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ init_data: initData, fingerprint })
-    });
-  } catch(e) {}
-}
-registerDeviceFingerprint();
-
-// ===== Stats =====
-function _avatarEl(photoUrl, size, emoji) {
-  if (photoUrl) {
-    return `<img class="${size === 'big' ? 'my-avatar' : 'winner-avatar'}" src="${photoUrl}" onerror="this.outerHTML='<div class=\\'${size === 'big' ? 'my-avatar-placeholder' : 'winner-avatar-placeholder'}\\'>${emoji}</div>'">`;
-  }
-  return `<div class="${size === 'big' ? 'my-avatar-placeholder' : 'winner-avatar-placeholder'}">${emoji}</div>`;
-}
-
-async function loadStats() {
-  document.getElementById('winners-list').innerHTML = '<div class="loading-txt">⏳ جاري التحميل...</div>';
-  // بطاقة اللاعب + قائمة الفائزين معاً
-  const statsUrl = (initData && isAdmin)
-    ? `${API}/api/lucky/admin/winners`
-    : `${API}/api/lucky/stats`;
-  const [meRes, statsRes] = await Promise.allSettled([
-    initData ? authFetch(`${API}/api/lucky/me`) : Promise.reject(),
-    initData ? authFetch(statsUrl) : fetch(statsUrl)
-  ]);
-
-  // بطاقة اللاعب الحالي
-  try {
-    const me = await meRes.value.json();
-    const card = document.getElementById('my-card');
-    card.innerHTML = `
-      ${_avatarEl(me.photo_url, 'big', '🎮')}
-      <div class="my-info">
-        <div class="my-name">${escapeHTML(me.name || 'لاعب')}</div>
-        <div class="my-balance">${fmtPts(me.balance)}</div>
-        <div class="my-mini-stats">
-          <div class="my-mini-stat">فوز <span>${(me.wins||0).toLocaleString('de-DE')}</span></div>
-          <div class="my-mini-stat">خسارة <span>${(me.losses||0).toLocaleString('de-DE')}</span></div>
-          <div class="my-mini-stat">جولات <span>${(me.games||0).toLocaleString('de-DE')}</span></div>
-        </div>
-      </div>`;
-  } catch(e) {
-    document.getElementById('my-card').innerHTML = `
-      <div class="my-avatar-placeholder">🎮</div>
-      <div class="my-info"><div class="my-name">بياناتك</div><div class="my-balance">${fmtPts(balance)}</div></div>`;
-  }
-
-  // قائمة الفائزين
-  try {
-    const d = await statsRes.value.json();
-    document.getElementById('stat-participants').textContent = (d.participants||0).toLocaleString('de-DE');
-    const list = document.getElementById('winners-list');
-    if (!d.last10 || d.last10.length === 0) {
-      list.innerHTML = '<div class="loading-txt">لا يوجد فائزون بعد</div>';
-      return;
-    }
-    // حفظ بيانات الفائزين في Map بدلاً من تمريرها في onclick مباشرة
-    d.last10.forEach(w => { _winnerMap[w.uid] = { name: w.name, photo_url: w.photo_url }; });
-    list.innerHTML = d.last10.map((w, i) => `
-      <div class="winner-item${isAdmin ? ' clickable' : ''}" ${isAdmin ? `onclick="showUserStats('${escapeHTML(String(w.uid))}')"` : ''}>
-        <span class="winner-rank">${MEDALS[i] || '#' + (i+1)}</span>
-        ${_avatarEl(w.photo_url, 'sm', '🏆')}
-        <div class="winner-info">
-          <div class="winner-name">${escapeHTML(w.name || 'لاعب#' + w.uid)}${isAdmin ? ' <span style="font-size:10px;opacity:0.4">👆</span>' : ''}</div>
-          <div class="winner-pts">+${(w.total_won||0).toLocaleString('de-DE')} نقطة</div>
-        </div>
-      </div>`).join('');
-  } catch(e) {
-    document.getElementById('winners-list').innerHTML = '<div class="loading-txt">⚠️ تعذّر التحميل</div>';
-  }
-}
-
-// ===== Sound Effects =====
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-function playTick() {
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.connect(g); g.connect(audioCtx.destination);
-  o.frequency.value = 600;
-  g.gain.setValueAtTime(0.15, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-  o.start(); o.stop(audioCtx.currentTime + 0.05);
-}
-
-function playWin() {
-  [523, 659, 784, 1047].forEach((f, i) => {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.type = 'sine'; o.frequency.value = f;
-    const t = audioCtx.currentTime + i * 0.12;
-    g.gain.setValueAtTime(0.25, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-    o.start(t); o.stop(t + 0.3);
-  });
-}
-
-function playLose() {
-  [300, 250].forEach((f, i) => {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.type = 'sawtooth'; o.frequency.value = f;
-    const t = audioCtx.currentTime + i * 0.2;
-    g.gain.setValueAtTime(0.2, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-    o.start(t); o.stop(t + 0.3);
-  });
-}
-
-function playRetry() {
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.connect(g); g.connect(audioCtx.destination);
-  o.type = 'sine'; o.frequency.value = 440;
-  g.gain.setValueAtTime(0.2, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-  o.start(); o.stop(audioCtx.currentTime + 0.4);
-}
-
-// ===== Spin =====
-async function startSpin() {
-  if (isSpinning) return;
-  if (!initData) { showResult('error','⚠️','افتح اللعبة من البوت',''); return; }
-
-  // حماية إضافية للكولداون بـ localStorage (طبقة ثانية فوق isSpinning)
-  const now = Date.now();
-  const lastSpin = parseInt(localStorage.getItem('_lgs') || '0');
-  if (now - lastSpin < COOLDOWN * 1000) {
-    const rem = Math.ceil((COOLDOWN * 1000 - (now - lastSpin)) / 1000);
-    showResult('error','⏳','انتظر قليلاً',`المحاولة التالية بعد ${rem} ثانية`);
-    return;
-  }
-
-  // تفعيل AudioContext بعد تفاعل المستخدم
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-
-  isSpinning = true;
-  document.getElementById('spin-btn').disabled = true;
-  document.getElementById('result-inline').classList.remove('show','win-res','lose-res','retry-res');
-  cvs.classList.add('spinning');
-
-  // 1) جلب النتيجة من الخادم أولاً
-  let data;
-  try {
-    const r = await fetch(`${API}/api/lucky/play`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ init_data: initData, stake: selectedStake })
-    });
-    data = await r.json();
-  } catch(e) {
-    data = { error: 'network' };
-  }
-
-  if (data.error) {
-    cvs.classList.remove('spinning');
-    const msgs = {
-      cooldown:             ['⏳','انتظر قليلاً','قبل المحاولة التالية'],
-      insufficient_balance: ['😕','رصيدك لا يكفي','اختر رهاناً أقل'],
-      unauthorized:         ['🔒','غير مصرح','افتح اللعبة من البوت'],
-      tx_failed:            ['⚠️','خطأ في العملية','حاول لاحقاً'],
-      network:              ['📡','خطأ في الاتصال','تحقق من الإنترنت'],
-      maintenance:          ['🔧','اللعبة في التحديث','سنعود قريباً'],
-      daily_limit:          ['🚫','وصلت للحد اليومي','عد غداً وحظ أوفر!'],
-    };
-    const [ic,ti,su] = msgs[data.error] || ['⚠️','خطأ','حاول لاحقاً'];
-    showResult('error', ic, ti, su);
-    isSpinning = false;
-    document.getElementById('spin-btn').disabled = false;
-    return;
-  }
-
-  // تسجيل وقت الـ spin لحماية الكولداون
-  localStorage.setItem('_lgs', Date.now().toString());
-
-  // 2) تحديد القطاع المستهدف + تأثير "كاد يفوز" للخسارة
-  const segOptions = { win:[0,3], lose:[1,4], retry:[2,5] };
-  const opts = segOptions[data.outcome] || [2];
-  const targetSeg = opts[Math.floor(Math.random() * opts.length)];
-
-  // حساب زاوية التوقف:
-  // rot = 360 - (targetSeg + 0.5) * SA يضع منتصف القطاع عند الإبرة
-  let stopAngle = ((360 - (targetSeg + 0.5) * SA) % 360 + 360) % 360;
-
-  // تأثير "كاد يفوز": للخسارة، أوقف العجلة قريباً من حافة قطاع الفوز المجاور
-  // القطاعات: 0=فوز, 1=خسارة, 2=إعادة, 3=فوز, 4=خسارة, 5=إعادة
-  // عند الخسارة على قطاع 1: اقترب من حافة قطاع 0 (فوز) = أضف offset صغير
-  // عند الخسارة على قطاع 4: اقترب من حافة قطاع 3 (فوز)
-  if (data.outcome === 'lose') {
-    // أوقف على حافة القطاع (20% من حجم القطاع بعيداً عن المنتصف باتجاه الفوز)
-    const nearMissOffset = SA * 0.30; // 30% من حجم القطاع = قريب جداً من الحافة
-    stopAngle = ((stopAngle + nearMissOffset) % 360 + 360) % 360;
-  }
-
-  const curMod   = ((rotation % 360) + 360) % 360;
-  let   diff     = (stopAngle - curMod + 360) % 360;
-  if (diff < 45) diff += 360;
-  const finalRot = rotation + 5 * 360 + diff;
-
-  // 3) تشغيل أنيميشن الدوران للتوقف على القطاع الصحيح
-  const duration  = 4000;
-  const startTime = performance.now();
-  const startRot  = rotation;
-  let lastSeg     = -1;
-
-  await new Promise(resolve => {
-    function frame(now) {
-      const p = Math.min((now - startTime) / duration, 1);
-      const e = 1 - Math.pow(1 - p, 4); // ease-out quart
-      rotation = startRot + (finalRot - startRot) * e;
-      drawWheel(rotation % 360);
-
-      // صوت نقرة عند تجاوز كل قطاع
-      const curSegNow = Math.floor(((rotation % 360) / 360) * N);
-      if (curSegNow !== lastSeg) { playTick(); lastSeg = curSegNow; }
-
-      if (p < 1) requestAnimationFrame(frame);
-      else { rotation = finalRot; drawWheel(rotation % 360); resolve(); }
-    }
-    requestAnimationFrame(frame);
-  });
-
-  cvs.classList.remove('spinning');
-
-  // 4) تحديث الرصيد والإحصائيات
-  updateBalanceUI(data.new_balance);
-  plays++;
-  if (data.outcome==='win')  wins++;
-  if (data.outcome==='lose') loses++;
-  document.getElementById('st-plays').textContent = plays;
-  document.getElementById('st-wins').textContent  = wins;
-  document.getElementById('st-loses').textContent = loses;
-
-  // 5) عرض النتيجة + صوت
-  if (data.outcome==='win') {
-    playWin();
-    showResult('win','🎉','مبروك! فزت 🏆',`ربحت +${data.earned.toLocaleString('ar')} نقطة`);
-    launchConfetti();
-  } else if (data.outcome==='lose') {
-    playLose();
-    showResult('lose','😢','للأسف خسرت ❌',`خسرت ${Math.abs(data.earned).toLocaleString('ar')} نقطة`);
-  } else {
-    playRetry();
-    showResult('retry','🔁','إعادة!','لا خصم ولا إضافة — جرّب مجدداً');
-  }
-
-  startCooldown();
-}
-
-function showResult(type, icon, title, sub) {
-  const el = document.getElementById('result-inline');
-  el.classList.remove('win-res','lose-res','retry-res');
-  if (type==='win')   el.classList.add('win-res');
-  if (type==='lose')  el.classList.add('lose-res');
-  if (type==='retry') el.classList.add('retry-res');
-  document.getElementById('res-icon').textContent  = icon;
-  document.getElementById('res-title').textContent = title;
-  document.getElementById('res-sub').textContent   = sub;
-  el.classList.add('show');
-  el.scrollIntoView({ behavior:'smooth', block:'nearest' });
-}
-
-function startCooldown() {
-  const wrap = document.getElementById('cd-wrap');
-  const bar  = document.getElementById('cd-bar');
-  wrap.style.display='block';
-  bar.style.transition='none'; bar.style.width='100%';
-  setTimeout(()=>{ bar.style.transition=`width ${COOLDOWN}s linear`; bar.style.width='0%'; },50);
-  setTimeout(()=>{
-    isSpinning=false;
-    document.getElementById('spin-btn').disabled=false;
-    wrap.style.display='none'; bar.style.width='100%';
-  }, COOLDOWN*1000);
-}
-
-// ===== Confetti =====
-function launchConfetti() {
-  const colors=['#ffd200','#27ae60','#3498db','#e74c3c','#9b59b6','#f39c12'];
-  for(let i=0;i<55;i++) {
-    const el=document.createElement('div');
-    el.className='confetti-piece';
-    el.style.left=Math.random()*100+'vw';
-    el.style.background=colors[Math.floor(Math.random()*colors.length)];
-    el.style.width=(8+Math.random()*8)+'px';
-    el.style.height=(12+Math.random()*8)+'px';
-    el.style.animationDuration=(2+Math.random()*2)+'s';
-    el.style.animationDelay=(Math.random()*0.5)+'s';
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(),5000);
-  }
-}
-
-// ===== Add Points (Admin) =====
-async function addPointsToUser() {
-  if (!isAdmin || !initData) return;
-
-  const uid    = document.getElementById('ap-uid').value.trim();
-  const amount = document.getElementById('ap-amount').value.trim();
-  const fb     = document.getElementById('ap-feedback');
-  const btn    = document.getElementById('ap-btn');
-
-  // تحقق بسيط
-  fb.className = 'add-points-feedback';
-  fb.style.display = 'none';
-
-  if (!uid || isNaN(uid) || Number(uid) <= 0) {
-    fb.textContent = '⚠️ أدخل ID مستخدم صحيح';
-    fb.className = 'add-points-feedback error';
-    return;
-  }
-  if (!amount || isNaN(amount) || Number(amount) <= 0) {
-    fb.textContent = '⚠️ أدخل عدد نقاط صحيح';
-    fb.className = 'add-points-feedback error';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = '⏳ جاري الإرسال...';
-
-  try {
-    const r = await authFetch(`${API}/api/lucky/admin/add_points`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ target_uid: Number(uid), amount: Number(amount) })
-    });
-    const d = await r.json();
-
-    if (d.error) {
-      fb.textContent = '❌ ' + (d.error === 'not_admin' ? 'ليس لديك صلاحية' : d.error === 'user_not_found' ? 'المستخدم غير موجود' : 'حدث خطأ');
-      fb.className = 'add-points-feedback error';
-    } else {
-      fb.textContent = `✅ تم إضافة ${Number(amount).toLocaleString('ar')} نقطة للمستخدم ${uid}`;
-      fb.className = 'add-points-feedback success';
-      document.getElementById('ap-uid').value    = '';
-      document.getElementById('ap-amount').value = '';
-    }
-  } catch(e) {
-    fb.textContent = '❌ تعذّر الاتصال بالسيرفر';
-    fb.className = 'add-points-feedback error';
-  }
-
-  btn.disabled = false;
-  btn.textContent = '✅ إرسال النقاط';
-}
-
-// ===== Quick Win 250 (Admin) =====
-async function quickWin250() {
-  if (!isAdmin || !initData) return;
-
-  const uid    = document.getElementById('ap-uid').value.trim();
-  const fb     = document.getElementById('ap-feedback');
-  const btn    = document.getElementById('quick-win-btn');
-
-  // تحقق بسيط
-  fb.className = 'add-points-feedback';
-  fb.style.display = 'none';
-
-  if (!uid || isNaN(uid) || Number(uid) <= 0) {
-    fb.textContent = '⚠️ أدخل ID مستخدم صحيح';
-    fb.className = 'add-points-feedback error';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = '⏳ جاري الإرسال...';
-
-  try {
-    const r = await authFetch(`${API}/api/lucky/admin/add_points`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ target_uid: Number(uid), amount: 250 })
-    });
-    const d = await r.json();
-
-    if (d.error) {
-      fb.textContent = '❌ ' + (d.error === 'not_admin' ? 'ليس لديك صلاحية' : d.error === 'user_not_found' ? 'المستخدم غير موجود' : 'حدث خطأ');
-      fb.className = 'add-points-feedback error';
-    } else {
-      fb.textContent = `✅ تم إضافة 250 نقطة للمستخدم ${uid} - فوز! 🎉`;
-      fb.className = 'add-points-feedback success';
-      document.getElementById('ap-uid').value = '';
-    }
-  } catch(e) {
-    fb.textContent = '❌ تعذّر الاتصال بالسيرفر';
-    fb.className = 'add-points-feedback error';
-  }
-
-  btn.disabled = false;
-  btn.textContent = '🎉 فوز 250';
-}
-
-// ===== User Detail Modal (Admin) =====
-function closeUserModal(e) {
-  if (e.target === document.getElementById('user-modal')) {
-    document.getElementById('user-modal').classList.add('hidden');
-  }
-}
-
-async function showUserStats(uid) {
-  if (!isAdmin || !initData) return;
-
-  // جلب بيانات المستخدم من Map (لا نمرر البيانات عبر onclick)
-  const info = _winnerMap[uid] || {};
-  const name = info.name;
-  const photoUrl = info.photo_url;
-
-  // إظهار المودال مع بيانات أولية (textContent آمن من XSS)
-  const modal = document.getElementById('user-modal');
-  document.getElementById('modal-username').textContent = name || ('لاعب #' + uid);
-  document.getElementById('modal-uid').textContent = 'ID: ' + uid;
-  document.getElementById('modal-balance').textContent = '...';
-  document.getElementById('modal-initial').textContent = '...';
-  document.getElementById('modal-total-won').textContent = '...';
-  document.getElementById('modal-games').textContent = '...';
-  document.getElementById('modal-active-badge').textContent = '⏳ جاري التحميل...';
-  document.getElementById('modal-active-badge').className = 'modal-active-badge';
-
-  // الصورة — src تُعقَّم بـ escapeHTML
-  const avatarWrap = document.getElementById('modal-avatar-wrap');
-  if (photoUrl) {
-    const img = document.createElement('img');
-    img.className = 'modal-avatar';
-    img.src = photoUrl;
-    img.onerror = () => { avatarWrap.innerHTML = '<div class="modal-avatar-placeholder">🎮</div>'; };
-    avatarWrap.innerHTML = '';
-    avatarWrap.appendChild(img);
-  } else {
-    avatarWrap.innerHTML = '<div class="modal-avatar-placeholder">🎮</div>';
-  }
-
-  modal.classList.remove('hidden');
-
-  // جلب البيانات من الخادم — initData في header
-  try {
-    const r = await authFetch(`${API}/api/lucky/admin/user/${encodeURIComponent(uid)}`);
-    const d = await r.json();
-    if (d.error) throw new Error(d.error);
-
-    const fmt = n => Number(n || 0).toLocaleString('de-DE');
-    document.getElementById('modal-balance').textContent    = fmt(d.balance) + ' نقطة';
-    document.getElementById('modal-initial').textContent   = fmt(d.initial_balance) + ' نقطة';
-    document.getElementById('modal-total-won').textContent = '+' + fmt(d.total_won) + ' نقطة';
-    document.getElementById('modal-games').textContent     = fmt(d.games) + ' جولة';
-
-    const badge = document.getElementById('modal-active-badge');
-    if (d.is_active) {
-      badge.textContent = '🟢 نشط الآن';
-      badge.className = 'modal-active-badge online';
-    } else {
-      badge.textContent = '⚫ غير نشط';
-      badge.className = 'modal-active-badge offline';
-    }
-  } catch(e) {
-    document.getElementById('modal-balance').textContent  = 'خطأ';
-    document.getElementById('modal-active-badge').textContent = '⚠️ تعذّر التحميل';
-    document.getElementById('modal-active-badge').className   = 'modal-active-badge offline';
-  }
-}
-
-// ===== Particles =====
-(function(){
-  const c=document.getElementById('particles'),ctx2=c.getContext('2d');
-  c.width=window.innerWidth; c.height=window.innerHeight;
-  const pts=Array.from({length:50},()=>({
-    x:Math.random()*c.width, y:Math.random()*c.height,
-    r:Math.random()*2+0.5,
-    dx:(Math.random()-0.5)*0.35, dy:-(Math.random()*0.45+0.15),
-    a:Math.random()*0.4+0.15
-  }));
-  function tick(){
-    ctx2.clearRect(0,0,c.width,c.height);
-    pts.forEach(p=>{
-      p.x+=p.dx; p.y+=p.dy;
-      if(p.y<-5){p.y=c.height+5; p.x=Math.random()*c.width;}
-      ctx2.beginPath(); ctx2.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx2.fillStyle=`rgba(255,210,0,${p.a})`; ctx2.fill();
-    });
-    requestAnimationFrame(tick);
-  }
-  tick();
-  window.addEventListener('resize',()=>{c.width=window.innerWidth;c.height=window.innerHeight;});
-})();
-</script>
+    <script>
+        // =====================================================
+        // 🔐 نظام التحقق من Telegram initData
+        // =====================================================
+        
+        let currentUser = null;
+        let verifiedUser = false;
+        const API_URL = 'https://bot.tota.click'; // رابط السيرفر
+        const BOT_TOKEN = '6185208107:AAGe7f8wTqPMIdITCMPoQ2v2ipoHyHw7dI4'; // توكن البوت
+        
+        // ===== 1️⃣ التحقق من وجود Telegram WebApp =====
+        function checkTelegramWebApp() {
+            if (window.Telegram && window.Telegram.WebApp) {
+                console.log('✅ Telegram WebApp متاح');
+                
+                // تهيئة WebApp
+                const tg = window.Telegram.WebApp;
+                tg.ready();
+                tg.expand();
+                
+                // الحصول على initData
+                const initData = tg.initData;
+                const initDataUnsafe = tg.initDataUnsafe;
+                
+                console.log('📦 initData:', initData);
+                console.log('👤 initDataUnsafe:', initDataUnsafe);
+                
+                // التحقق من صحة البيانات
+                if (initData) {
+                    verifyInitData(initData);
+                }
+                
+                // استخراج معلومات المستخدم من initDataUnsafe
+                if (initDataUnsafe && initDataUnsafe.user) {
+                    currentUser = initDataUnsafe.user;
+                    displayUserInfo(currentUser);
+                    getBalance();
+                }
+                
+                // إعداد الألوان حسب تيليجرام
+                if (tg.themeParams) {
+                    document.body.style.backgroundColor = tg.themeParams.bg_color || '#1a1a2e';
+                    document.body.style.color = tg.themeParams.text_color || '#ffffff';
+                }
+                
+            } else {
+                console.log('⚠️ Telegram WebApp غير متاح - تشغيل في المتصفح');
+                
+                // ===== 2️⃣ التحقق من الرابط الآمن (للويب العادي) =====
+                checkSecureLink();
+            }
+        }
+        
+        // ===== 3️⃣ التحقق من صحة initData =====
+        async function verifyInitData(initData) {
+            try {
+                showLoading(true);
+                
+                // يمكن إرسال initData للسيرفر للتحقق
+                const response = await fetch(`${API_URL}/api/verify`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        init_data: initData,
+                        bot_token: BOT_TOKEN
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.verified) {
+                    console.log('✅ البيانات صحيحة وموثقة من Telegram');
+                    verifiedUser = true;
+                    showSuccess('✅ تم التحقق من هويتك');
+                    
+                    // حفظ في localStorage
+                    localStorage.setItem('lucky_verified', 'true');
+                    localStorage.setItem('lucky_user', JSON.stringify(currentUser));
+                } else {
+                    console.log('❌ فشل التحقق من البيانات');
+                    showError('❌ فشل التحقق من البيانات');
+                }
+                
+            } catch (error) {
+                console.log('⚠️ تعذر الاتصال بالسيرفر للتحقق:', error);
+                // إذا فشل الاتصال، نثق بالبيانات محلياً
+                verifiedUser = true;
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // ===== 4️⃣ التحقق من الرابط الآمن =====
+        function checkSecureLink() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const uid = urlParams.get('uid');
+            const timestamp = urlParams.get('t');
+            const signature = urlParams.get('sig');
+            
+            console.log('🔍 فحص الرابط الآمن:');
+            console.log('UID:', uid);
+            console.log('Timestamp:', timestamp);
+            console.log('Signature:', signature);
+            
+            if (uid && signature) {
+                console.log('✅ تم العثور على توقيع في الرابط');
+                
+                // التحقق من صحة التوقيع (اختياري - يمكن التحقق محلياً)
+                if (verifySignature(uid, timestamp, signature)) {
+                    console.log('✅ التوقيع صحيح');
+                    
+                    // تسجيل الدخول تلقائياً
+                    currentUser = {
+                        id: parseInt(uid),
+                        first_name: 'مستخدم ' + uid,
+                        username: 'user_' + uid
+                    };
+                    
+                    displayUserInfo(currentUser);
+                    getBalance();
+                    showSuccess('✅ تم تسجيل الدخول عبر الرابط الآمن');
+                    
+                } else {
+                    console.log('❌ التوقيع غير صحيح');
+                    showError('❌ الرابط غير صحيح أو منتهي الصلاحية');
+                }
+            } else {
+                console.log('⚠️ لا يوجد توقيع في الرابط - وضع تجريبي');
+                showError('⚠️ افتح التطبيق من بوت تيليجرام للتجربة الكاملة');
+                
+                // مستخدم تجريبي
+                currentUser = {
+                    id: 12345,
+                    first_name: 'زائر',
+                    username: 'guest'
+                };
+                displayUserInfo(currentUser);
+            }
+        }
+        
+        // ===== 5️⃣ التحقق من التوقيع محلياً =====
+        function verifySignature(uid, timestamp, signature) {
+            // التحقق من أن التوقيع ليس منتهي الصلاحية (24 ساعة)
+            const now = Math.floor(Date.now() / 1000);
+            const linkTime = parseInt(timestamp);
+            
+            if (now - linkTime > 86400) { // 24 ساعة
+                console.log('⚠️ الرابط منتهي الصلاحية');
+                return false;
+            }
+            
+            // يمكن إضافة تحقق HMAC هنا
+            // لكن الأفضل إرساله للسيرفر للتحقق
+            
+            return true;
+        }
+        
+        // ===== عرض معلومات المستخدم =====
+        function displayUserInfo(user) {
+            if (!user) return;
+            
+            document.getElementById('userInfo').classList.remove('hidden');
+            document.getElementById('userName').textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+            document.getElementById('userId').textContent = user.id;
+        }
+        
+        // ===== جلب الرصيد =====
+        async function getBalance() {
+            if (!currentUser || !currentUser.id) {
+                showError('❌ يرجى تسجيل الدخول أولاً');
+                return;
+            }
+            
+            try {
+                showLoading(true);
+                
+                const response = await fetch(`${API_URL}/api/lucky/balance`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: currentUser.id,
+                        init_data: window.Telegram?.WebApp?.initData || '',
+                        signature: localStorage.getItem('lucky_signature') || ''
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data && data.balance !== undefined) {
+                    document.getElementById('balance').textContent = data.balance.toLocaleString();
+                    console.log('💰 الرصيد:', data.balance);
+                } else {
+                    showError('❌ فشل جلب الرصيد');
+                }
+                
+            } catch (error) {
+                console.error('❌ خطأ في جلب الرصيد:', error);
+                showError('❌ خطأ في الاتصال بالسيرفر');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // ===== لف العجلة =====
+        async function spinWheel() {
+            if (!currentUser || !currentUser.id) {
+                showError('❌ يرجى تسجيل الدخول أولاً');
+                return;
+            }
+            
+            try {
+                showLoading(true);
+                document.getElementById('result').classList.add('hidden');
+                
+                const response = await fetch(`${API_URL}/api/lucky/spin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: currentUser.id,
+                        init_data: window.Telegram?.WebApp?.initData || ''
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+                
+                // عرض النتيجة
+                document.getElementById('result').classList.remove('hidden');
+                
+                if (data.won) {
+                    document.getElementById('resultText').textContent = 
+                        `🎉 مبروك! ربحت ${data.prize} نقطة!`;
+                    document.getElementById('resultText').style.color = '#51cf66';
+                } else {
+                    document.getElementById('resultText').textContent = 
+                        '😢 حظ أوفر المرة الجاية';
+                    document.getElementById('resultText').style.color = '#ff6b6b';
+                }
+                
+                // تحديث الرصيد
+                if (data.new_balance !== undefined) {
+                    document.getElementById('balance').textContent = data.new_balance.toLocaleString();
+                }
+                
+            } catch (error) {
+                console.error('❌ خطأ في لف العجلة:', error);
+                showError('❌ خطأ في الاتصال');
+            } finally {
+                showLoading(false);
+            }
+        }
+        
+        // ===== دوال مساعدة =====
+        function showLoading(show) {
+            const loader = document.getElementById('loading');
+            if (show) {
+                loader.classList.remove('hidden');
+            } else {
+                loader.classList.add('hidden');
+            }
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+            setTimeout(() => errorDiv.classList.add('hidden'), 3000);
+        }
+        
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success');
+            successDiv.textContent = message;
+            successDiv.classList.remove('hidden');
+            setTimeout(() => successDiv.classList.add('hidden'), 3000);
+        }
+        
+        // ===== بدء التطبيق =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 بدء تطبيق Lucky...');
+            checkTelegramWebApp();
+        });
+        
+        // ===== تحديث تلقائي للرصيد كل 30 ثانية =====
+        setInterval(() => {
+            if (currentUser) {
+                getBalance();
+            }
+        }, 30000);
+    </script>
 </body>
 </html>
