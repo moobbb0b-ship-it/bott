@@ -1,3 +1,4 @@
+<!-- v12 -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -23,6 +24,7 @@
       padding-bottom: 40px;
     }
 
+    /* ===== Header ===== */
     .header {
       width: 100%;
       padding: 16px 20px 12px;
@@ -46,6 +48,7 @@
     }
     .balance-box:active { transform: scale(0.95); }
 
+    /* ===== Tabs ===== */
     .tabs {
       display: flex;
       width: 92%;
@@ -74,12 +77,15 @@
       box-shadow: 0 2px 10px rgba(247,151,30,0.4);
     }
 
+    /* ===== Tab panels ===== */
     .panel { display: none; width: 100%; flex-direction: column; align-items: center; }
     .panel.show { display: flex; }
 
+    /* ===== Particles ===== */
     #particles { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
     .content { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; }
 
+    /* ===== Wheel ===== */
     .wheel-section { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
     .wheel-wrapper { position: relative; width: 260px; height: 260px; }
     .needle {
@@ -107,6 +113,7 @@
       z-index: 5;
     }
 
+    /* ===== Stats mini row ===== */
     .stats-row {
       display: flex; gap: 10px;
       margin-top: 16px;
@@ -123,6 +130,7 @@
     .stat-label { font-size: 10px; color: rgba(255,255,255,0.5); }
     .stat-value { font-size: 15px; font-weight: 700; margin-top: 3px; }
 
+    /* ===== Stake picker ===== */
     .stake-section { margin-top: 18px; width: 92%; max-width: 380px; }
     .stake-label { text-align: center; font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 10px; }
     .stakes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -136,6 +144,7 @@
       padding: 11px 6px;
       cursor: pointer;
       transition: all 0.2s;
+      position: relative; overflow: hidden;
     }
     .stake-btn.active {
       border-color: #ffd200;
@@ -144,6 +153,7 @@
     }
     .stake-btn:active { transform: scale(0.95); }
 
+    /* ===== Spin button ===== */
     .spin-btn {
       margin-top: 16px;
       width: 92%; max-width: 380px;
@@ -164,6 +174,7 @@
       box-shadow: none; transform: none;
     }
 
+    /* ===== Cooldown bar ===== */
     .cd-wrap {
       width: 92%; max-width: 380px;
       margin-top: 10px; height: 5px;
@@ -178,6 +189,7 @@
       transition: width linear;
     }
 
+    /* ===== Result card (inline, not popup) ===== */
     .result-inline {
       display: none;
       width: 92%; max-width: 380px;
@@ -191,14 +203,16 @@
       from { transform: translateY(20px); opacity: 0; }
       to   { transform: translateY(0);    opacity: 1; }
     }
-    .result-inline.win-res  { background: rgba(39,174,96,0.2); border: 2px solid #27ae60; }
-    .result-inline.lose-res { background: rgba(231,76,60,0.2); border: 2px solid #e74c3c; }
-    .result-inline.retry-res{ background: rgba(52,152,219,0.2); border: 2px solid #3498db; }
+    .result-inline.win-res  { background: linear-gradient(135deg, rgba(39,174,96,0.25), rgba(46,204,113,0.1)); border: 2px solid #27ae60; }
+    .result-inline.lose-res { background: linear-gradient(135deg, rgba(231,76,60,0.25),  rgba(192,57,43,0.1));  border: 2px solid #e74c3c; }
+    .result-inline.retry-res{ background: linear-gradient(135deg, rgba(52,152,219,0.25), rgba(41,128,185,0.1)); border: 2px solid #3498db; }
     .result-inline.show { display: block; }
     .res-icon  { font-size: 50px; }
     .res-title { font-size: 22px; font-weight: 800; margin: 6px 0 4px; }
     .res-sub   { font-size: 14px; color: rgba(255,255,255,0.7); }
 
+    /* ===== Stats panel ===== */
+    /* ===== Stats Panel ===== */
     .stats-panel { width: 92%; max-width: 400px; margin-top: 16px; }
     .stats-header {
       display: flex; justify-content: space-between; align-items: center;
@@ -214,6 +228,7 @@
     }
     .refresh-btn:active { transform: scale(0.95); }
 
+    /* بطاقة اللاعب الحالي */
     .my-card {
       background: linear-gradient(135deg, rgba(247,151,30,0.18), rgba(255,210,0,0.10));
       border: 1px solid rgba(247,151,30,0.4);
@@ -246,6 +261,7 @@
     .my-mini-stats { display: flex; gap: 10px; }
     .my-mini-stat { display: none; }
 
+    /* إجمالي المشاركين */
     .total-box {
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.1);
@@ -257,6 +273,7 @@
     .total-box-lbl { font-size: 13px; color: rgba(255,255,255,0.6); }
     .total-box-num { font-size: 24px; font-weight: 800; color: #ffd200; }
 
+    /* قائمة الفائزين */
     .lb-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.75); margin-bottom: 10px; }
     .winners-list { display: flex; flex-direction: column; gap: 8px; }
     .winner-item {
@@ -295,6 +312,7 @@
 
     .loading-txt { text-align: center; color: rgba(255,255,255,0.4); padding: 30px; font-size: 14px; }
 
+    /* ===== User Detail Modal ===== */
     .modal-overlay {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.75);
@@ -367,6 +385,7 @@
     .winner-item.clickable { cursor: pointer; }
     .winner-item.clickable:hover { background: rgba(255,255,255,0.1) !important; border-color: rgba(255,210,0,0.4) !important; }
 
+    /* ===== Admin Panel ===== */
     .admin-panel { width: 92%; max-width: 380px; margin-top: 16px; }
     .period-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
     .period-btn {
@@ -400,112 +419,14 @@
       margin: 10px 0 8px;
     }
 
-    /* ===== Maintenance Button ===== */
-    .maint-btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 6px;
-    }
-    .maint-btn.off {
-      background: rgba(231,76,60,0.2);
-      border: 2px solid #e74c3c;
-      color: #e74c3c;
-    }
-    .maint-btn.on {
-      background: rgba(46,204,113,0.2);
-      border: 2px solid #2ecc71;
-      color: #2ecc71;
-    }
-    .maint-btn:active { transform: scale(0.97); }
-    .maint-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    /* ===== Maintenance Overlay ===== */
-    #maintOverlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      backdrop-filter: blur(12px);
-      z-index: 1000;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px;
-    }
-    #maintOverlay.show { display: flex; }
-    #maintOverlay .icon { font-size: 72px; margin-bottom: 16px; animation: pulse 1.5s ease-in-out infinite; }
-    #maintOverlay .title { font-size: 24px; font-weight: 800; margin-bottom: 10px; }
-    #maintOverlay .sub { font-size: 15px; opacity: 0.7; max-width: 320px; line-height: 1.6; }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-    }
-
-    .add-points-section {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,210,0,0.25);
-      border-radius: 16px;
-      padding: 16px;
-      margin-top: 14px;
-    }
-    .add-points-title {
-      font-size: 14px; font-weight: 700;
-      color: #ffd200; margin-bottom: 12px;
-      display: flex; align-items: center; gap: 6px;
-    }
-    .add-points-input {
-      width: 100%; padding: 11px 14px;
-      border-radius: 12px;
-      border: 1.5px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.08);
-      color: #fff; font-size: 15px;
-      margin-bottom: 10px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .add-points-input:focus { border-color: #ffd200; }
-    .add-points-input::placeholder { color: rgba(255,255,255,0.35); }
-    .add-points-row { display: flex; gap: 8px; }
-    .add-points-btn {
-      flex: 1; padding: 12px;
-      border: none; border-radius: 12px;
-      font-size: 14px; font-weight: 800;
-      cursor: pointer; transition: all 0.2s;
-    }
-    .add-points-btn.send {
-      background: linear-gradient(135deg, #27ae60, #2ecc71);
-      color: #fff;
-      box-shadow: 0 3px 12px rgba(46,204,113,0.35);
-    }
-    .add-points-btn.send:hover { transform: translateY(-1px); }
-    .add-points-btn.send:active { transform: scale(0.97); }
-    .add-points-btn.send:disabled { background: #444; color: #888; cursor: not-allowed; box-shadow: none; transform: none; }
-    .add-points-feedback {
-      margin-top: 10px; padding: 10px 14px;
-      border-radius: 10px; font-size: 13px; font-weight: 600;
-      display: none; text-align: center;
-    }
-    .add-points-feedback.success { background: rgba(46,204,113,0.15); border: 1px solid #27ae60; color: #2ecc71; display: block; }
-    .add-points-feedback.error   { background: rgba(231,76,60,0.15);  border: 1px solid #e74c3c; color: #e74c3c;  display: block; }
-
+    /* ===== Spinning glow ===== */
     .spinning { animation: glowRing 0.4s ease-in-out infinite alternate; }
     @keyframes glowRing {
       from { filter: drop-shadow(0 0 10px rgba(255,210,0,0.3)); }
       to   { filter: drop-shadow(0 0 30px rgba(255,210,0,0.9)); }
     }
 
+    /* ===== Confetti ===== */
     .confetti-piece {
       position: fixed; width: 10px; height: 14px; top: -20px;
       border-radius: 2px;
@@ -517,6 +438,7 @@
       100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
     }
 
+    /* ===== Maintenance Screen ===== */
     #maintenance-screen {
       display: none;
       position: fixed; inset: 0;
@@ -536,30 +458,9 @@
     }
     .maint-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
     .maint-sub   { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.7; }
-
-    .toast {
-      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-      background: rgba(0,0,0,0.85);
-      padding: 10px 22px; border-radius: 12px;
-      font-size: 13px; font-weight: 600;
-      z-index: 999; display: none;
-      text-align: center;
-      max-width: 90%;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-    .toast.show { display: block; }
-    .toast.success { border-color: #27ae60; color: #2ecc71; }
-    .toast.error { border-color: #e74c3c; color: #e74c3c; }
   </style>
 </head>
 <body>
-
-<!-- ===== MAINTENANCE OVERLAY ===== -->
-<div id="maintOverlay">
-  <div class="icon">🔧</div>
-  <div class="title">الموقع في وضع الصيانة</div>
-  <div class="sub">نعمل على تحسين التجربة<br>سنعود قريباً، شكراً لصبركم 🙏</div>
-</div>
 
 <!-- Maintenance Screen -->
 <div id="maintenance-screen">
@@ -581,8 +482,8 @@
   <!-- Tabs -->
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('game',this)">🎮 اللعبة</button>
-    <button class="tab-btn" onclick="switchTab('stats',this)">📊 الإحصائيات</button>
-    <button class="tab-btn" id="admin-tab-btn" onclick="switchTab('admin',this)">⚙️ لوحة التحكم</button>
+    <button class="tab-btn"       onclick="switchTab('stats',this)">📊 الإحصائيات</button>
+    <button class="tab-btn" id="8219134319" style="display:none" onclick="switchTab('admin',this)">⚙️ إعدادات</button>
   </div>
 
   <!-- ===== GAME PANEL ===== -->
@@ -631,34 +532,26 @@
     <div class="result-inline" id="result-inline">
       <div class="res-icon" id="res-icon">🎉</div>
       <div class="res-title" id="res-title">مبروك!</div>
-      <div class="res-sub" id="res-sub"></div>
+      <div class="res-sub"   id="res-sub"></div>
     </div>
 
   </div>
 
   <!-- ===== ADMIN PANEL ===== -->
-  <div class="panel" id="panel-admin">
+  <div class="panel" id="8219134319">
     <div class="admin-panel">
       <div class="stats-header">
-        <h3>⚙️ لوحة التحكم</h3>
+        <h3>⚙️ لوحة الأدمن</h3>
         <button class="refresh-btn" onclick="loadAdminStats()">🔄 تحديث</button>
-      </div>
-
-      <!-- ===== زر الصيانة (للجميع) ===== -->
-      <div class="admin-stat-card" style="grid-column: span 2; border-color: rgba(255,210,0,0.3); margin-bottom: 12px;">
-        <button class="maint-btn off" id="maintBtn" onclick="toggleMaintenance()" style="width:100%;">
-          ⚠️ تفعيل الصيانة
-        </button>
-        <div style="font-size:10px; color:rgba(255,255,255,0.4); margin-top:4px; text-align:center;">اضغط لتفعيل/إلغاء الصيانة للجميع</div>
       </div>
 
       <!-- فلاتر الفترة الزمنية -->
       <div class="period-filters">
-        <button class="period-btn active" data-period="TODAY" onclick="selectPeriod(this)">اليوم</button>
-        <button class="period-btn" data-period="YESTERDAY" onclick="selectPeriod(this)">البارحة</button>
-        <button class="period-btn" data-period="DAY2" onclick="selectPeriod(this)">أول البارحة</button>
-        <button class="period-btn" data-period="W7" onclick="selectPeriod(this)">7 أيام</button>
-        <button class="period-btn" data-period="ALL" onclick="selectPeriod(this)">الكل</button>
+        <button class="period-btn active" data-period="TODAY"     onclick="selectPeriod(this)">اليوم</button>
+        <button class="period-btn"        data-period="YESTERDAY" onclick="selectPeriod(this)">البارحة</button>
+        <button class="period-btn"        data-period="DAY2"      onclick="selectPeriod(this)">أول البارحة</button>
+        <button class="period-btn"        data-period="W7"        onclick="selectPeriod(this)">7 أيام</button>
+        <button class="period-btn"        data-period="ALL"       onclick="selectPeriod(this)">الكل</button>
       </div>
 
       <!-- اللاعبون -->
@@ -706,18 +599,6 @@
       </div>
 
       <div class="loading-txt" id="adm-loading" style="display:none">⏳ جاري التحميل...</div>
-
-      <!-- ===== إضافة نقاط (للأدمن فقط) ===== -->
-      <div class="add-points-section" id="add-points-section" style="display:none;">
-        <div class="add-points-title">➕ إضافة نقاط لمستخدم</div>
-        <input class="add-points-input" id="ap-uid" type="number" placeholder="🆔 أدخل ID المستخدم" />
-        <input class="add-points-input" id="ap-amount" type="number" placeholder="💰 عدد النقاط" />
-        <div class="add-points-row">
-          <button class="add-points-btn send" id="ap-btn" onclick="addPointsToUser()">✅ إرسال النقاط</button>
-        </div>
-        <div class="add-points-feedback" id="ap-feedback"></div>
-      </div>
-
     </div>
   </div>
 
@@ -729,6 +610,7 @@
         <button class="refresh-btn" onclick="loadStats()">🔄 تحديث</button>
       </div>
 
+      <!-- بطاقة اللاعب الحالي -->
       <div class="my-card" id="my-card">
         <div class="my-avatar-placeholder">⏳</div>
         <div class="my-info">
@@ -742,11 +624,13 @@
         </div>
       </div>
 
+      <!-- إجمالي المشاركين -->
       <div class="total-box">
         <div class="total-box-lbl">👥 إجمالي المشاركين</div>
         <div class="total-box-num" id="stat-participants">-</div>
       </div>
 
+      <!-- المتصدرون -->
       <div class="lb-title">🏆 أكثر الفائزين</div>
       <div class="winners-list" id="winners-list">
         <div class="loading-txt">⏳ جاري التحميل...</div>
@@ -756,7 +640,7 @@
 
 </div>
 
-<!-- ===== User Detail Modal ===== -->
+<!-- ===== User Detail Modal (Admin) ===== -->
 <div class="modal-overlay hidden" id="user-modal" onclick="closeUserModal(event)">
   <div class="modal-card">
     <button class="modal-close" onclick="document.getElementById('user-modal').classList.add('hidden')">✕</button>
@@ -793,57 +677,48 @@
   </div>
 </div>
 
-<!-- Toast -->
-<div class="toast" id="toast"></div>
-
 <script>
-// ===== CONFIG =====
-const API = "https://bot.tota.click";
-const STAKES = [250, 500, 750, 1000, 5000, 10000];
+// ===== Setup =====
+const tg      = window.Telegram?.WebApp;
+const API     = "https://bot.tota.click";
+const STAKES  = [250, 500, 750, 1000, 5000, 10000];
 const _urlParams = new URLSearchParams(window.location.search);
-const COOLDOWN = parseInt(_urlParams.get('cooldown') || '3', 10);
-const MEDALS = ["🥇","🥈","🥉","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"];
-
-const tg = window.Telegram?.WebApp;
-const initData = tg?.initData || "";
+const COOLDOWN= parseInt(_urlParams.get('cooldown') || '3', 10);
+const MEDALS  = ["🥇","🥈","🥉","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"];
 
 if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#0f0c29'); tg.setBackgroundColor('#0f0c29'); }
 
-// ===== STATE =====
-let balance = 0;
-let selectedStake = 500;
-let isSpinning = false;
-let rotation = 0;
-let plays = 0, wins = 0, loses = 0;
-let isAdmin = false;
-let isMaintenance = false;
-let currentPeriod = 'TODAY';
-let adminRefreshTimer = null;
+(async function checkMaintenance() {
+  try {
+    const r = await fetch(`${API}/api/lucky/maintenance`);
+    const d = await r.json();
+    if (d.maintenance) {
+      document.getElementById('maintenance-screen').classList.add('show');
+    }
+  } catch(e) {}
+})();
 
-// ===== HELPERS =====
+let balance      = 0;
+let selectedStake= 500;
+let isSpinning   = false;
+let rotation     = 0;
+let plays=0, wins=0, loses=0;
+const initData   = tg?.initData || "";
+
+// ===== Security Helpers =====
 function escapeHTML(str) {
   return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
-
-function fmt(n) { return Number(n || 0).toLocaleString('de-DE') + ' نقطة'; }
-
+// إرسال initData في header بدلاً من URL
 function authFetch(url, opts = {}) {
   if (!opts.headers) opts.headers = {};
   opts.headers['X-Tg-Init'] = initData;
   return fetch(url, opts);
 }
-
-function toast(msg, type = 'success') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'toast show ' + type;
-  clearTimeout(el._t);
-  el._t = setTimeout(() => el.classList.remove('show'), 3000);
-}
-
+// بيانات الفائزين (لتجنب XSS في onclick)
 const _winnerMap = {};
 
-// ===== TABS =====
+// ===== Tabs =====
 function switchTab(name, btn) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -858,12 +733,16 @@ function switchTab(name, btn) {
   }
 }
 
-// ===== ADMIN =====
+// ===== Admin =====
+let currentPeriod = 'TODAY';
+let isAdmin = false;
+let adminRefreshTimer = null;
+
 function startAdminAutoRefresh() {
   stopAdminAutoRefresh();
   adminRefreshTimer = setInterval(() => {
-    loadAdminStats();
-  }, 15000);
+    if (isAdmin) loadAdminStats();
+  }, 15000); // كل 15 ثانية
 }
 
 function stopAdminAutoRefresh() {
@@ -880,7 +759,7 @@ async function checkAdmin() {
     const d = await r.json();
     if (d.is_admin) {
       isAdmin = true;
-      document.getElementById('add-points-section').style.display = '';
+      document.getElementById('8219134319').style.display = '';
     }
   } catch(e) {}
 }
@@ -894,190 +773,39 @@ function selectPeriod(btn) {
 
 function _updateAdminUI(d) {
   const fmt = n => Number(n || 0).toLocaleString('de-DE');
-  document.getElementById('adm-active-now').textContent = fmt(d.active_now);
+  document.getElementById('adm-active-now').textContent   = fmt(d.active_now);
   document.getElementById('adm-active-today').textContent = fmt(d.active_today);
-  document.getElementById('adm-profit').textContent = fmt(d.profit);
-  document.getElementById('adm-loss').textContent = fmt(d.loss);
-  document.getElementById('adm-games').textContent = fmt(d.total_games);
+  document.getElementById('adm-profit').textContent       = fmt(d.profit);
+  document.getElementById('adm-loss').textContent         = fmt(d.loss);
+  document.getElementById('adm-games').textContent        = fmt(d.total_games);
   document.getElementById('adm-period-label').textContent = `💹 الفترة: ${d.label || currentPeriod}`;
-  const net = (d.profit || 0) - (d.loss || 0);
+  const net   = (d.profit || 0) - (d.loss || 0);
   const netEl = document.getElementById('adm-net');
   netEl.textContent = (net >= 0 ? '+' : '') + net.toLocaleString('ar');
   netEl.style.color = net >= 0 ? '#2ecc71' : '#e74c3c';
 }
 
 async function loadAdminStats() {
-  if (!initData) {
-    document.getElementById('adm-active-now').textContent = '👤';
-    document.getElementById('adm-active-today').textContent = '👤';
-    document.getElementById('adm-profit').textContent = '🔒';
-    document.getElementById('adm-loss').textContent = '🔒';
-    document.getElementById('adm-games').textContent = '🔒';
-    document.getElementById('adm-net').textContent = '🔒';
-    document.getElementById('adm-loading').style.display = 'none';
-    return;
-  }
-  
+  if (!initData) return;
   document.getElementById('adm-loading').style.display = 'block';
-  const ctrl = new AbortController();
+  const ctrl    = new AbortController();
   const timeout = setTimeout(() => ctrl.abort(), 10000);
   try {
     const url = `${API}/api/lucky/admin/stats?period=${currentPeriod}`;
-    const r = await authFetch(url, { signal: ctrl.signal });
-    const d = await r.json();
-    if (d.error) {
-      document.getElementById('adm-active-now').textContent = '👤';
-      document.getElementById('adm-active-today').textContent = '👤';
-      document.getElementById('adm-profit').textContent = '🔒';
-      document.getElementById('adm-loss').textContent = '🔒';
-      document.getElementById('adm-games').textContent = '🔒';
-      document.getElementById('adm-net').textContent = '🔒';
-    } else {
-      _updateAdminUI(d);
-    }
+    const r   = await authFetch(url, { signal: ctrl.signal });
+    const d   = await r.json();
+    _updateAdminUI(d.error ? {active_now:0,active_today:0,profit:0,loss:0,total_games:0,label:'لا صلاحية'} : d);
   } catch(e) {
-    document.getElementById('adm-active-now').textContent = '⚠️';
-    document.getElementById('adm-active-today').textContent = '⚠️';
-    document.getElementById('adm-profit').textContent = '⚠️';
-    document.getElementById('adm-loss').textContent = '⚠️';
-    document.getElementById('adm-games').textContent = '⚠️';
-    document.getElementById('adm-net').textContent = '⚠️';
+    _updateAdminUI({active_now:0,active_today:0,profit:0,loss:0,total_games:0,label:'خطأ في الاتصال'});
   } finally {
     clearTimeout(timeout);
     document.getElementById('adm-loading').style.display = 'none';
   }
 }
 
-// ===== MAINTENANCE (محلية + سيرفر) =====
-async function fetchMaintenanceStatus() {
-  try {
-    const r = await authFetch(`${API}/api/lucky/maintenance`);
-    const d = await r.json();
-    const status = d.maintenance || false;
-    localStorage.setItem('_maint', status ? 'true' : 'false');
-    updateMaintenanceUI(status);
-  } catch(e) {
-    const saved = localStorage.getItem('_maint') === 'true';
-    updateMaintenanceUI(saved);
-  }
-}
+checkAdmin();
 
-function updateMaintenanceUI(enabled) {
-  const overlay = document.getElementById('maintOverlay');
-  const spinBtn = document.getElementById('spin-btn');
-  const maintBtn = document.getElementById('maintBtn');
-
-  isMaintenance = enabled;
-
-  if (enabled) {
-    overlay.classList.add('show');
-    if (spinBtn) spinBtn.disabled = true;
-    if (maintBtn) {
-      maintBtn.className = 'maint-btn on';
-      maintBtn.innerHTML = '✅ الصيانة مفعلة (اضغط لإلغاء)';
-      maintBtn.disabled = false;
-    }
-  } else {
-    overlay.classList.remove('show');
-    if (spinBtn) spinBtn.disabled = false;
-    if (maintBtn) {
-      maintBtn.className = 'maint-btn off';
-      maintBtn.innerHTML = '⚠️ تفعيل الصيانة';
-      maintBtn.disabled = false;
-    }
-  }
-}
-
-async function toggleMaintenance() {
-  const btn = document.getElementById('maintBtn');
-  if (!btn) return;
-  
-  btn.disabled = true;
-  btn.innerHTML = '⏳ جاري...';
-
-  const newStatus = !isMaintenance;
-  isMaintenance = newStatus;
-  localStorage.setItem('_maint', newStatus ? 'true' : 'false');
-  updateMaintenanceUI(newStatus);
-
-  try {
-    const r = await authFetch(`${API}/api/lucky/maintenance`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ maintenance: newStatus })
-    });
-    const d = await r.json();
-    
-    if (d.error) {
-      toast(newStatus ? '🔧 تم تفعيل الصيانة (محلياً)' : '✅ تم إلغاء الصيانة (محلياً)', newStatus ? 'error' : 'success');
-    } else {
-      toast(newStatus ? '🔧 تم تفعيل الصيانة للجميع' : '✅ تم إلغاء الصيانة', newStatus ? 'error' : 'success');
-    }
-  } catch(e) {
-    toast(newStatus ? '🔧 تم تفعيل الصيانة (محلياً)' : '✅ تم إلغاء الصيانة (محلياً)', newStatus ? 'error' : 'success');
-  }
-
-  btn.disabled = false;
-}
-
-// ===== ADD POINTS (للأدمن فقط) =====
-async function addPointsToUser() {
-  if (!isAdmin || !initData) {
-    const fb = document.getElementById('ap-feedback');
-    fb.textContent = '❌ ليس لديك صلاحية أدمن';
-    fb.className = 'add-points-feedback error';
-    return;
-  }
-
-  const uid = document.getElementById('ap-uid').value.trim();
-  const amount = document.getElementById('ap-amount').value.trim();
-  const fb = document.getElementById('ap-feedback');
-  const btn = document.getElementById('ap-btn');
-
-  fb.className = 'add-points-feedback';
-  fb.style.display = 'none';
-
-  if (!uid || isNaN(uid) || Number(uid) <= 0) {
-    fb.textContent = '⚠️ أدخل ID مستخدم صحيح';
-    fb.className = 'add-points-feedback error';
-    return;
-  }
-  if (!amount || isNaN(amount) || Number(amount) <= 0) {
-    fb.textContent = '⚠️ أدخل عدد نقاط صحيح';
-    fb.className = 'add-points-feedback error';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = '⏳ جاري الإرسال...';
-
-  try {
-    const r = await authFetch(`${API}/api/lucky/admin/add_points`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ target_uid: Number(uid), amount: Number(amount) })
-    });
-    const d = await r.json();
-
-    if (d.error) {
-      fb.textContent = '❌ ' + (d.error === 'not_admin' ? 'ليس لديك صلاحية' : d.error === 'user_not_found' ? 'المستخدم غير موجود' : 'حدث خطأ');
-      fb.className = 'add-points-feedback error';
-    } else {
-      fb.textContent = `✅ تم إضافة ${Number(amount).toLocaleString('ar')} نقطة للمستخدم ${uid}`;
-      fb.className = 'add-points-feedback success';
-      document.getElementById('ap-uid').value = '';
-      document.getElementById('ap-amount').value = '';
-    }
-  } catch(e) {
-    fb.textContent = '❌ تعذّر الاتصال بالسيرفر';
-    fb.className = 'add-points-feedback error';
-  }
-
-  btn.disabled = false;
-  btn.textContent = '✅ إرسال النقاط';
-}
-
-// ===== PRESENCE =====
+// ===== Presence tracking =====
 function pingPresence() {
   if (!initData) return;
   authFetch(`${API}/api/lucky/ping`).catch(() => {});
@@ -1085,25 +813,29 @@ function pingPresence() {
 
 function leavePresence() {
   if (!initData) return;
+  // sendBeacon لا يدعم headers — نرسل initData في body بدلاً من URL
   const blob = new Blob([JSON.stringify({ init_data: initData })], { type: 'application/json' });
   try { navigator.sendBeacon(`${API}/api/lucky/leave`, blob); } catch(e) {}
 }
 
+// ping فوراً عند الفتح
 pingPresence();
+// ping كل 60 ثانية للإبقاء على التسجيل
 setInterval(pingPresence, 60000);
 
+// حذف عند الإغلاق أو إخفاء الصفحة
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') leavePresence();
   if (document.visibilityState === 'visible') pingPresence();
 });
 window.addEventListener('pagehide', leavePresence);
 
-// ===== WHEEL =====
+// ===== Wheel segments =====
 const SEGS = [
-  { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
-  { label:'❌ خسارة', color:'#922b21', light:'#c0392b' },
+  { label:'🏆 فوز',    color:'#1e8449', light:'#27ae60' },
+  { label:'❌ خسارة',  color:'#922b21', light:'#c0392b' },
   { label:'🔁 إعادة', color:'#1a5276', light:'#2980b9' },
-  { label:'🏆 فوز', color:'#27ae60', light:'#2ecc71' },
+  { label:'🏆 فوز',   color:'#27ae60', light:'#2ecc71' },
   { label:'❌ خسارة', color:'#c0392b', light:'#e74c3c' },
   { label:'🔁 إعادة', color:'#1a5276', light:'#2980b9' },
 ];
@@ -1117,43 +849,63 @@ function drawWheel(rot) {
   ctx.clearRect(0,0,cvs.width,cvs.height);
   const off = (rot - 90) * Math.PI / 180;
 
+  // ===== رسم القطاعات =====
   SEGS.forEach((s,i) => {
     const st = off + i * SA * Math.PI/180;
     const en = st + SA * Math.PI/180;
+
+    // تدرج لوني
     const g = ctx.createRadialGradient(CX,CY,R*0.15,CX,CY,R);
     g.addColorStop(0, s.light);
     g.addColorStop(1, s.color);
     ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,st,en); ctx.closePath();
     ctx.fillStyle = g; ctx.fill();
+
+    // حدود بيضاء واضحة
     ctx.strokeStyle='rgba(255,255,255,0.55)';
     ctx.lineWidth=2.5;
     ctx.stroke();
   });
 
+  // ===== رسم النصوص =====
   SEGS.forEach((s,i) => {
     const midAngle = off + i * SA * Math.PI/180 + (SA/2) * Math.PI/180;
-    const textR = R * 0.68;
+    const textR = R * 0.68; // موضع النص على بعد 68% من المركز
+
     ctx.save();
-    ctx.translate(CX + Math.cos(midAngle) * textR, CY + Math.sin(midAngle) * textR);
-    ctx.rotate(midAngle + Math.PI/2);
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    const parts = s.label.split(' ');
-    const emoji = parts[0] || '';
+    ctx.translate(
+      CX + Math.cos(midAngle) * textR,
+      CY + Math.sin(midAngle) * textR
+    );
+    ctx.rotate(midAngle + Math.PI/2); // النص عمودي باتجاه الخارج
+
+    ctx.textAlign   = 'center';
+    ctx.textBaseline= 'middle';
+
+    // فصل الإيموجي عن النص العربي
+    const parts  = s.label.split(' ');
+    const emoji  = parts[0] || '';
     const arabic = parts.slice(1).join(' ');
-    ctx.font = 'bold 14px Arial';
+
+    // ---- رسم النص العربي بإطار أسود ----
+    ctx.font     = 'bold 14px Arial';
     ctx.lineJoin = 'round';
+    // طبقة الإطار الأسود (5px)
     ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 5;
+    ctx.lineWidth   = 5;
     ctx.strokeText(arabic, 0, 4);
+    // طبقة النص الأبيض
     ctx.fillStyle = '#ffffff';
     ctx.fillText(arabic, 0, 4);
-    ctx.font = '13px Arial';
+
+    // ---- رسم الإيموجي فوق (بدون إطار) ----
+    ctx.font      = '13px Arial';
     ctx.fillStyle = '#ffffff';
     ctx.fillText(emoji, 0, -10);
     ctx.restore();
   });
 
+  // ===== الحلقة الخارجية =====
   ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2);
   ctx.strokeStyle='rgba(255,210,0,0.7)';
   ctx.lineWidth=5;
@@ -1161,26 +913,27 @@ function drawWheel(rot) {
 }
 drawWheel(0);
 
-// ===== STAKES =====
+// ===== Stakes buttons =====
 const grid = document.getElementById('stakes-grid');
 STAKES.forEach(s => {
   const b = document.createElement('button');
-  b.className = 'stake-btn' + (s === selectedStake ? ' active' : '');
+  b.className = 'stake-btn' + (s===selectedStake?' active':'');
   b.textContent = s >= 1000 ? (s/1000)+'K' : s;
   b.onclick = () => {
-    document.querySelectorAll('.stake-btn').forEach(x => x.classList.remove('active'));
-    b.classList.add('active');
-    selectedStake = s;
+    document.querySelectorAll('.stake-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active'); selectedStake = s;
   };
   grid.appendChild(b);
 });
 
-// ===== BALANCE =====
+// ===== Balance =====
+function fmtPts(n) {
+  return Number(n || 0).toLocaleString('de-DE') + ' نقطة';
+}
 function updateBalanceUI(v) {
   balance = v;
-  document.getElementById('balance-display').textContent = '💰 ' + fmt(v);
+  document.getElementById('balance-display').textContent = '💰 ' + fmtPts(v);
 }
-
 async function refreshBalance() {
   if (!initData) return;
   try {
@@ -1191,7 +944,61 @@ async function refreshBalance() {
 }
 refreshBalance();
 
-// ===== STATS =====
+// ===== Device Fingerprint (لربط الحسابات المتعددة) =====
+async function registerDeviceFingerprint() {
+  if (!initData) return;
+  try {
+    // جمع عناصر البصمة
+    const nav = navigator;
+    const screen = window.screen;
+
+    // Canvas fingerprint
+    let canvasHash = '';
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = 200; canvas.height = 50;
+      const ctx = canvas.getContext('2d');
+      ctx.textBaseline = 'top';
+      ctx.font = '14px Arial';
+      ctx.fillStyle = '#f60';
+      ctx.fillRect(0, 0, 200, 50);
+      ctx.fillStyle = '#069';
+      ctx.fillText('device-fp-2024', 2, 5);
+      ctx.fillStyle = 'rgba(102,204,0,0.9)';
+      ctx.fillText('device-fp-2024', 4, 17);
+      canvasHash = canvas.toDataURL().slice(-40);
+    } catch(e) {}
+
+    // مزج العناصر وتحويلها لهاش
+    const raw = [
+      nav.language || '',
+      (screen.width || 0) + 'x' + (screen.height || 0),
+      (screen.colorDepth || 0),
+      nav.platform || '',
+      (nav.hardwareConcurrency || 0),
+      Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+      canvasHash,
+      (nav.deviceMemory || 0)
+    ].join('|');
+
+    // SimpleHash (FNV-like) → hex string 16 chars
+    let h = 2166136261;
+    for (let i = 0; i < raw.length; i++) {
+      h ^= raw.charCodeAt(i);
+      h = (h * 16777619) >>> 0;
+    }
+    const fingerprint = h.toString(16).padStart(8,'0') + raw.length.toString(16).padStart(8,'0');
+
+    await fetch(`${API}/api/lucky/register_device`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ init_data: initData, fingerprint })
+    });
+  } catch(e) {}
+}
+registerDeviceFingerprint();
+
+// ===== Stats =====
 function _avatarEl(photoUrl, size, emoji) {
   if (photoUrl) {
     return `<img class="${size === 'big' ? 'my-avatar' : 'winner-avatar'}" src="${photoUrl}" onerror="this.outerHTML='<div class=\\'${size === 'big' ? 'my-avatar-placeholder' : 'winner-avatar-placeholder'}\\'>${emoji}</div>'">`;
@@ -1201,12 +1008,16 @@ function _avatarEl(photoUrl, size, emoji) {
 
 async function loadStats() {
   document.getElementById('winners-list').innerHTML = '<div class="loading-txt">⏳ جاري التحميل...</div>';
-  
+  // بطاقة اللاعب + قائمة الفائزين معاً
+  const statsUrl = (initData && isAdmin)
+    ? `${API}/api/lucky/admin/winners`
+    : `${API}/api/lucky/stats`;
   const [meRes, statsRes] = await Promise.allSettled([
     initData ? authFetch(`${API}/api/lucky/me`) : Promise.reject(),
-    initData ? authFetch(`${API}/api/lucky/stats`) : fetch(`${API}/api/lucky/stats`)
+    initData ? authFetch(statsUrl) : fetch(statsUrl)
   ]);
 
+  // بطاقة اللاعب الحالي
   try {
     const me = await meRes.value.json();
     const card = document.getElementById('my-card');
@@ -1214,7 +1025,7 @@ async function loadStats() {
       ${_avatarEl(me.photo_url, 'big', '🎮')}
       <div class="my-info">
         <div class="my-name">${escapeHTML(me.name || 'لاعب')}</div>
-        <div class="my-balance">${fmt(me.balance)}</div>
+        <div class="my-balance">${fmtPts(me.balance)}</div>
         <div class="my-mini-stats">
           <div class="my-mini-stat">فوز <span>${(me.wins||0).toLocaleString('de-DE')}</span></div>
           <div class="my-mini-stat">خسارة <span>${(me.losses||0).toLocaleString('de-DE')}</span></div>
@@ -1224,9 +1035,10 @@ async function loadStats() {
   } catch(e) {
     document.getElementById('my-card').innerHTML = `
       <div class="my-avatar-placeholder">🎮</div>
-      <div class="my-info"><div class="my-name">بياناتك</div><div class="my-balance">${fmt(balance)}</div></div>`;
+      <div class="my-info"><div class="my-name">بياناتك</div><div class="my-balance">${fmtPts(balance)}</div></div>`;
   }
 
+  // قائمة الفائزين
   try {
     const d = await statsRes.value.json();
     document.getElementById('stat-participants').textContent = (d.participants||0).toLocaleString('de-DE');
@@ -1235,6 +1047,7 @@ async function loadStats() {
       list.innerHTML = '<div class="loading-txt">لا يوجد فائزون بعد</div>';
       return;
     }
+    // حفظ بيانات الفائزين في Map بدلاً من تمريرها في onclick مباشرة
     d.last10.forEach(w => { _winnerMap[w.uid] = { name: w.name, photo_url: w.photo_url }; });
     list.innerHTML = d.last10.map((w, i) => `
       <div class="winner-item${isAdmin ? ' clickable' : ''}" ${isAdmin ? `onclick="showUserStats('${escapeHTML(String(w.uid))}')"` : ''}>
@@ -1250,105 +1063,61 @@ async function loadStats() {
   }
 }
 
-// ===== SOUND =====
+// ===== Sound Effects =====
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playTick() {
-  try {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.frequency.value = 600;
-    g.gain.setValueAtTime(0.15, audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-    o.start(); o.stop(audioCtx.currentTime + 0.05);
-  } catch(e) {}
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.frequency.value = 600;
+  g.gain.setValueAtTime(0.15, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+  o.start(); o.stop(audioCtx.currentTime + 0.05);
 }
 
 function playWin() {
-  try {
-    [523, 659, 784, 1047].forEach((f, i) => {
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.connect(g); g.connect(audioCtx.destination);
-      o.type = 'sine'; o.frequency.value = f;
-      const t = audioCtx.currentTime + i * 0.12;
-      g.gain.setValueAtTime(0.25, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-      o.start(t); o.stop(t + 0.3);
-    });
-  } catch(e) {}
-}
-
-function playLose() {
-  try {
-    [300, 250].forEach((f, i) => {
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.connect(g); g.connect(audioCtx.destination);
-      o.type = 'sawtooth'; o.frequency.value = f;
-      const t = audioCtx.currentTime + i * 0.2;
-      g.gain.setValueAtTime(0.2, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-      o.start(t); o.stop(t + 0.3);
-    });
-  } catch(e) {}
-}
-
-function playRetry() {
-  try {
+  [523, 659, 784, 1047].forEach((f, i) => {
     const o = audioCtx.createOscillator();
     const g = audioCtx.createGain();
     o.connect(g); g.connect(audioCtx.destination);
-    o.type = 'sine'; o.frequency.value = 440;
-    g.gain.setValueAtTime(0.2, audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-    o.start(); o.stop(audioCtx.currentTime + 0.4);
-  } catch(e) {}
+    o.type = 'sine'; o.frequency.value = f;
+    const t = audioCtx.currentTime + i * 0.12;
+    g.gain.setValueAtTime(0.25, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    o.start(t); o.stop(t + 0.3);
+  });
 }
 
-// ===== RESULT =====
-function showResult(type, icon, title, sub) {
-  const el = document.getElementById('result-inline');
-  el.classList.remove('win-res','lose-res','retry-res');
-  if (type === 'win') el.classList.add('win-res');
-  else if (type === 'lose') el.classList.add('lose-res');
-  else if (type === 'retry') el.classList.add('retry-res');
-  document.getElementById('res-icon').textContent = icon;
-  document.getElementById('res-title').textContent = title;
-  document.getElementById('res-sub').textContent = sub;
-  el.classList.add('show');
-  el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+function playLose() {
+  [300, 250].forEach((f, i) => {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type = 'sawtooth'; o.frequency.value = f;
+    const t = audioCtx.currentTime + i * 0.2;
+    g.gain.setValueAtTime(0.2, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    o.start(t); o.stop(t + 0.3);
+  });
 }
 
-// ===== CONFETTI =====
-function launchConfetti() {
-  const colors = ['#ffd200','#27ae60','#3498db','#e74c3c','#9b59b6','#f39c12'];
-  for(let i = 0; i < 55; i++) {
-    const el = document.createElement('div');
-    el.className = 'confetti-piece';
-    el.style.left = Math.random() * 100 + 'vw';
-    el.style.background = colors[Math.floor(Math.random() * colors.length)];
-    el.style.width = (8 + Math.random() * 8) + 'px';
-    el.style.height = (12 + Math.random() * 8) + 'px';
-    el.style.animationDuration = (2 + Math.random() * 2) + 's';
-    el.style.animationDelay = (Math.random() * 0.5) + 's';
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 5000);
-  }
+function playRetry() {
+  const o = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination);
+  o.type = 'sine'; o.frequency.value = 440;
+  g.gain.setValueAtTime(0.2, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+  o.start(); o.stop(audioCtx.currentTime + 0.4);
 }
 
-// ===== SPIN =====
+// ===== Spin =====
 async function startSpin() {
-  // ===== التحقق من الصيانة =====
-  if (isMaintenance) {
-    showResult('error','🔧','الموقع في الصيانة','عد لاحقاً');
-    return;
-  }
-
   if (isSpinning) return;
   if (!initData) { showResult('error','⚠️','افتح اللعبة من البوت',''); return; }
 
+  // حماية إضافية للكولداون بـ localStorage (طبقة ثانية فوق isSpinning)
   const now = Date.now();
   const lastSpin = parseInt(localStorage.getItem('_lgs') || '0');
   if (now - lastSpin < COOLDOWN * 1000) {
@@ -1357,6 +1126,7 @@ async function startSpin() {
     return;
   }
 
+  // تفعيل AudioContext بعد تفاعل المستخدم
   if (audioCtx.state === 'suspended') audioCtx.resume();
 
   isSpinning = true;
@@ -1364,6 +1134,7 @@ async function startSpin() {
   document.getElementById('result-inline').classList.remove('show','win-res','lose-res','retry-res');
   cvs.classList.add('spinning');
 
+  // 1) جلب النتيجة من الخادم أولاً
   let data;
   try {
     const r = await fetch(`${API}/api/lucky/play`, {
@@ -1379,13 +1150,13 @@ async function startSpin() {
   if (data.error) {
     cvs.classList.remove('spinning');
     const msgs = {
-      cooldown: ['⏳','انتظر قليلاً','قبل المحاولة التالية'],
+      cooldown:             ['⏳','انتظر قليلاً','قبل المحاولة التالية'],
       insufficient_balance: ['😕','رصيدك لا يكفي','اختر رهاناً أقل'],
-      unauthorized: ['🔒','غير مصرح','افتح اللعبة من البوت'],
-      tx_failed: ['⚠️','خطأ في العملية','حاول لاحقاً'],
-      network: ['📡','خطأ في الاتصال','تحقق من الإنترنت'],
-      maintenance: ['🔧','اللعبة في التحديث','سنعود قريباً'],
-      daily_limit: ['🚫','وصلت للحد اليومي','عد غداً وحظ أوفر!'],
+      unauthorized:         ['🔒','غير مصرح','افتح اللعبة من البوت'],
+      tx_failed:            ['⚠️','خطأ في العملية','حاول لاحقاً'],
+      network:              ['📡','خطأ في الاتصال','تحقق من الإنترنت'],
+      maintenance:          ['🔧','اللعبة في التحديث','سنعود قريباً'],
+      daily_limit:          ['🚫','وصلت للحد اليومي','عد غداً وحظ أوفر!'],
     };
     const [ic,ti,su] = msgs[data.error] || ['⚠️','خطأ','حاول لاحقاً'];
     showResult('error', ic, ti, su);
@@ -1394,36 +1165,47 @@ async function startSpin() {
     return;
   }
 
+  // تسجيل وقت الـ spin لحماية الكولداون
   localStorage.setItem('_lgs', Date.now().toString());
 
+  // 2) تحديد القطاع المستهدف + تأثير "كاد يفوز" للخسارة
   const segOptions = { win:[0,3], lose:[1,4], retry:[2,5] };
   const opts = segOptions[data.outcome] || [2];
   const targetSeg = opts[Math.floor(Math.random() * opts.length)];
 
+  // حساب زاوية التوقف:
+  // rot = 360 - (targetSeg + 0.5) * SA يضع منتصف القطاع عند الإبرة
   let stopAngle = ((360 - (targetSeg + 0.5) * SA) % 360 + 360) % 360;
 
+  // تأثير "كاد يفوز": للخسارة، أوقف العجلة قريباً من حافة قطاع الفوز المجاور
+  // القطاعات: 0=فوز, 1=خسارة, 2=إعادة, 3=فوز, 4=خسارة, 5=إعادة
+  // عند الخسارة على قطاع 1: اقترب من حافة قطاع 0 (فوز) = أضف offset صغير
+  // عند الخسارة على قطاع 4: اقترب من حافة قطاع 3 (فوز)
   if (data.outcome === 'lose') {
-    const nearMissOffset = SA * 0.30;
+    // أوقف على حافة القطاع (20% من حجم القطاع بعيداً عن المنتصف باتجاه الفوز)
+    const nearMissOffset = SA * 0.30; // 30% من حجم القطاع = قريب جداً من الحافة
     stopAngle = ((stopAngle + nearMissOffset) % 360 + 360) % 360;
   }
 
-  const curMod = ((rotation % 360) + 360) % 360;
-  let diff = (stopAngle - curMod + 360) % 360;
+  const curMod   = ((rotation % 360) + 360) % 360;
+  let   diff     = (stopAngle - curMod + 360) % 360;
   if (diff < 45) diff += 360;
   const finalRot = rotation + 5 * 360 + diff;
 
-  const duration = 4000;
+  // 3) تشغيل أنيميشن الدوران للتوقف على القطاع الصحيح
+  const duration  = 4000;
   const startTime = performance.now();
-  const startRot = rotation;
-  let lastSeg = -1;
+  const startRot  = rotation;
+  let lastSeg     = -1;
 
   await new Promise(resolve => {
     function frame(now) {
       const p = Math.min((now - startTime) / duration, 1);
-      const e = 1 - Math.pow(1 - p, 4);
+      const e = 1 - Math.pow(1 - p, 4); // ease-out quart
       rotation = startRot + (finalRot - startRot) * e;
       drawWheel(rotation % 360);
 
+      // صوت نقرة عند تجاوز كل قطاع
       const curSegNow = Math.floor(((rotation % 360) / 360) * N);
       if (curSegNow !== lastSeg) { playTick(); lastSeg = curSegNow; }
 
@@ -1435,41 +1217,75 @@ async function startSpin() {
 
   cvs.classList.remove('spinning');
 
+  // 4) تحديث الرصيد والإحصائيات
   updateBalanceUI(data.new_balance);
   plays++;
-  if (data.outcome === 'win') wins++;
-  if (data.outcome === 'lose') loses++;
+  if (data.outcome==='win')  wins++;
+  if (data.outcome==='lose') loses++;
   document.getElementById('st-plays').textContent = plays;
-  document.getElementById('st-wins').textContent = wins;
+  document.getElementById('st-wins').textContent  = wins;
   document.getElementById('st-loses').textContent = loses;
 
-  if (data.outcome === 'win') {
+  // 5) عرض النتيجة + صوت
+  if (data.outcome==='win') {
     playWin();
     showResult('win','🎉','مبروك! فزت 🏆',`ربحت +${data.earned.toLocaleString('ar')} نقطة`);
     launchConfetti();
-  } else if (data.outcome === 'lose') {
+  } else if (data.outcome==='lose') {
     playLose();
     showResult('lose','😢','للأسف خسرت ❌',`خسرت ${Math.abs(data.earned).toLocaleString('ar')} نقطة`);
   } else {
     playRetry();
-    showResult('retry','🔄','إعادة!','لا خصم ولا إضافة — جرّب مجدداً');
+    showResult('retry','🔁','إعادة!','لا خصم ولا إضافة — جرّب مجدداً');
   }
 
-  // Cooldown
-  const wrap = document.getElementById('cd-wrap');
-  const bar = document.getElementById('cd-bar');
-  wrap.style.display = 'block';
-  bar.style.transition = 'none'; bar.style.width = '100%';
-  setTimeout(() => { bar.style.transition = `width ${COOLDOWN}s linear`; bar.style.width = '0%'; }, 50);
-  setTimeout(() => {
-    isSpinning = false;
-    document.getElementById('spin-btn').disabled = false;
-    wrap.style.display = 'none';
-    bar.style.width = '100%';
-  }, COOLDOWN * 1000);
+  startCooldown();
 }
 
-// ===== USER MODAL =====
+function showResult(type, icon, title, sub) {
+  const el = document.getElementById('result-inline');
+  el.classList.remove('win-res','lose-res','retry-res');
+  if (type==='win')   el.classList.add('win-res');
+  if (type==='lose')  el.classList.add('lose-res');
+  if (type==='retry') el.classList.add('retry-res');
+  document.getElementById('res-icon').textContent  = icon;
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-sub').textContent   = sub;
+  el.classList.add('show');
+  el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function startCooldown() {
+  const wrap = document.getElementById('cd-wrap');
+  const bar  = document.getElementById('cd-bar');
+  wrap.style.display='block';
+  bar.style.transition='none'; bar.style.width='100%';
+  setTimeout(()=>{ bar.style.transition=`width ${COOLDOWN}s linear`; bar.style.width='0%'; },50);
+  setTimeout(()=>{
+    isSpinning=false;
+    document.getElementById('spin-btn').disabled=false;
+    wrap.style.display='none'; bar.style.width='100%';
+  }, COOLDOWN*1000);
+}
+
+// ===== Confetti =====
+function launchConfetti() {
+  const colors=['#ffd200','#27ae60','#3498db','#e74c3c','#9b59b6','#f39c12'];
+  for(let i=0;i<55;i++) {
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.left=Math.random()*100+'vw';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    el.style.width=(8+Math.random()*8)+'px';
+    el.style.height=(12+Math.random()*8)+'px';
+    el.style.animationDuration=(2+Math.random()*2)+'s';
+    el.style.animationDelay=(Math.random()*0.5)+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),5000);
+  }
+}
+
+// ===== User Detail Modal (Admin) =====
 function closeUserModal(e) {
   if (e.target === document.getElementById('user-modal')) {
     document.getElementById('user-modal').classList.add('hidden');
@@ -1479,10 +1295,12 @@ function closeUserModal(e) {
 async function showUserStats(uid) {
   if (!isAdmin || !initData) return;
 
+  // جلب بيانات المستخدم من Map (لا نمرر البيانات عبر onclick)
   const info = _winnerMap[uid] || {};
   const name = info.name;
   const photoUrl = info.photo_url;
 
+  // إظهار المودال مع بيانات أولية (textContent آمن من XSS)
   const modal = document.getElementById('user-modal');
   document.getElementById('modal-username').textContent = name || ('لاعب #' + uid);
   document.getElementById('modal-uid').textContent = 'ID: ' + uid;
@@ -1493,6 +1311,7 @@ async function showUserStats(uid) {
   document.getElementById('modal-active-badge').textContent = '⏳ جاري التحميل...';
   document.getElementById('modal-active-badge').className = 'modal-active-badge';
 
+  // الصورة — src تُعقَّم بـ escapeHTML
   const avatarWrap = document.getElementById('modal-avatar-wrap');
   if (photoUrl) {
     const img = document.createElement('img');
@@ -1507,16 +1326,17 @@ async function showUserStats(uid) {
 
   modal.classList.remove('hidden');
 
+  // جلب البيانات من الخادم — initData في header
   try {
     const r = await authFetch(`${API}/api/lucky/admin/user/${encodeURIComponent(uid)}`);
     const d = await r.json();
     if (d.error) throw new Error(d.error);
 
-    const fmt2 = n => Number(n || 0).toLocaleString('de-DE');
-    document.getElementById('modal-balance').textContent = fmt2(d.balance) + ' نقطة';
-    document.getElementById('modal-initial').textContent = fmt2(d.initial_balance) + ' نقطة';
-    document.getElementById('modal-total-won').textContent = '+' + fmt2(d.total_won) + ' نقطة';
-    document.getElementById('modal-games').textContent = fmt2(d.games) + ' جولة';
+    const fmt = n => Number(n || 0).toLocaleString('de-DE');
+    document.getElementById('modal-balance').textContent    = fmt(d.balance) + ' نقطة';
+    document.getElementById('modal-initial').textContent   = fmt(d.initial_balance) + ' نقطة';
+    document.getElementById('modal-total-won').textContent = '+' + fmt(d.total_won) + ' نقطة';
+    document.getElementById('modal-games').textContent     = fmt(d.games) + ' جولة';
 
     const badge = document.getElementById('modal-active-badge');
     if (d.is_active) {
@@ -1527,17 +1347,17 @@ async function showUserStats(uid) {
       badge.className = 'modal-active-badge offline';
     }
   } catch(e) {
-    document.getElementById('modal-balance').textContent = 'خطأ';
+    document.getElementById('modal-balance').textContent  = 'خطأ';
     document.getElementById('modal-active-badge').textContent = '⚠️ تعذّر التحميل';
-    document.getElementById('modal-active-badge').className = 'modal-active-badge offline';
+    document.getElementById('modal-active-badge').className   = 'modal-active-badge offline';
   }
 }
 
-// ===== PARTICLES =====
+// ===== Particles =====
 (function(){
-  const c=document.getElementById('particles'), ctx2=c.getContext('2d');
+  const c=document.getElementById('particles'),ctx2=c.getContext('2d');
   c.width=window.innerWidth; c.height=window.innerHeight;
-  const pts=Array.from({length:50}, () => ({
+  const pts=Array.from({length:50},()=>({
     x:Math.random()*c.width, y:Math.random()*c.height,
     r:Math.random()*2+0.5,
     dx:(Math.random()-0.5)*0.35, dy:-(Math.random()*0.45+0.15),
@@ -1545,23 +1365,17 @@ async function showUserStats(uid) {
   }));
   function tick(){
     ctx2.clearRect(0,0,c.width,c.height);
-    pts.forEach(p => {
-      p.x += p.dx; p.y += p.dy;
-      if(p.y < -5){ p.y = c.height+5; p.x = Math.random()*c.width; }
+    pts.forEach(p=>{
+      p.x+=p.dx; p.y+=p.dy;
+      if(p.y<-5){p.y=c.height+5; p.x=Math.random()*c.width;}
       ctx2.beginPath(); ctx2.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx2.fillStyle = `rgba(255,210,0,${p.a})`; ctx2.fill();
+      ctx2.fillStyle=`rgba(255,210,0,${p.a})`; ctx2.fill();
     });
     requestAnimationFrame(tick);
   }
   tick();
-  window.addEventListener('resize', () => { c.width = window.innerWidth; c.height = window.innerHeight; });
+  window.addEventListener('resize',()=>{c.width=window.innerWidth;c.height=window.innerHeight;});
 })();
-
-// ===== INIT =====
-checkAdmin();
-fetchMaintenanceStatus();
-setInterval(fetchMaintenanceStatus, 10000);
-refreshBalance();
 </script>
 </body>
 </html>
