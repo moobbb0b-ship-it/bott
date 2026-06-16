@@ -1,4 +1,4 @@
-<!-- v13 - Batch Spin System (Same API) -->
+<!-- v12 -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -24,6 +24,7 @@
       padding-bottom: 40px;
     }
 
+    /* ===== Header ===== */
     .header {
       width: 100%;
       padding: 16px 20px 12px;
@@ -47,6 +48,7 @@
     }
     .balance-box:active { transform: scale(0.95); }
 
+    /* ===== Tabs ===== */
     .tabs {
       display: flex;
       width: 92%;
@@ -75,12 +77,15 @@
       box-shadow: 0 2px 10px rgba(247,151,30,0.4);
     }
 
+    /* ===== Tab panels ===== */
     .panel { display: none; width: 100%; flex-direction: column; align-items: center; }
     .panel.show { display: flex; }
 
+    /* ===== Particles ===== */
     #particles { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
     .content { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; }
 
+    /* ===== Wheel ===== */
     .wheel-section { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
     .wheel-wrapper { position: relative; width: 260px; height: 260px; }
     .needle {
@@ -108,6 +113,7 @@
       z-index: 5;
     }
 
+    /* ===== Stats mini row ===== */
     .stats-row {
       display: flex; gap: 10px;
       margin-top: 16px;
@@ -124,6 +130,7 @@
     .stat-label { font-size: 10px; color: rgba(255,255,255,0.5); }
     .stat-value { font-size: 15px; font-weight: 700; margin-top: 3px; }
 
+    /* ===== Stake picker ===== */
     .stake-section { margin-top: 18px; width: 92%; max-width: 380px; }
     .stake-label { text-align: center; font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 10px; }
     .stakes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -137,6 +144,7 @@
       padding: 11px 6px;
       cursor: pointer;
       transition: all 0.2s;
+      position: relative; overflow: hidden;
     }
     .stake-btn.active {
       border-color: #ffd200;
@@ -145,20 +153,11 @@
     }
     .stake-btn:active { transform: scale(0.95); }
 
-    .spin-row {
-      display: flex;
-      gap: 10px;
-      width: 92%;
-      max-width: 380px;
-      margin-top: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-    }
+    /* ===== Spin button ===== */
     .spin-btn {
-      flex: 2;
-      min-width: 160px;
-      padding: 15px 20px;
+      margin-top: 16px;
+      width: 92%; max-width: 380px;
+      padding: 15px;
       font-size: 17px; font-weight: 800;
       border: none; border-radius: 16px;
       background: linear-gradient(135deg, #f7971e, #ffd200);
@@ -175,44 +174,7 @@
       box-shadow: none; transform: none;
     }
 
-    .repeat-controls {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 6px 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .repeat-controls label {
-      font-size: 13px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.7);
-    }
-    .repeat-controls input[type="number"] {
-      width: 44px;
-      padding: 4px 2px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.1);
-      color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-      text-align: center;
-      outline: none;
-    }
-    .repeat-controls input[type="number"]:focus {
-      border-color: #ffd200;
-      box-shadow: 0 0 10px rgba(255,210,0,0.3);
-    }
-    .repeat-controls input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      accent-color: #ffd200;
-      cursor: pointer;
-    }
-
+    /* ===== Cooldown bar ===== */
     .cd-wrap {
       width: 92%; max-width: 380px;
       margin-top: 10px; height: 5px;
@@ -227,6 +189,7 @@
       transition: width linear;
     }
 
+    /* ===== Result card (inline, not popup) ===== */
     .result-inline {
       display: none;
       width: 92%; max-width: 380px;
@@ -247,8 +210,9 @@
     .res-icon  { font-size: 50px; }
     .res-title { font-size: 22px; font-weight: 800; margin: 6px 0 4px; }
     .res-sub   { font-size: 14px; color: rgba(255,255,255,0.7); }
-    .res-detail { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 8px; }
 
+    /* ===== Stats panel ===== */
+    /* ===== Stats Panel ===== */
     .stats-panel { width: 92%; max-width: 400px; margin-top: 16px; }
     .stats-header {
       display: flex; justify-content: space-between; align-items: center;
@@ -264,6 +228,7 @@
     }
     .refresh-btn:active { transform: scale(0.95); }
 
+    /* بطاقة اللاعب الحالي */
     .my-card {
       background: linear-gradient(135deg, rgba(247,151,30,0.18), rgba(255,210,0,0.10));
       border: 1px solid rgba(247,151,30,0.4);
@@ -296,6 +261,7 @@
     .my-mini-stats { display: flex; gap: 10px; }
     .my-mini-stat { display: none; }
 
+    /* إجمالي المشاركين */
     .total-box {
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.1);
@@ -307,6 +273,7 @@
     .total-box-lbl { font-size: 13px; color: rgba(255,255,255,0.6); }
     .total-box-num { font-size: 24px; font-weight: 800; color: #ffd200; }
 
+    /* قائمة الفائزين */
     .lb-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.75); margin-bottom: 10px; }
     .winners-list { display: flex; flex-direction: column; gap: 8px; }
     .winner-item {
@@ -345,6 +312,7 @@
 
     .loading-txt { text-align: center; color: rgba(255,255,255,0.4); padding: 30px; font-size: 14px; }
 
+    /* ===== User Detail Modal ===== */
     .modal-overlay {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.75);
@@ -417,6 +385,7 @@
     .winner-item.clickable { cursor: pointer; }
     .winner-item.clickable:hover { background: rgba(255,255,255,0.1) !important; border-color: rgba(255,210,0,0.4) !important; }
 
+    /* ===== Admin Panel ===== */
     .admin-panel { width: 92%; max-width: 380px; margin-top: 16px; }
     .period-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
     .period-btn {
@@ -450,12 +419,14 @@
       margin: 10px 0 8px;
     }
 
+    /* ===== Spinning glow ===== */
     .spinning { animation: glowRing 0.4s ease-in-out infinite alternate; }
     @keyframes glowRing {
       from { filter: drop-shadow(0 0 10px rgba(255,210,0,0.3)); }
       to   { filter: drop-shadow(0 0 30px rgba(255,210,0,0.9)); }
     }
 
+    /* ===== Confetti ===== */
     .confetti-piece {
       position: fixed; width: 10px; height: 14px; top: -20px;
       border-radius: 2px;
@@ -467,6 +438,7 @@
       100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
     }
 
+    /* ===== Maintenance Screen ===== */
     #maintenance-screen {
       display: none;
       position: fixed; inset: 0;
@@ -526,7 +498,7 @@
       </div>
     </div>
 
-    <!-- Mini stats (محلية فقط للعرض) -->
+    <!-- Mini stats -->
     <div class="stats-row">
       <div class="stat-box">
         <div class="stat-label">الجولات</div>
@@ -548,16 +520,8 @@
       <div class="stakes-grid" id="stakes-grid"></div>
     </div>
 
-    <!-- Spin + Repeat controls -->
-    <div class="spin-row">
-      <button class="spin-btn" id="spin-btn" onclick="startSpin()">🎰 ادور العجلة</button>
-      <div class="repeat-controls">
-        <label>🔁</label>
-        <input type="checkbox" id="repeat-toggle" checked>
-        <input type="number" id="repeat-count" value="5" min="2" max="20">
-        <span style="font-size:11px;color:rgba(255,255,255,0.4)">مرات</span>
-      </div>
-    </div>
+    <!-- Spin button -->
+    <button class="spin-btn" id="spin-btn" onclick="startSpin()">🎰 ادور العجلة</button>
 
     <!-- Cooldown bar -->
     <div class="cd-wrap" id="cd-wrap">
@@ -568,8 +532,7 @@
     <div class="result-inline" id="result-inline">
       <div class="res-icon" id="res-icon">🎉</div>
       <div class="res-title" id="res-title">مبروك!</div>
-      <div class="res-sub" id="res-sub"></div>
-      <div class="res-detail" id="res-detail"></div>
+      <div class="res-sub"   id="res-sub"></div>
     </div>
 
   </div>
@@ -581,13 +544,17 @@
         <h3>⚙️ لوحة الأدمن</h3>
         <button class="refresh-btn" onclick="loadAdminStats()">🔄 تحديث</button>
       </div>
+
+      <!-- فلاتر الفترة الزمنية -->
       <div class="period-filters">
-        <button class="period-btn active" data-period="TODAY" onclick="selectPeriod(this)">اليوم</button>
-        <button class="period-btn" data-period="YESTERDAY" onclick="selectPeriod(this)">البارحة</button>
-        <button class="period-btn" data-period="DAY2" onclick="selectPeriod(this)">أول البارحة</button>
-        <button class="period-btn" data-period="W7" onclick="selectPeriod(this)">7 أيام</button>
-        <button class="period-btn" data-period="ALL" onclick="selectPeriod(this)">الكل</button>
+        <button class="period-btn active" data-period="TODAY"     onclick="selectPeriod(this)">اليوم</button>
+        <button class="period-btn"        data-period="YESTERDAY" onclick="selectPeriod(this)">البارحة</button>
+        <button class="period-btn"        data-period="DAY2"      onclick="selectPeriod(this)">أول البارحة</button>
+        <button class="period-btn"        data-period="W7"        onclick="selectPeriod(this)">7 أيام</button>
+        <button class="period-btn"        data-period="ALL"       onclick="selectPeriod(this)">الكل</button>
       </div>
+
+      <!-- اللاعبون -->
       <div class="adm-section-title">👥 اللاعبون</div>
       <div class="admin-stat-grid">
         <div class="admin-stat-card">
@@ -601,6 +568,8 @@
           <div class="admin-card-lbl">نشطون اليوم</div>
         </div>
       </div>
+
+      <!-- الأرباح والخسائر -->
       <div class="adm-section-title" id="adm-period-label">💹 الفترة: اليوم</div>
       <div class="admin-stat-grid">
         <div class="admin-stat-card profit">
@@ -614,6 +583,8 @@
           <div class="admin-card-lbl">خسائر البوت</div>
         </div>
       </div>
+
+      <!-- الإجمالي وعدد الجولات -->
       <div class="admin-stat-grid">
         <div class="admin-stat-card">
           <div class="admin-card-icon">⚖️</div>
@@ -626,6 +597,7 @@
           <div class="admin-card-lbl">عدد الجولات</div>
         </div>
       </div>
+
       <div class="loading-txt" id="adm-loading" style="display:none">⏳ جاري التحميل...</div>
     </div>
   </div>
@@ -637,6 +609,8 @@
         <h3>📊 الإحصائيات</h3>
         <button class="refresh-btn" onclick="loadStats()">🔄 تحديث</button>
       </div>
+
+      <!-- بطاقة اللاعب الحالي -->
       <div class="my-card" id="my-card">
         <div class="my-avatar-placeholder">⏳</div>
         <div class="my-info">
@@ -649,10 +623,14 @@
           </div>
         </div>
       </div>
+
+      <!-- إجمالي المشاركين -->
       <div class="total-box">
         <div class="total-box-lbl">👥 إجمالي المشاركين</div>
         <div class="total-box-num" id="stat-participants">-</div>
       </div>
+
+      <!-- المتصدرون -->
       <div class="lb-title">🏆 أكثر الفائزين</div>
       <div class="winners-list" id="winners-list">
         <div class="loading-txt">⏳ جاري التحميل...</div>
@@ -662,7 +640,7 @@
 
 </div>
 
-<!-- ===== User Detail Modal ===== -->
+<!-- ===== User Detail Modal (Admin) ===== -->
 <div class="modal-overlay hidden" id="user-modal" onclick="closeUserModal(event)">
   <div class="modal-card">
     <button class="modal-close" onclick="document.getElementById('user-modal').classList.add('hidden')">✕</button>
@@ -725,22 +703,19 @@ let selectedStake= 500;
 let isSpinning   = false;
 let rotation     = 0;
 let plays=0, wins=0, loses=0;
-
-// ===== متغيرات التكرار =====
-let repeatEnabled = true;
-let repeatCount = 5;
-
 const initData   = tg?.initData || "";
 
 // ===== Security Helpers =====
 function escapeHTML(str) {
   return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
+// إرسال initData في header بدلاً من URL
 function authFetch(url, opts = {}) {
   if (!opts.headers) opts.headers = {};
   opts.headers['X-Tg-Init'] = initData;
   return fetch(url, opts);
 }
+// بيانات الفائزين (لتجنب XSS في onclick)
 const _winnerMap = {};
 
 // ===== Tabs =====
@@ -767,14 +742,16 @@ function startAdminAutoRefresh() {
   stopAdminAutoRefresh();
   adminRefreshTimer = setInterval(() => {
     if (isAdmin) loadAdminStats();
-  }, 15000);
+  }, 15000); // كل 15 ثانية
 }
+
 function stopAdminAutoRefresh() {
   if (adminRefreshTimer) {
     clearInterval(adminRefreshTimer);
     adminRefreshTimer = null;
   }
 }
+
 async function checkAdmin() {
   if (!initData) return;
   try {
@@ -786,12 +763,14 @@ async function checkAdmin() {
     }
   } catch(e) {}
 }
+
 function selectPeriod(btn) {
   document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   currentPeriod = btn.dataset.period;
   loadAdminStats();
 }
+
 function _updateAdminUI(d) {
   const fmt = n => Number(n || 0).toLocaleString('de-DE');
   document.getElementById('adm-active-now').textContent   = fmt(d.active_now);
@@ -805,6 +784,7 @@ function _updateAdminUI(d) {
   netEl.textContent = (net >= 0 ? '+' : '') + net.toLocaleString('ar');
   netEl.style.color = net >= 0 ? '#2ecc71' : '#e74c3c';
 }
+
 async function loadAdminStats() {
   if (!initData) return;
   document.getElementById('adm-loading').style.display = 'block';
@@ -822,6 +802,7 @@ async function loadAdminStats() {
     document.getElementById('adm-loading').style.display = 'none';
   }
 }
+
 checkAdmin();
 
 // ===== Presence tracking =====
@@ -829,13 +810,20 @@ function pingPresence() {
   if (!initData) return;
   authFetch(`${API}/api/lucky/ping`).catch(() => {});
 }
+
 function leavePresence() {
   if (!initData) return;
+  // sendBeacon لا يدعم headers — نرسل initData في body بدلاً من URL
   const blob = new Blob([JSON.stringify({ init_data: initData })], { type: 'application/json' });
   try { navigator.sendBeacon(`${API}/api/lucky/leave`, blob); } catch(e) {}
 }
+
+// ping فوراً عند الفتح
 pingPresence();
+// ping كل 60 ثانية للإبقاء على التسجيل
 setInterval(pingPresence, 60000);
+
+// حذف عند الإغلاق أو إخفاء الصفحة
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') leavePresence();
   if (document.visibilityState === 'visible') pingPresence();
@@ -845,10 +833,8 @@ window.addEventListener('pagehide', leavePresence);
 // ===== Wheel segments =====
 const SEGS = [
   { label:'🏆 فوز',    color:'#1e8449', light:'#27ae60' },
-  { label:'❌ خسارة',  color:'#922b21', light:'#c0392b' },
   { label:'🔁 إعادة', color:'#1a5276', light:'#2980b9' },
   { label:'🏆 فوز',   color:'#27ae60', light:'#2ecc71' },
-  { label:'❌ خسارة', color:'#c0392b', light:'#e74c3c' },
   { label:'🔁 إعادة', color:'#1a5276', light:'#2980b9' },
 ];
 const N = SEGS.length;
@@ -860,40 +846,64 @@ const CX = cvs.width/2, CY = cvs.height/2, R = CX - 5;
 function drawWheel(rot) {
   ctx.clearRect(0,0,cvs.width,cvs.height);
   const off = (rot - 90) * Math.PI / 180;
+
+  // ===== رسم القطاعات =====
   SEGS.forEach((s,i) => {
     const st = off + i * SA * Math.PI/180;
     const en = st + SA * Math.PI/180;
+
+    // تدرج لوني
     const g = ctx.createRadialGradient(CX,CY,R*0.15,CX,CY,R);
     g.addColorStop(0, s.light);
     g.addColorStop(1, s.color);
     ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,st,en); ctx.closePath();
     ctx.fillStyle = g; ctx.fill();
+
+    // حدود بيضاء واضحة
     ctx.strokeStyle='rgba(255,255,255,0.55)';
     ctx.lineWidth=2.5;
     ctx.stroke();
   });
+
+  // ===== رسم النصوص =====
   SEGS.forEach((s,i) => {
     const midAngle = off + i * SA * Math.PI/180 + (SA/2) * Math.PI/180;
-    const textR = R * 0.68;
+    const textR = R * 0.68; // موضع النص على بعد 68% من المركز
+
     ctx.save();
-    ctx.translate(CX + Math.cos(midAngle) * textR, CY + Math.sin(midAngle) * textR);
-    ctx.rotate(midAngle + Math.PI/2);
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    const parts = s.label.split(' ');
-    const emoji = parts[0] || '';
+    ctx.translate(
+      CX + Math.cos(midAngle) * textR,
+      CY + Math.sin(midAngle) * textR
+    );
+    ctx.rotate(midAngle + Math.PI/2); // النص عمودي باتجاه الخارج
+
+    ctx.textAlign   = 'center';
+    ctx.textBaseline= 'middle';
+
+    // فصل الإيموجي عن النص العربي
+    const parts  = s.label.split(' ');
+    const emoji  = parts[0] || '';
     const arabic = parts.slice(1).join(' ');
-    ctx.font = 'bold 14px Arial';
+
+    // ---- رسم النص العربي بإطار أسود ----
+    ctx.font     = 'bold 14px Arial';
     ctx.lineJoin = 'round';
+    // طبقة الإطار الأسود (5px)
     ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 5;
+    ctx.lineWidth   = 5;
     ctx.strokeText(arabic, 0, 4);
+    // طبقة النص الأبيض
     ctx.fillStyle = '#ffffff';
     ctx.fillText(arabic, 0, 4);
-    ctx.font = '13px Arial';
+
+    // ---- رسم الإيموجي فوق (بدون إطار) ----
+    ctx.font      = '13px Arial';
     ctx.fillStyle = '#ffffff';
     ctx.fillText(emoji, 0, -10);
     ctx.restore();
   });
+
+  // ===== الحلقة الخارجية =====
   ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2);
   ctx.strokeStyle='rgba(255,210,0,0.7)';
   ctx.lineWidth=5;
@@ -901,7 +911,7 @@ function drawWheel(rot) {
 }
 drawWheel(0);
 
-// ===== Stakes =====
+// ===== Stakes buttons =====
 const grid = document.getElementById('stakes-grid');
 STAKES.forEach(s => {
   const b = document.createElement('button');
@@ -913,21 +923,6 @@ STAKES.forEach(s => {
   };
   grid.appendChild(b);
 });
-
-// ===== Repeat controls =====
-document.getElementById('repeat-toggle').addEventListener('change', function() {
-  repeatEnabled = this.checked;
-  document.getElementById('repeat-count').disabled = !this.checked;
-});
-document.getElementById('repeat-count').addEventListener('change', function() {
-  let val = parseInt(this.value) || 5;
-  if (val < 2) val = 2;
-  if (val > 20) val = 20;
-  this.value = val;
-  repeatCount = val;
-});
-repeatEnabled = document.getElementById('repeat-toggle').checked;
-repeatCount = parseInt(document.getElementById('repeat-count').value) || 5;
 
 // ===== Balance =====
 function fmtPts(n) {
@@ -947,12 +942,15 @@ async function refreshBalance() {
 }
 refreshBalance();
 
-// ===== Device Fingerprint =====
+// ===== Device Fingerprint (لربط الحسابات المتعددة) =====
 async function registerDeviceFingerprint() {
   if (!initData) return;
   try {
+    // جمع عناصر البصمة
     const nav = navigator;
     const screen = window.screen;
+
+    // Canvas fingerprint
     let canvasHash = '';
     try {
       const canvas = document.createElement('canvas');
@@ -968,6 +966,8 @@ async function registerDeviceFingerprint() {
       ctx.fillText('device-fp-2024', 4, 17);
       canvasHash = canvas.toDataURL().slice(-40);
     } catch(e) {}
+
+    // مزج العناصر وتحويلها لهاش
     const raw = [
       nav.language || '',
       (screen.width || 0) + 'x' + (screen.height || 0),
@@ -978,12 +978,15 @@ async function registerDeviceFingerprint() {
       canvasHash,
       (nav.deviceMemory || 0)
     ].join('|');
+
+    // SimpleHash (FNV-like) → hex string 16 chars
     let h = 2166136261;
     for (let i = 0; i < raw.length; i++) {
       h ^= raw.charCodeAt(i);
       h = (h * 16777619) >>> 0;
     }
     const fingerprint = h.toString(16).padStart(8,'0') + raw.length.toString(16).padStart(8,'0');
+
     await fetch(`${API}/api/lucky/register_device`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1000,13 +1003,19 @@ function _avatarEl(photoUrl, size, emoji) {
   }
   return `<div class="${size === 'big' ? 'my-avatar-placeholder' : 'winner-avatar-placeholder'}">${emoji}</div>`;
 }
+
 async function loadStats() {
   document.getElementById('winners-list').innerHTML = '<div class="loading-txt">⏳ جاري التحميل...</div>';
-  const statsUrl = (initData && isAdmin) ? `${API}/api/lucky/admin/winners` : `${API}/api/lucky/stats`;
+  // بطاقة اللاعب + قائمة الفائزين معاً
+  const statsUrl = (initData && isAdmin)
+    ? `${API}/api/lucky/admin/winners`
+    : `${API}/api/lucky/stats`;
   const [meRes, statsRes] = await Promise.allSettled([
     initData ? authFetch(`${API}/api/lucky/me`) : Promise.reject(),
     initData ? authFetch(statsUrl) : fetch(statsUrl)
   ]);
+
+  // بطاقة اللاعب الحالي
   try {
     const me = await meRes.value.json();
     const card = document.getElementById('my-card');
@@ -1026,6 +1035,8 @@ async function loadStats() {
       <div class="my-avatar-placeholder">🎮</div>
       <div class="my-info"><div class="my-name">بياناتك</div><div class="my-balance">${fmtPts(balance)}</div></div>`;
   }
+
+  // قائمة الفائزين
   try {
     const d = await statsRes.value.json();
     document.getElementById('stat-participants').textContent = (d.participants||0).toLocaleString('de-DE');
@@ -1034,6 +1045,7 @@ async function loadStats() {
       list.innerHTML = '<div class="loading-txt">لا يوجد فائزون بعد</div>';
       return;
     }
+    // حفظ بيانات الفائزين في Map بدلاً من تمريرها في onclick مباشرة
     d.last10.forEach(w => { _winnerMap[w.uid] = { name: w.name, photo_url: w.photo_url }; });
     list.innerHTML = d.last10.map((w, i) => `
       <div class="winner-item${isAdmin ? ' clickable' : ''}" ${isAdmin ? `onclick="showUserStats('${escapeHTML(String(w.uid))}')"` : ''}>
@@ -1051,6 +1063,7 @@ async function loadStats() {
 
 // ===== Sound Effects =====
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
 function playTick() {
   const o = audioCtx.createOscillator();
   const g = audioCtx.createGain();
@@ -1060,6 +1073,7 @@ function playTick() {
   g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
   o.start(); o.stop(audioCtx.currentTime + 0.05);
 }
+
 function playWin() {
   [523, 659, 784, 1047].forEach((f, i) => {
     const o = audioCtx.createOscillator();
@@ -1072,6 +1086,7 @@ function playWin() {
     o.start(t); o.stop(t + 0.3);
   });
 }
+
 function playLose() {
   [300, 250].forEach((f, i) => {
     const o = audioCtx.createOscillator();
@@ -1084,6 +1099,7 @@ function playLose() {
     o.start(t); o.stop(t + 0.3);
   });
 }
+
 function playRetry() {
   const o = audioCtx.createOscillator();
   const g = audioCtx.createGain();
@@ -1094,115 +1110,12 @@ function playRetry() {
   o.start(); o.stop(audioCtx.currentTime + 0.4);
 }
 
-// ===== Show Result =====
-function showResult(type, icon, title, sub, detail) {
-  const el = document.getElementById('result-inline');
-  el.classList.remove('win-res','lose-res','retry-res');
-  if (type==='win') el.classList.add('win-res');
-  if (type==='lose') el.classList.add('lose-res');
-  if (type==='retry') el.classList.add('retry-res');
-  document.getElementById('res-icon').textContent = icon;
-  document.getElementById('res-title').textContent = title;
-  document.getElementById('res-sub').textContent = sub;
-  document.getElementById('res-detail').textContent = detail || '';
-  el.classList.add('show');
-  el.scrollIntoView({ behavior:'smooth', block:'nearest' });
-}
-
-// ===== Cooldown =====
-function startCooldown() {
-  const wrap = document.getElementById('cd-wrap');
-  const bar = document.getElementById('cd-bar');
-  wrap.style.display = 'block';
-  bar.style.transition = 'none'; bar.style.width = '100%';
-  setTimeout(() => { bar.style.transition = `width ${COOLDOWN}s linear`; bar.style.width = '0%'; }, 50);
-  setTimeout(() => {
-    isSpinning = false;
-    document.getElementById('spin-btn').disabled = false;
-    wrap.style.display = 'none'; bar.style.width = '100%';
-  }, COOLDOWN * 1000);
-}
-
-// ===== Confetti =====
-function launchConfetti() {
-  const colors = ['#ffd200','#27ae60','#3498db','#e74c3c','#9b59b6','#f39c12'];
-  for (let i = 0; i < 55; i++) {
-    const el = document.createElement('div');
-    el.className = 'confetti-piece';
-    el.style.left = Math.random() * 100 + 'vw';
-    el.style.background = colors[Math.floor(Math.random() * colors.length)];
-    el.style.width = (8 + Math.random() * 8) + 'px';
-    el.style.height = (12 + Math.random() * 8) + 'px';
-    el.style.animationDuration = (2 + Math.random() * 2) + 's';
-    el.style.animationDelay = (Math.random() * 0.5) + 's';
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 5000);
-  }
-}
-
-// ===== User Detail Modal =====
-function closeUserModal(e) {
-  if (e.target === document.getElementById('user-modal')) {
-    document.getElementById('user-modal').classList.add('hidden');
-  }
-}
-async function showUserStats(uid) {
-  if (!isAdmin || !initData) return;
-  const info = _winnerMap[uid] || {};
-  const modal = document.getElementById('user-modal');
-  document.getElementById('modal-username').textContent = info.name || ('لاعب #' + uid);
-  document.getElementById('modal-uid').textContent = 'ID: ' + uid;
-  document.getElementById('modal-balance').textContent = '...';
-  document.getElementById('modal-initial').textContent = '...';
-  document.getElementById('modal-total-won').textContent = '...';
-  document.getElementById('modal-games').textContent = '...';
-  document.getElementById('modal-active-badge').textContent = '⏳ جاري التحميل...';
-  document.getElementById('modal-active-badge').className = 'modal-active-badge';
-  const avatarWrap = document.getElementById('modal-avatar-wrap');
-  if (info.photo_url) {
-    const img = document.createElement('img');
-    img.className = 'modal-avatar';
-    img.src = info.photo_url;
-    img.onerror = () => { avatarWrap.innerHTML = '<div class="modal-avatar-placeholder">🎮</div>'; };
-    avatarWrap.innerHTML = '';
-    avatarWrap.appendChild(img);
-  } else {
-    avatarWrap.innerHTML = '<div class="modal-avatar-placeholder">🎮</div>';
-  }
-  modal.classList.remove('hidden');
-  try {
-    const r = await authFetch(`${API}/api/lucky/admin/user/${encodeURIComponent(uid)}`);
-    const d = await r.json();
-    if (d.error) throw new Error(d.error);
-    const fmt = n => Number(n || 0).toLocaleString('de-DE');
-    document.getElementById('modal-balance').textContent = fmt(d.balance) + ' نقطة';
-    document.getElementById('modal-initial').textContent = fmt(d.initial_balance) + ' نقطة';
-    document.getElementById('modal-total-won').textContent = '+' + fmt(d.total_won) + ' نقطة';
-    document.getElementById('modal-games').textContent = fmt(d.games) + ' جولة';
-    const badge = document.getElementById('modal-active-badge');
-    if (d.is_active) {
-      badge.textContent = '🟢 نشط الآن';
-      badge.className = 'modal-active-badge online';
-    } else {
-      badge.textContent = '⚫ غير نشط';
-      badge.className = 'modal-active-badge offline';
-    }
-  } catch(e) {
-    document.getElementById('modal-balance').textContent = 'خطأ';
-    document.getElementById('modal-active-badge').textContent = '⚠️ تعذّر التحميل';
-    document.getElementById('modal-active-badge').className = 'modal-active-badge offline';
-  }
-}
-
-// ===== ===== ===== ===== =====
-// ===== MAIN SPIN FUNCTION =====
-// ===== ===== ===== ===== =====
-
+// ===== Spin =====
 async function startSpin() {
   if (isSpinning) return;
   if (!initData) { showResult('error','⚠️','افتح اللعبة من البوت',''); return; }
 
-  // Cooldown protection
+  // حماية إضافية للكولداون بـ localStorage (طبقة ثانية فوق isSpinning)
   const now = Date.now();
   const lastSpin = parseInt(localStorage.getItem('_lgs') || '0');
   if (now - lastSpin < COOLDOWN * 1000) {
@@ -1211,29 +1124,21 @@ async function startSpin() {
     return;
   }
 
+  // تفعيل AudioContext بعد تفاعل المستخدم
   if (audioCtx.state === 'suspended') audioCtx.resume();
 
   isSpinning = true;
   document.getElementById('spin-btn').disabled = true;
-  document.getElementById('result-inline').classList.remove('show', 'win-res', 'lose-res', 'retry-res');
+  document.getElementById('result-inline').classList.remove('show','win-res','lose-res','retry-res');
   cvs.classList.add('spinning');
 
-  // ===== قراءة إعدادات التكرار =====
-  const useRepeat = repeatEnabled;
-  const repeat = useRepeat ? repeatCount : 1;
-
-  // ===== إرسال الطلب إلى نفس الـ endpoint القديم مع إضافة batch =====
+  // 1) جلب النتيجة من الخادم أولاً
   let data;
   try {
     const r = await fetch(`${API}/api/lucky/play`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        init_data: initData,
-        stake: selectedStake,
-        batch: useRepeat,    // إعلام الخادم بأنها دفعة
-        repeat: repeat       // عدد مرات التكرار
-      })
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ init_data: initData, stake: selectedStake })
     });
     data = await r.json();
   } catch(e) {
@@ -1243,70 +1148,62 @@ async function startSpin() {
   if (data.error) {
     cvs.classList.remove('spinning');
     const msgs = {
-      cooldown: ['⏳', 'انتظر قليلاً', 'قبل المحاولة التالية'],
-      insufficient_balance: ['😕', 'رصيدك لا يكفي', 'اختر رهاناً أقل'],
-      unauthorized: ['🔒', 'غير مصرح', 'افتح اللعبة من البوت'],
-      tx_failed: ['⚠️', 'خطأ في العملية', 'حاول لاحقاً'],
-      network: ['📡', 'خطأ في الاتصال', 'تحقق من الإنترنت'],
-      maintenance: ['🔧', 'اللعبة في التحديث', 'سنعود قريباً'],
-      daily_limit: ['🚫', 'وصلت للحد اليومي', 'عد غداً وحظ أوفر!'],
+      cooldown:             ['⏳','انتظر قليلاً','قبل المحاولة التالية'],
+      insufficient_balance: ['😕','رصيدك لا يكفي','اختر رهاناً أقل'],
+      unauthorized:         ['🔒','غير مصرح','افتح اللعبة من البوت'],
+      tx_failed:            ['⚠️','خطأ في العملية','حاول لاحقاً'],
+      network:              ['📡','خطأ في الاتصال','تحقق من الإنترنت'],
+      maintenance:          ['🔧','اللعبة في التحديث','سنعود قريباً'],
+      daily_limit:          ['🚫','وصلت للحد اليومي','عد غداً وحظ أوفر!'],
     };
-    const [ic, ti, su] = msgs[data.error] || ['⚠️', 'خطأ', 'حاول لاحقاً'];
+    const [ic,ti,su] = msgs[data.error] || ['⚠️','خطأ','حاول لاحقاً'];
     showResult('error', ic, ti, su);
     isSpinning = false;
     document.getElementById('spin-btn').disabled = false;
     return;
   }
 
-  // ===== تسجيل وقت الـ spin للكولداون =====
+  // تسجيل وقت الـ spin لحماية الكولداون
   localStorage.setItem('_lgs', Date.now().toString());
 
-  // ===== تحديد نتيجة الدورة الواحدة (العرض) =====
-  // نأخذ النتيجة الإجمالية من الخادم
-  const totalEarned = data.earned || 0;
-  const totalGames = data.games || repeat;
-  const outcomes = data.outcomes || []; // مصفوفة النتائج الفردية
-
-  // حساب إحصائيات الدفعة
-  let batchWins = 0, batchLoses = 0, batchRetries = 0;
-  outcomes.forEach(o => {
-    if (o === 'win') batchWins++;
-    else if (o === 'lose') batchLoses++;
-    else if (o === 'retry') batchRetries++;
-  });
-
-  // ===== دوران العجلة =====
-  // نختار قطاع عشوائي للعرض (أو نأخذ آخر نتيجة)
-  const lastOutcome = outcomes.length > 0 ? outcomes[outcomes.length - 1] : 'retry';
-  const segOptions = { win: [0, 3], lose: [1, 4], retry: [2, 5] };
-  const opts = segOptions[lastOutcome] || [2];
+  // 2) تحديد القطاع المستهدف + تأثير "كاد يفوز" للخسارة
+  const segOptions = { win:[0,3], lose:[1,4], retry:[2,5] };
+  const opts = segOptions[data.outcome] || [2];
   const targetSeg = opts[Math.floor(Math.random() * opts.length)];
 
+  // حساب زاوية التوقف:
+  // rot = 360 - (targetSeg + 0.5) * SA يضع منتصف القطاع عند الإبرة
   let stopAngle = ((360 - (targetSeg + 0.5) * SA) % 360 + 360) % 360;
 
-  // تأثير "كاد يفوز" للخسارة
-  if (lastOutcome === 'lose') {
-    const nearMissOffset = SA * 0.30;
+  // تأثير "كاد يفوز": للخسارة، أوقف العجلة قريباً من حافة قطاع الفوز المجاور
+  // القطاعات: 0=فوز, 1=خسارة, 2=إعادة, 3=فوز, 4=خسارة, 5=إعادة
+  // عند الخسارة على قطاع 1: اقترب من حافة قطاع 0 (فوز) = أضف offset صغير
+  // عند الخسارة على قطاع 4: اقترب من حافة قطاع 3 (فوز)
+  if (data.outcome === 'lose') {
+    // أوقف على حافة القطاع (20% من حجم القطاع بعيداً عن المنتصف باتجاه الفوز)
+    const nearMissOffset = SA * 0.30; // 30% من حجم القطاع = قريب جداً من الحافة
     stopAngle = ((stopAngle + nearMissOffset) % 360 + 360) % 360;
   }
 
-  const curMod = ((rotation % 360) + 360) % 360;
-  let diff = (stopAngle - curMod + 360) % 360;
+  const curMod   = ((rotation % 360) + 360) % 360;
+  let   diff     = (stopAngle - curMod + 360) % 360;
   if (diff < 45) diff += 360;
   const finalRot = rotation + 5 * 360 + diff;
 
-  const duration = 4000;
+  // 3) تشغيل أنيميشن الدوران للتوقف على القطاع الصحيح
+  const duration  = 4000;
   const startTime = performance.now();
-  const startRot = rotation;
-  let lastSeg = -1;
+  const startRot  = rotation;
+  let lastSeg     = -1;
 
   await new Promise(resolve => {
     function frame(now) {
       const p = Math.min((now - startTime) / duration, 1);
-      const e = 1 - Math.pow(1 - p, 4);
+      const e = 1 - Math.pow(1 - p, 4); // ease-out quart
       rotation = startRot + (finalRot - startRot) * e;
       drawWheel(rotation % 360);
 
+      // صوت نقرة عند تجاوز كل قطاع
       const curSegNow = Math.floor(((rotation % 360) / 360) * N);
       if (curSegNow !== lastSeg) { playTick(); lastSeg = curSegNow; }
 
@@ -1318,92 +1215,164 @@ async function startSpin() {
 
   cvs.classList.remove('spinning');
 
-  // ===== تحديث الرصيد =====
+  // 4) تحديث الرصيد والإحصائيات
   updateBalanceUI(data.new_balance);
-
-  // ===== تحديث الإحصائيات المحلية (للنسبة، يتم مسحها) =====
-  // هذي الإحصائيات محلية فقط ولا تؤثر على نسبة الفوز الحقيقية
-  // في كل دورة جديدة، يتم مسحها وتبدأ من الصفر
-  // لكن نضيف نتائج الدفعة الحالية للعرض
-  plays += totalGames;
-  wins += batchWins;
-  loses += batchLoses;
-
+  plays++;
+  if (data.outcome==='win')  wins++;
+  if (data.outcome==='lose') loses++;
   document.getElementById('st-plays').textContent = plays;
-  document.getElementById('st-wins').textContent = wins;
+  document.getElementById('st-wins').textContent  = wins;
   document.getElementById('st-loses').textContent = loses;
 
-  // ===== عرض النتيجة =====
-  let detailText = '';
-  let outcomeType = 'retry';
-  let icon = '🔁', title = 'إعادة!', sub = 'لا خصم ولا إضافة';
-
-  if (totalEarned > 0) {
-    outcomeType = 'win';
-    icon = '🎉';
-    title = 'مبروك! فزت 🏆';
-    sub = `ربحت +${totalEarned.toLocaleString('ar')} نقطة`;
-    if (totalGames > 1) {
-      detailText = `${batchWins} فوز، ${batchLoses} خسارة، ${batchRetries} إعادة`;
-    }
+  // 5) عرض النتيجة + صوت
+  if (data.outcome==='win') {
     playWin();
+    showResult('win','🎉','مبروك! فزت 🏆',`ربحت +${data.earned.toLocaleString('ar')} نقطة`);
     launchConfetti();
-  } else if (totalEarned < 0) {
-    outcomeType = 'lose';
-    icon = '😢';
-    title = 'للأسف خسرت ❌';
-    sub = `خسرت ${Math.abs(totalEarned).toLocaleString('ar')} نقطة`;
-    if (totalGames > 1) {
-      detailText = `${batchWins} فوز، ${batchLoses} خسارة، ${batchRetries} إعادة`;
-    }
+  } else if (data.outcome==='lose') {
     playLose();
+    showResult('lose','😢','للأسف خسرت ❌',`خسرت ${Math.abs(data.earned).toLocaleString('ar')} نقطة`);
   } else {
-    outcomeType = 'retry';
-    icon = '🔁';
-    title = 'إعادة!';
-    sub = 'لا خصم ولا إضافة';
-    if (totalGames > 1) {
-      detailText = `${batchWins} فوز، ${batchLoses} خسارة، ${batchRetries} إعادة`;
-    }
     playRetry();
+    showResult('retry','🔁','إعادة!','لا خصم ولا إضافة — جرّب مجدداً');
   }
 
-  showResult(outcomeType, icon, title, sub, detailText);
-
-  // ===== بدء الكولداون =====
   startCooldown();
 }
 
+function showResult(type, icon, title, sub) {
+  const el = document.getElementById('result-inline');
+  el.classList.remove('win-res','lose-res','retry-res');
+  if (type==='win')   el.classList.add('win-res');
+  if (type==='lose')  el.classList.add('lose-res');
+  if (type==='retry') el.classList.add('retry-res');
+  document.getElementById('res-icon').textContent  = icon;
+  document.getElementById('res-title').textContent = title;
+  document.getElementById('res-sub').textContent   = sub;
+  el.classList.add('show');
+  el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function startCooldown() {
+  const wrap = document.getElementById('cd-wrap');
+  const bar  = document.getElementById('cd-bar');
+  wrap.style.display='block';
+  bar.style.transition='none'; bar.style.width='100%';
+  setTimeout(()=>{ bar.style.transition=`width ${COOLDOWN}s linear`; bar.style.width='0%'; },50);
+  setTimeout(()=>{
+    isSpinning=false;
+    document.getElementById('spin-btn').disabled=false;
+    wrap.style.display='none'; bar.style.width='100%';
+  }, COOLDOWN*1000);
+}
+
+// ===== Confetti =====
+function launchConfetti() {
+  const colors=['#ffd200','#27ae60','#3498db','#e74c3c','#9b59b6','#f39c12'];
+  for(let i=0;i<55;i++) {
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.left=Math.random()*100+'vw';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    el.style.width=(8+Math.random()*8)+'px';
+    el.style.height=(12+Math.random()*8)+'px';
+    el.style.animationDuration=(2+Math.random()*2)+'s';
+    el.style.animationDelay=(Math.random()*0.5)+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),5000);
+  }
+}
+
+// ===== User Detail Modal (Admin) =====
+function closeUserModal(e) {
+  if (e.target === document.getElementById('user-modal')) {
+    document.getElementById('user-modal').classList.add('hidden');
+  }
+}
+
+async function showUserStats(uid) {
+  if (!isAdmin || !initData) return;
+
+  // جلب بيانات المستخدم من Map (لا نمرر البيانات عبر onclick)
+  const info = _winnerMap[uid] || {};
+  const name = info.name;
+  const photoUrl = info.photo_url;
+
+  // إظهار المودال مع بيانات أولية (textContent آمن من XSS)
+  const modal = document.getElementById('user-modal');
+  document.getElementById('modal-username').textContent = name || ('لاعب #' + uid);
+  document.getElementById('modal-uid').textContent = 'ID: ' + uid;
+  document.getElementById('modal-balance').textContent = '...';
+  document.getElementById('modal-initial').textContent = '...';
+  document.getElementById('modal-total-won').textContent = '...';
+  document.getElementById('modal-games').textContent = '...';
+  document.getElementById('modal-active-badge').textContent = '⏳ جاري التحميل...';
+  document.getElementById('modal-active-badge').className = 'modal-active-badge';
+
+  // الصورة — src تُعقَّم بـ escapeHTML
+  const avatarWrap = document.getElementById('modal-avatar-wrap');
+  if (photoUrl) {
+    const img = document.createElement('img');
+    img.className = 'modal-avatar';
+    img.src = photoUrl;
+    img.onerror = () => { avatarWrap.innerHTML = '<div class="modal-avatar-placeholder">🎮</div>'; };
+    avatarWrap.innerHTML = '';
+    avatarWrap.appendChild(img);
+  } else {
+    avatarWrap.innerHTML = '<div class="modal-avatar-placeholder">🎮</div>';
+  }
+
+  modal.classList.remove('hidden');
+
+  // جلب البيانات من الخادم — initData في header
+  try {
+    const r = await authFetch(`${API}/api/lucky/admin/user/${encodeURIComponent(uid)}`);
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+
+    const fmt = n => Number(n || 0).toLocaleString('de-DE');
+    document.getElementById('modal-balance').textContent    = fmt(d.balance) + ' نقطة';
+    document.getElementById('modal-initial').textContent   = fmt(d.initial_balance) + ' نقطة';
+    document.getElementById('modal-total-won').textContent = '+' + fmt(d.total_won) + ' نقطة';
+    document.getElementById('modal-games').textContent     = fmt(d.games) + ' جولة';
+
+    const badge = document.getElementById('modal-active-badge');
+    if (d.is_active) {
+      badge.textContent = '🟢 نشط الآن';
+      badge.className = 'modal-active-badge online';
+    } else {
+      badge.textContent = '⚫ غير نشط';
+      badge.className = 'modal-active-badge offline';
+    }
+  } catch(e) {
+    document.getElementById('modal-balance').textContent  = 'خطأ';
+    document.getElementById('modal-active-badge').textContent = '⚠️ تعذّر التحميل';
+    document.getElementById('modal-active-badge').className   = 'modal-active-badge offline';
+  }
+}
+
 // ===== Particles =====
-(function() {
-  const c = document.getElementById('particles'), ctx2 = c.getContext('2d');
-  c.width = window.innerWidth;
-  c.height = window.innerHeight;
-  const pts = Array.from({ length: 50 }, () => ({
-    x: Math.random() * c.width,
-    y: Math.random() * c.height,
-    r: Math.random() * 2 + 0.5,
-    dx: (Math.random() - 0.5) * 0.35,
-    dy: -(Math.random() * 0.45 + 0.15),
-    a: Math.random() * 0.4 + 0.15
+(function(){
+  const c=document.getElementById('particles'),ctx2=c.getContext('2d');
+  c.width=window.innerWidth; c.height=window.innerHeight;
+  const pts=Array.from({length:50},()=>({
+    x:Math.random()*c.width, y:Math.random()*c.height,
+    r:Math.random()*2+0.5,
+    dx:(Math.random()-0.5)*0.35, dy:-(Math.random()*0.45+0.15),
+    a:Math.random()*0.4+0.15
   }));
-  function tick() {
-    ctx2.clearRect(0, 0, c.width, c.height);
-    pts.forEach(p => {
-      p.x += p.dx;
-      p.y += p.dy;
-      if (p.y < -5) { p.y = c.height + 5;
-        p.x = Math.random() * c.width; }
-      ctx2.beginPath();
-      ctx2.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx2.fillStyle = `rgba(255,210,0,${p.a})`;
-      ctx2.fill();
+  function tick(){
+    ctx2.clearRect(0,0,c.width,c.height);
+    pts.forEach(p=>{
+      p.x+=p.dx; p.y+=p.dy;
+      if(p.y<-5){p.y=c.height+5; p.x=Math.random()*c.width;}
+      ctx2.beginPath(); ctx2.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx2.fillStyle=`rgba(255,210,0,${p.a})`; ctx2.fill();
     });
     requestAnimationFrame(tick);
   }
   tick();
-  window.addEventListener('resize', () => { c.width = window.innerWidth;
-    c.height = window.innerHeight; });
+  window.addEventListener('resize',()=>{c.width=window.innerWidth;c.height=window.innerHeight;});
 })();
 </script>
 </body>
