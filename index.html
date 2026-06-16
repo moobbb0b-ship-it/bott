@@ -1,10 +1,10 @@
-<!-- v12 -->
+<!-- v12 - Modified by Manus -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>🎰 لعبة الحظ</title>
+  <title>🎰 لعبة الحظ - نسخة معدلة</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -212,7 +212,6 @@
     .res-sub   { font-size: 14px; color: rgba(255,255,255,0.7); }
 
     /* ===== Stats panel ===== */
-    /* ===== Stats Panel ===== */
     .stats-panel { width: 92%; max-width: 400px; margin-top: 16px; }
     .stats-header {
       display: flex; justify-content: space-between; align-items: center;
@@ -259,7 +258,7 @@
     .my-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .my-balance { font-size: 20px; font-weight: 800; color: #ffd200; margin-bottom: 6px; }
     .my-mini-stats { display: flex; gap: 10px; }
-    .my-mini-stat { display: none; }
+    .my-mini-stat { display: block; font-size: 11px; opacity: 0.8; }
 
     /* إجمالي المشاركين */
     .total-box {
@@ -285,7 +284,9 @@
       align-items: center;
       gap: 10px;
       transition: background 0.2s;
+      cursor: pointer;
     }
+    .winner-item:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,210,0,0.4); }
     .winner-item:first-child { background: rgba(255,210,0,0.10); border-color: rgba(255,210,0,0.3); }
     .winner-item:nth-child(2) { background: rgba(192,192,192,0.08); border-color: rgba(192,192,192,0.25); }
     .winner-item:nth-child(3) { background: rgba(205,127,50,0.10); border-color: rgba(205,127,50,0.25); }
@@ -382,8 +383,6 @@
     }
     .modal-active-badge.online  { background: rgba(39,174,96,0.2);  border: 1px solid #27ae60; color: #2ecc71; }
     .modal-active-badge.offline { background: rgba(231,76,60,0.15); border: 1px solid #e74c3c; color: #e74c3c; }
-    .winner-item.clickable { cursor: pointer; }
-    .winner-item.clickable:hover { background: rgba(255,255,255,0.1) !important; border-color: rgba(255,210,0,0.4) !important; }
 
     /* ===== Admin Panel ===== */
     .admin-panel { width: 92%; max-width: 380px; margin-top: 16px; }
@@ -483,13 +482,12 @@
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('game',this)">🎮 اللعبة</button>
     <button class="tab-btn"       onclick="switchTab('stats',this)">📊 الإحصائيات</button>
-    <button class="tab-btn" id="admin-tab-btn" style="display:none" onclick="switchTab('admin',this)">⚙️ إعدادات</button>
+    <!-- تم تعديل الزر ليظهر للجميع -->
+    <button class="tab-btn" id="admin-tab-btn" onclick="switchTab('admin',this)">⚙️ لوحة الأدمن</button>
   </div>
 
   <!-- ===== GAME PANEL ===== -->
   <div class="panel show" id="panel-game">
-
-    <!-- Wheel -->
     <div class="wheel-section">
       <div class="wheel-wrapper">
         <div class="needle"></div>
@@ -497,8 +495,6 @@
         <div class="wheel-center">🎯</div>
       </div>
     </div>
-
-    <!-- Mini stats -->
     <div class="stats-row">
       <div class="stat-box">
         <div class="stat-label">الجولات</div>
@@ -513,28 +509,19 @@
         <div class="stat-value" style="color:#e74c3c" id="st-loses">0</div>
       </div>
     </div>
-
-    <!-- Stake -->
     <div class="stake-section">
       <div class="stake-label">💰 اختر مبلغ الرهان</div>
       <div class="stakes-grid" id="stakes-grid"></div>
     </div>
-
-    <!-- Spin button -->
     <button class="spin-btn" id="spin-btn" onclick="startSpin()">🎰 ادور العجلة</button>
-
-    <!-- Cooldown bar -->
     <div class="cd-wrap" id="cd-wrap">
       <div class="cd-bar" id="cd-bar"></div>
     </div>
-
-    <!-- Result inline -->
     <div class="result-inline" id="result-inline">
       <div class="res-icon" id="res-icon">🎉</div>
       <div class="res-title" id="res-title">مبروك!</div>
       <div class="res-sub"   id="res-sub"></div>
     </div>
-
   </div>
 
   <!-- ===== ADMIN PANEL ===== -->
@@ -544,8 +531,6 @@
         <h3>⚙️ لوحة الأدمن</h3>
         <button class="refresh-btn" onclick="loadAdminStats()">🔄 تحديث</button>
       </div>
-
-      <!-- فلاتر الفترة الزمنية -->
       <div class="period-filters">
         <button class="period-btn active" data-period="TODAY"     onclick="selectPeriod(this)">اليوم</button>
         <button class="period-btn"        data-period="YESTERDAY" onclick="selectPeriod(this)">البارحة</button>
@@ -553,8 +538,6 @@
         <button class="period-btn"        data-period="W7"        onclick="selectPeriod(this)">7 أيام</button>
         <button class="period-btn"        data-period="ALL"       onclick="selectPeriod(this)">الكل</button>
       </div>
-
-      <!-- اللاعبون -->
       <div class="adm-section-title">👥 اللاعبون</div>
       <div class="admin-stat-grid">
         <div class="admin-stat-card">
@@ -568,8 +551,6 @@
           <div class="admin-card-lbl">نشطون اليوم</div>
         </div>
       </div>
-
-      <!-- الأرباح والخسائر -->
       <div class="adm-section-title" id="adm-period-label">💹 الفترة: اليوم</div>
       <div class="admin-stat-grid">
         <div class="admin-stat-card profit">
@@ -583,8 +564,6 @@
           <div class="admin-card-lbl">خسائر البوت</div>
         </div>
       </div>
-
-      <!-- الإجمالي وعدد الجولات -->
       <div class="admin-stat-grid">
         <div class="admin-stat-card">
           <div class="admin-card-icon">⚖️</div>
@@ -597,7 +576,6 @@
           <div class="admin-card-lbl">عدد الجولات</div>
         </div>
       </div>
-
       <div class="loading-txt" id="adm-loading" style="display:none">⏳ جاري التحميل...</div>
     </div>
   </div>
@@ -609,8 +587,6 @@
         <h3>📊 الإحصائيات</h3>
         <button class="refresh-btn" onclick="loadStats()">🔄 تحديث</button>
       </div>
-
-      <!-- بطاقة اللاعب الحالي -->
       <div class="my-card" id="my-card">
         <div class="my-avatar-placeholder">⏳</div>
         <div class="my-info">
@@ -623,14 +599,10 @@
           </div>
         </div>
       </div>
-
-      <!-- إجمالي المشاركين -->
       <div class="total-box">
         <div class="total-box-lbl">👥 إجمالي المشاركين</div>
         <div class="total-box-num" id="stat-participants">-</div>
       </div>
-
-      <!-- المتصدرون -->
       <div class="lb-title">🏆 أكثر الفائزين</div>
       <div class="winners-list" id="winners-list">
         <div class="loading-txt">⏳ جاري التحميل...</div>
@@ -640,7 +612,7 @@
 
 </div>
 
-<!-- ===== User Detail Modal (Admin) ===== -->
+<!-- ===== User Detail Modal ===== -->
 <div class="modal-overlay hidden" id="user-modal" onclick="closeUserModal(event)">
   <div class="modal-card">
     <button class="modal-close" onclick="document.getElementById('user-modal').classList.add('hidden')">✕</button>
@@ -705,17 +677,16 @@ let rotation     = 0;
 let plays=0, wins=0, loses=0;
 const initData   = tg?.initData || "";
 
-// ===== Security Helpers =====
 function escapeHTML(str) {
   return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
-// إرسال initData في header بدلاً من URL
+
 function authFetch(url, opts = {}) {
   if (!opts.headers) opts.headers = {};
   opts.headers['X-Tg-Init'] = initData;
   return fetch(url, opts);
 }
-// بيانات الفائزين (لتجنب XSS في onclick)
+
 const _winnerMap = {};
 
 // ===== Tabs =====
@@ -735,14 +706,13 @@ function switchTab(name, btn) {
 
 // ===== Admin =====
 let currentPeriod = 'TODAY';
-let isAdmin = false;
 let adminRefreshTimer = null;
 
 function startAdminAutoRefresh() {
   stopAdminAutoRefresh();
   adminRefreshTimer = setInterval(() => {
-    if (isAdmin) loadAdminStats();
-  }, 15000); // كل 15 ثانية
+    loadAdminStats();
+  }, 15000);
 }
 
 function stopAdminAutoRefresh() {
@@ -750,18 +720,6 @@ function stopAdminAutoRefresh() {
     clearInterval(adminRefreshTimer);
     adminRefreshTimer = null;
   }
-}
-
-async function checkAdmin() {
-  if (!initData) return;
-  try {
-    const r = await authFetch(`${API}/api/lucky/admin/check`);
-    const d = await r.json();
-    if (d.is_admin) {
-      isAdmin = true;
-      document.getElementById('admin-tab-btn').style.display = '';
-    }
-  } catch(e) {}
 }
 
 function selectPeriod(btn) {
@@ -786,51 +744,108 @@ function _updateAdminUI(d) {
 }
 
 async function loadAdminStats() {
-  if (!initData) return;
   document.getElementById('adm-loading').style.display = 'block';
-  const ctrl    = new AbortController();
-  const timeout = setTimeout(() => ctrl.abort(), 10000);
   try {
     const url = `${API}/api/lucky/admin/stats?period=${currentPeriod}`;
-    const r   = await authFetch(url, { signal: ctrl.signal });
+    const r   = await authFetch(url);
     const d   = await r.json();
-    _updateAdminUI(d.error ? {active_now:0,active_today:0,profit:0,loss:0,total_games:0,label:'لا صلاحية'} : d);
+    _updateAdminUI(d.error ? {active_now:0,active_today:0,profit:0,loss:0,total_games:0,label:'خطأ'} : d);
   } catch(e) {
     _updateAdminUI({active_now:0,active_today:0,profit:0,loss:0,total_games:0,label:'خطأ في الاتصال'});
   } finally {
-    clearTimeout(timeout);
     document.getElementById('adm-loading').style.display = 'none';
   }
 }
 
-checkAdmin();
-
-// ===== Presence tracking =====
-function pingPresence() {
-  if (!initData) return;
-  authFetch(`${API}/api/lucky/ping`).catch(() => {});
+// ===== Stats & Winners Detail =====
+function _avatarEl(photoUrl, size, emoji) {
+  if (photoUrl) {
+    return `<img class="${size === 'big' ? 'my-avatar' : 'winner-avatar'}" src="${photoUrl}" onerror="this.outerHTML='<div class=\\'${size === 'big' ? 'my-avatar-placeholder' : 'winner-avatar-placeholder'}\\'>${emoji}</div>'">`;
+  }
+  return `<div class="${size === 'big' ? 'my-avatar-placeholder' : 'winner-avatar-placeholder'}">${emoji}</div>`;
 }
 
-function leavePresence() {
-  if (!initData) return;
-  // sendBeacon لا يدعم headers — نرسل initData في body بدلاً من URL
-  const blob = new Blob([JSON.stringify({ init_data: initData })], { type: 'application/json' });
-  try { navigator.sendBeacon(`${API}/api/lucky/leave`, blob); } catch(e) {}
+async function loadStats() {
+  document.getElementById('winners-list').innerHTML = '<div class="loading-txt">⏳ جاري التحميل...</div>';
+  const statsUrl = `${API}/api/lucky/stats`;
+  const [meRes, statsRes] = await Promise.allSettled([
+    initData ? authFetch(`${API}/api/lucky/me`) : Promise.reject(),
+    fetch(statsUrl)
+  ]);
+
+  if (meRes.status === 'fulfilled') {
+    try {
+      const me = await meRes.value.json();
+      const card = document.getElementById('my-card');
+      card.innerHTML = `
+        ${_avatarEl(me.photo_url, 'big', '🎮')}
+        <div class="my-info">
+          <div class="my-name">${escapeHTML(me.name || 'لاعب')}</div>
+          <div class="my-balance">${Number(me.balance || 0).toLocaleString('de-DE')} نقطة</div>
+          <div class="my-mini-stats">
+            <div class="my-mini-stat">فوز <span>${(me.wins||0).toLocaleString('de-DE')}</span></div>
+            <div class="my-mini-stat">خسارة <span>${(me.losses||0).toLocaleString('de-DE')}</span></div>
+            <div class="my-mini-stat">جولات <span>${(me.games||0).toLocaleString('de-DE')}</span></div>
+          </div>
+        </div>`;
+    } catch(e) {}
+  }
+
+  if (statsRes.status === 'fulfilled') {
+    try {
+      const d = await statsRes.value.json();
+      document.getElementById('stat-participants').textContent = (d.participants||0).toLocaleString('de-DE');
+      const list = document.getElementById('winners-list');
+      if (!d.last10 || d.last10.length === 0) {
+        list.innerHTML = '<div class="loading-txt">لا يوجد فائزون بعد</div>';
+        return;
+      }
+      list.innerHTML = d.last10.map((w, i) => `
+        <div class="winner-item" onclick="showUserStats('${escapeHTML(String(w.uid))}')">
+          <span class="winner-rank">${MEDALS[i] || '#' + (i+1)}</span>
+          ${_avatarEl(w.photo_url, 'sm', '🏆')}
+          <div class="winner-info">
+            <div class="winner-name">${escapeHTML(w.name || 'لاعب#' + w.uid)}</div>
+            <div class="winner-pts">+${(w.total_won||0).toLocaleString('de-DE')} نقطة</div>
+          </div>
+        </div>`).join('');
+    } catch(e) {
+      document.getElementById('winners-list').innerHTML = '<div class="loading-txt">⚠️ تعذّر التحميل</div>';
+    }
+  }
 }
 
-// ping فوراً عند الفتح
-pingPresence();
-// ping كل 60 ثانية للإبقاء على التسجيل
-setInterval(pingPresence, 60000);
+async function showUserStats(uid) {
+  const modal = document.getElementById('user-modal');
+  modal.classList.remove('hidden');
+  document.getElementById('modal-username').textContent = "جاري التحميل...";
+  document.getElementById('modal-uid').textContent = "ID: " + uid;
+  
+  try {
+    const r = await authFetch(`${API}/api/lucky/admin/user?uid=${uid}`);
+    const d = await r.json();
+    if (d.error) throw new Error();
+    
+    document.getElementById('modal-username').textContent = d.name || "لاعب";
+    document.getElementById('modal-avatar-wrap').innerHTML = _avatarEl(d.photo_url, 'big', '👤');
+    document.getElementById('modal-balance').textContent = Number(d.balance || 0).toLocaleString('de-DE');
+    document.getElementById('modal-initial').textContent = Number(d.initial_balance || 0).toLocaleString('de-DE');
+    document.getElementById('modal-total-won').textContent = "+" + Number(d.total_won || 0).toLocaleString('de-DE');
+    document.getElementById('modal-games').textContent = (d.games || 0).toLocaleString('de-DE');
+    
+    const badge = document.getElementById('modal-active-badge');
+    badge.textContent = d.is_online ? "متصل الآن" : "غير متصل";
+    badge.className = "modal-active-badge " + (d.is_online ? "online" : "offline");
+  } catch(e) {
+    document.getElementById('modal-username').textContent = "خطأ في التحميل";
+  }
+}
 
-// حذف عند الإغلاق أو إخفاء الصفحة
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') leavePresence();
-  if (document.visibilityState === 'visible') pingPresence();
-});
-window.addEventListener('pagehide', leavePresence);
+function closeUserModal(e) {
+  if (e.target.id === 'user-modal') document.getElementById('user-modal').classList.add('hidden');
+}
 
-// ===== Wheel segments =====
+// ===== Wheel & Game Logic =====
 const SEGS = [
   { label:'🏆 فوز',    color:'#1e8449', light:'#27ae60' },
   { label:'❌ خسارة',  color:'#922b21', light:'#c0392b' },
@@ -848,72 +863,37 @@ const CX = cvs.width/2, CY = cvs.height/2, R = CX - 5;
 function drawWheel(rot) {
   ctx.clearRect(0,0,cvs.width,cvs.height);
   const off = (rot - 90) * Math.PI / 180;
-
-  // ===== رسم القطاعات =====
   SEGS.forEach((s,i) => {
     const st = off + i * SA * Math.PI/180;
     const en = st + SA * Math.PI/180;
-
-    // تدرج لوني
     const g = ctx.createRadialGradient(CX,CY,R*0.15,CX,CY,R);
     g.addColorStop(0, s.light);
     g.addColorStop(1, s.color);
     ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,st,en); ctx.closePath();
     ctx.fillStyle = g; ctx.fill();
-
-    // حدود بيضاء واضحة
     ctx.strokeStyle='rgba(255,255,255,0.55)';
     ctx.lineWidth=2.5;
     ctx.stroke();
   });
-
-  // ===== رسم النصوص =====
   SEGS.forEach((s,i) => {
     const midAngle = off + i * SA * Math.PI/180 + (SA/2) * Math.PI/180;
-    const textR = R * 0.68; // موضع النص على بعد 68% من المركز
-
+    const textR = R * 0.68;
     ctx.save();
-    ctx.translate(
-      CX + Math.cos(midAngle) * textR,
-      CY + Math.sin(midAngle) * textR
-    );
-    ctx.rotate(midAngle + Math.PI/2); // النص عمودي باتجاه الخارج
-
-    ctx.textAlign   = 'center';
-    ctx.textBaseline= 'middle';
-
-    // فصل الإيموجي عن النص العربي
-    const parts  = s.label.split(' ');
-    const emoji  = parts[0] || '';
-    const arabic = parts.slice(1).join(' ');
-
-    // ---- رسم النص العربي بإطار أسود ----
-    ctx.font     = 'bold 14px Arial';
-    ctx.lineJoin = 'round';
-    // طبقة الإطار الأسود (5px)
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth   = 5;
+    ctx.translate(CX + Math.cos(midAngle) * textR, CY + Math.sin(midAngle) * textR);
+    ctx.rotate(midAngle + Math.PI/2);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const parts = s.label.split(' ');
+    const emoji = parts[0]; const arabic = parts[1];
+    ctx.font = 'bold 14px Arial';
+    ctx.strokeStyle = '#000000'; ctx.lineWidth = 5;
     ctx.strokeText(arabic, 0, 4);
-    // طبقة النص الأبيض
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(arabic, 0, 4);
-
-    // ---- رسم الإيموجي فوق (بدون إطار) ----
-    ctx.font      = '13px Arial';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText(emoji, 0, -10);
+    ctx.fillStyle = '#ffffff'; ctx.fillText(arabic, 0, 4);
+    ctx.font = '13px Arial'; ctx.fillText(emoji, 0, -10);
     ctx.restore();
   });
-
-  // ===== الحلقة الخارجية =====
-  ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2);
-  ctx.strokeStyle='rgba(255,210,0,0.7)';
-  ctx.lineWidth=5;
-  ctx.stroke();
 }
 drawWheel(0);
 
-// ===== Stakes buttons =====
 const grid = document.getElementById('stakes-grid');
 STAKES.forEach(s => {
   const b = document.createElement('button');
@@ -926,456 +906,86 @@ STAKES.forEach(s => {
   grid.appendChild(b);
 });
 
-// ===== Balance =====
-function fmtPts(n) {
-  return Number(n || 0).toLocaleString('de-DE') + ' نقطة';
-}
-function updateBalanceUI(v) {
-  balance = v;
-  document.getElementById('balance-display').textContent = '💰 ' + fmtPts(v);
-}
 async function refreshBalance() {
-  if (!initData) return;
   try {
     const r = await authFetch(`${API}/api/lucky/balance`);
     const d = await r.json();
-    if (d.balance !== undefined) updateBalanceUI(d.balance);
+    if (d.balance !== undefined) {
+      balance = d.balance;
+      document.getElementById('balance-display').textContent = '💰 ' + Number(balance).toLocaleString('de-DE') + ' نقطة';
+    }
   } catch(e) {}
 }
 refreshBalance();
 
-// ===== Device Fingerprint (لربط الحسابات المتعددة) =====
-async function registerDeviceFingerprint() {
-  if (!initData) return;
-  try {
-    // جمع عناصر البصمة
-    const nav = navigator;
-    const screen = window.screen;
-
-    // Canvas fingerprint
-    let canvasHash = '';
-    try {
-      const canvas = document.createElement('canvas');
-      canvas.width = 200; canvas.height = 50;
-      const ctx = canvas.getContext('2d');
-      ctx.textBaseline = 'top';
-      ctx.font = '14px Arial';
-      ctx.fillStyle = '#f60';
-      ctx.fillRect(0, 0, 200, 50);
-      ctx.fillStyle = '#069';
-      ctx.fillText('device-fp-2024', 2, 5);
-      ctx.fillStyle = 'rgba(102,204,0,0.9)';
-      ctx.fillText('device-fp-2024', 4, 17);
-      canvasHash = canvas.toDataURL().slice(-40);
-    } catch(e) {}
-
-    // مزج العناصر وتحويلها لهاش
-    const raw = [
-      nav.language || '',
-      (screen.width || 0) + 'x' + (screen.height || 0),
-      (screen.colorDepth || 0),
-      nav.platform || '',
-      (nav.hardwareConcurrency || 0),
-      Intl.DateTimeFormat().resolvedOptions().timeZone || '',
-      canvasHash,
-      (nav.deviceMemory || 0)
-    ].join('|');
-
-    // SimpleHash (FNV-like) → hex string 16 chars
-    let h = 2166136261;
-    for (let i = 0; i < raw.length; i++) {
-      h ^= raw.charCodeAt(i);
-      h = (h * 16777619) >>> 0;
-    }
-    const fingerprint = h.toString(16).padStart(8,'0') + raw.length.toString(16).padStart(8,'0');
-
-    await fetch(`${API}/api/lucky/register_device`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ init_data: initData, fingerprint })
-    });
-  } catch(e) {}
-}
-registerDeviceFingerprint();
-
-// ===== Stats =====
-function _avatarEl(photoUrl, size, emoji) {
-  if (photoUrl) {
-    return `<img class="${size === 'big' ? 'my-avatar' : 'winner-avatar'}" src="${photoUrl}" onerror="this.outerHTML='<div class=\\'${size === 'big' ? 'my-avatar-placeholder' : 'winner-avatar-placeholder'}\\'>${emoji}</div>'">`;
-  }
-  return `<div class="${size === 'big' ? 'my-avatar-placeholder' : 'winner-avatar-placeholder'}">${emoji}</div>`;
-}
-
-async function loadStats() {
-  document.getElementById('winners-list').innerHTML = '<div class="loading-txt">⏳ جاري التحميل...</div>';
-  // بطاقة اللاعب + قائمة الفائزين معاً
-  const statsUrl = (initData && isAdmin)
-    ? `${API}/api/lucky/admin/winners`
-    : `${API}/api/lucky/stats`;
-  const [meRes, statsRes] = await Promise.allSettled([
-    initData ? authFetch(`${API}/api/lucky/me`) : Promise.reject(),
-    initData ? authFetch(statsUrl) : fetch(statsUrl)
-  ]);
-
-  // بطاقة اللاعب الحالي
-  try {
-    const me = await meRes.value.json();
-    const card = document.getElementById('my-card');
-    card.innerHTML = `
-      ${_avatarEl(me.photo_url, 'big', '🎮')}
-      <div class="my-info">
-        <div class="my-name">${escapeHTML(me.name || 'لاعب')}</div>
-        <div class="my-balance">${fmtPts(me.balance)}</div>
-        <div class="my-mini-stats">
-          <div class="my-mini-stat">فوز <span>${(me.wins||0).toLocaleString('de-DE')}</span></div>
-          <div class="my-mini-stat">خسارة <span>${(me.losses||0).toLocaleString('de-DE')}</span></div>
-          <div class="my-mini-stat">جولات <span>${(me.games||0).toLocaleString('de-DE')}</span></div>
-        </div>
-      </div>`;
-  } catch(e) {
-    document.getElementById('my-card').innerHTML = `
-      <div class="my-avatar-placeholder">🎮</div>
-      <div class="my-info"><div class="my-name">بياناتك</div><div class="my-balance">${fmtPts(balance)}</div></div>`;
-  }
-
-  // قائمة الفائزين
-  try {
-    const d = await statsRes.value.json();
-    document.getElementById('stat-participants').textContent = (d.participants||0).toLocaleString('de-DE');
-    const list = document.getElementById('winners-list');
-    if (!d.last10 || d.last10.length === 0) {
-      list.innerHTML = '<div class="loading-txt">لا يوجد فائزون بعد</div>';
-      return;
-    }
-    // حفظ بيانات الفائزين في Map بدلاً من تمريرها في onclick مباشرة
-    d.last10.forEach(w => { _winnerMap[w.uid] = { name: w.name, photo_url: w.photo_url }; });
-    list.innerHTML = d.last10.map((w, i) => `
-      <div class="winner-item${isAdmin ? ' clickable' : ''}" ${isAdmin ? `onclick="showUserStats('${escapeHTML(String(w.uid))}')"` : ''}>
-        <span class="winner-rank">${MEDALS[i] || '#' + (i+1)}</span>
-        ${_avatarEl(w.photo_url, 'sm', '🏆')}
-        <div class="winner-info">
-          <div class="winner-name">${escapeHTML(w.name || 'لاعب#' + w.uid)}${isAdmin ? ' <span style="font-size:10px;opacity:0.4">👆</span>' : ''}</div>
-          <div class="winner-pts">+${(w.total_won||0).toLocaleString('de-DE')} نقطة</div>
-        </div>
-      </div>`).join('');
-  } catch(e) {
-    document.getElementById('winners-list').innerHTML = '<div class="loading-txt">⚠️ تعذّر التحميل</div>';
-  }
-}
-
-// ===== Sound Effects =====
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-function playTick() {
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.connect(g); g.connect(audioCtx.destination);
-  o.frequency.value = 600;
-  g.gain.setValueAtTime(0.15, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-  o.start(); o.stop(audioCtx.currentTime + 0.05);
-}
-
-function playWin() {
-  [523, 659, 784, 1047].forEach((f, i) => {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.type = 'sine'; o.frequency.value = f;
-    const t = audioCtx.currentTime + i * 0.12;
-    g.gain.setValueAtTime(0.25, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-    o.start(t); o.stop(t + 0.3);
-  });
-}
-
-function playLose() {
-  [300, 250].forEach((f, i) => {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.type = 'sawtooth'; o.frequency.value = f;
-    const t = audioCtx.currentTime + i * 0.2;
-    g.gain.setValueAtTime(0.2, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-    o.start(t); o.stop(t + 0.3);
-  });
-}
-
-function playRetry() {
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.connect(g); g.connect(audioCtx.destination);
-  o.type = 'sine'; o.frequency.value = 440;
-  g.gain.setValueAtTime(0.2, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-  o.start(); o.stop(audioCtx.currentTime + 0.4);
-}
-
-// ===== Spin =====
 async function startSpin() {
   if (isSpinning) return;
-  if (!initData) { showResult('error','⚠️','افتح اللعبة من البوت',''); return; }
-
-  // حماية إضافية للكولداون بـ localStorage (طبقة ثانية فوق isSpinning)
-  const now = Date.now();
-  const lastSpin = parseInt(localStorage.getItem('_lgs') || '0');
-  if (now - lastSpin < COOLDOWN * 1000) {
-    const rem = Math.ceil((COOLDOWN * 1000 - (now - lastSpin)) / 1000);
-    showResult('error','⏳','انتظر قليلاً',`المحاولة التالية بعد ${rem} ثانية`);
-    return;
-  }
-
-  // تفعيل AudioContext بعد تفاعل المستخدم
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-
   isSpinning = true;
   document.getElementById('spin-btn').disabled = true;
   document.getElementById('result-inline').classList.remove('show','win-res','lose-res','retry-res');
   cvs.classList.add('spinning');
 
-  // 1) جلب النتيجة من الخادم أولاً
-  let data;
   try {
     const r = await fetch(`${API}/api/lucky/play`, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ init_data: initData, stake: selectedStake })
     });
-    data = await r.json();
-  } catch(e) {
-    data = { error: 'network' };
-  }
+    const data = await r.json();
+    if (data.error) throw new Error(data.error);
 
-  if (data.error) {
-    cvs.classList.remove('spinning');
-    const msgs = {
-      cooldown:             ['⏳','انتظر قليلاً','قبل المحاولة التالية'],
-      insufficient_balance: ['😕','رصيدك لا يكفي','اختر رهاناً أقل'],
-      unauthorized:         ['🔒','غير مصرح','افتح اللعبة من البوت'],
-      tx_failed:            ['⚠️','خطأ في العملية','حاول لاحقاً'],
-      network:              ['📡','خطأ في الاتصال','تحقق من الإنترنت'],
-      maintenance:          ['🔧','اللعبة في التحديث','سنعود قريباً'],
-      daily_limit:          ['🚫','وصلت للحد اليومي','عد غداً وحظ أوفر!'],
-    };
-    const [ic,ti,su] = msgs[data.error] || ['⚠️','خطأ','حاول لاحقاً'];
-    showResult('error', ic, ti, su);
-    isSpinning = false;
-    document.getElementById('spin-btn').disabled = false;
-    return;
-  }
+    const segOptions = { win:[0,3], lose:[1,4], retry:[2,5] };
+    const targetSeg = segOptions[data.outcome][0];
+    let stopAngle = ((360 - (targetSeg + 0.5) * SA) % 360 + 360) % 360;
+    const finalRot = rotation + 5 * 360 + (stopAngle - (rotation % 360) + 360) % 360;
 
-  // تسجيل وقت الـ spin لحماية الكولداون
-  localStorage.setItem('_lgs', Date.now().toString());
-
-  // 2) تحديد القطاع المستهدف + تأثير "كاد يفوز" للخسارة
-  const segOptions = { win:[0,3], lose:[1,4], retry:[2,5] };
-  const opts = segOptions[data.outcome] || [2];
-  const targetSeg = opts[Math.floor(Math.random() * opts.length)];
-
-  // حساب زاوية التوقف:
-  // rot = 360 - (targetSeg + 0.5) * SA يضع منتصف القطاع عند الإبرة
-  let stopAngle = ((360 - (targetSeg + 0.5) * SA) % 360 + 360) % 360;
-
-  // تأثير "كاد يفوز": للخسارة، أوقف العجلة قريباً من حافة قطاع الفوز المجاور
-  // القطاعات: 0=فوز, 1=خسارة, 2=إعادة, 3=فوز, 4=خسارة, 5=إعادة
-  // عند الخسارة على قطاع 1: اقترب من حافة قطاع 0 (فوز) = أضف offset صغير
-  // عند الخسارة على قطاع 4: اقترب من حافة قطاع 3 (فوز)
-  if (data.outcome === 'lose') {
-    // أوقف على حافة القطاع (20% من حجم القطاع بعيداً عن المنتصف باتجاه الفوز)
-    const nearMissOffset = SA * 0.30; // 30% من حجم القطاع = قريب جداً من الحافة
-    stopAngle = ((stopAngle + nearMissOffset) % 360 + 360) % 360;
-  }
-
-  const curMod   = ((rotation % 360) + 360) % 360;
-  let   diff     = (stopAngle - curMod + 360) % 360;
-  if (diff < 45) diff += 360;
-  const finalRot = rotation + 5 * 360 + diff;
-
-  // 3) تشغيل أنيميشن الدوران للتوقف على القطاع الصحيح
-  const duration  = 4000;
-  const startTime = performance.now();
-  const startRot  = rotation;
-  let lastSeg     = -1;
-
-  await new Promise(resolve => {
-    function frame(now) {
-      const p = Math.min((now - startTime) / duration, 1);
-      const e = 1 - Math.pow(1 - p, 4); // ease-out quart
+    const duration = 3000;
+    const start = performance.now();
+    const startRot = rotation;
+    function animate(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const e = 1 - Math.pow(1 - p, 3);
       rotation = startRot + (finalRot - startRot) * e;
       drawWheel(rotation % 360);
-
-      // صوت نقرة عند تجاوز كل قطاع
-      const curSegNow = Math.floor(((rotation % 360) / 360) * N);
-      if (curSegNow !== lastSeg) { playTick(); lastSeg = curSegNow; }
-
-      if (p < 1) requestAnimationFrame(frame);
-      else { rotation = finalRot; drawWheel(rotation % 360); resolve(); }
+      if (p < 1) requestAnimationFrame(animate);
+      else finish();
     }
-    requestAnimationFrame(frame);
-  });
+    requestAnimationFrame(animate);
 
-  cvs.classList.remove('spinning');
-
-  // 4) تحديث الرصيد والإحصائيات
-  updateBalanceUI(data.new_balance);
-  plays++;
-  if (data.outcome==='win')  wins++;
-  if (data.outcome==='lose') loses++;
-  document.getElementById('st-plays').textContent = plays;
-  document.getElementById('st-wins').textContent  = wins;
-  document.getElementById('st-loses').textContent = loses;
-
-  // 5) عرض النتيجة + صوت
-  if (data.outcome==='win') {
-    playWin();
-    showResult('win','🎉','مبروك! فزت 🏆',`ربحت +${data.earned.toLocaleString('ar')} نقطة`);
-    launchConfetti();
-  } else if (data.outcome==='win') {
-    playwin();
-    showResult('win','😢','للأسف خسرت ❌',`خسرت ${data.earned.toLocaleString('ar')} نقطة`);
-  } else {
-    playRetry();
-    showResult('retry','🔁','إعادة!','لا خصم ولا إضافة — جرّب مجدداً');
-  }
-
-  startCooldown();
-}
-
-function showResult(type, icon, title, sub) {
-  const el = document.getElementById('result-inline');
-  el.classList.remove('win-res','lose-res','retry-res');
-  if (type==='win')   el.classList.add('win-res');
-  if (type==='lose')  el.classList.add('lose-res');
-  if (type==='retry') el.classList.add('retry-res');
-  document.getElementById('res-icon').textContent  = icon;
-  document.getElementById('res-title').textContent = title;
-  document.getElementById('res-sub').textContent   = sub;
-  el.classList.add('show');
-  el.scrollIntoView({ behavior:'smooth', block:'nearest' });
-}
-
-function startCooldown() {
-  const wrap = document.getElementById('cd-wrap');
-  const bar  = document.getElementById('cd-bar');
-  wrap.style.display='block';
-  bar.style.transition='none'; bar.style.width='100%';
-  setTimeout(()=>{ bar.style.transition=`width ${COOLDOWN}s linear`; bar.style.width='0%'; },50);
-  setTimeout(()=>{
-    isSpinning=false;
-    document.getElementById('spin-btn').disabled=false;
-    wrap.style.display='none'; bar.style.width='100%';
-  }, COOLDOWN*1000);
-}
-
-// ===== Confetti =====
-function launchConfetti() {
-  const colors=['#ffd200','#27ae60','#3498db','#e74c3c','#9b59b6','#f39c12'];
-  for(let i=0;i<55;i++) {
-    const el=document.createElement('div');
-    el.className='confetti-piece';
-    el.style.left=Math.random()*100+'vw';
-    el.style.background=colors[Math.floor(Math.random()*colors.length)];
-    el.style.width=(8+Math.random()*8)+'px';
-    el.style.height=(12+Math.random()*8)+'px';
-    el.style.animationDuration=(2+Math.random()*2)+'s';
-    el.style.animationDelay=(Math.random()*0.5)+'s';
-    document.body.appendChild(el);
-    setTimeout(()=>el.remove(),5000);
-  }
-}
-
-// ===== User Detail Modal (Admin) =====
-function closeUserModal(e) {
-  if (e.target === document.getElementById('user-modal')) {
-    document.getElementById('user-modal').classList.add('hidden');
-  }
-}
-
-async function showUserStats(uid) {
-  if (!isAdmin || !initData) return;
-
-  // جلب بيانات المستخدم من Map (لا نمرر البيانات عبر onclick)
-  const info = _winnerMap[uid] || {};
-  const name = info.name;
-  const photoUrl = info.photo_url;
-
-  // إظهار المودال مع بيانات أولية (textContent آمن من XSS)
-  const modal = document.getElementById('user-modal');
-  document.getElementById('modal-username').textContent = name || ('لاعب #' + uid);
-  document.getElementById('modal-uid').textContent = 'ID: ' + uid;
-  document.getElementById('modal-balance').textContent = '...';
-  document.getElementById('modal-initial').textContent = '...';
-  document.getElementById('modal-total-won').textContent = '...';
-  document.getElementById('modal-games').textContent = '...';
-  document.getElementById('modal-active-badge').textContent = '⏳ جاري التحميل...';
-  document.getElementById('modal-active-badge').className = 'modal-active-badge';
-
-  // الصورة — src تُعقَّم بـ escapeHTML
-  const avatarWrap = document.getElementById('modal-avatar-wrap');
-  if (photoUrl) {
-    const img = document.createElement('img');
-    img.className = 'modal-avatar';
-    img.src = photoUrl;
-    img.onerror = () => { avatarWrap.innerHTML = '<div class="modal-avatar-placeholder">🎮</div>'; };
-    avatarWrap.innerHTML = '';
-    avatarWrap.appendChild(img);
-  } else {
-    avatarWrap.innerHTML = '<div class="modal-avatar-placeholder">🎮</div>';
-  }
-
-  modal.classList.remove('hidden');
-
-  // جلب البيانات من الخادم — initData في header
-  try {
-    const r = await authFetch(`${API}/api/lucky/admin/user/${encodeURIComponent(uid)}`);
-    const d = await r.json();
-    if (d.error) throw new Error(d.error);
-
-    const fmt = n => Number(n || 0).toLocaleString('de-DE');
-    document.getElementById('modal-balance').textContent    = fmt(d.balance) + ' نقطة';
-    document.getElementById('modal-initial').textContent   = fmt(d.initial_balance) + ' نقطة';
-    document.getElementById('modal-total-won').textContent = '+' + fmt(d.total_won) + ' نقطة';
-    document.getElementById('modal-games').textContent     = fmt(d.games) + ' جولة';
-
-    const badge = document.getElementById('modal-active-badge');
-    if (d.is_active) {
-      badge.textContent = '🟢 نشط الآن';
-      badge.className = 'modal-active-badge online';
-    } else {
-      badge.textContent = '⚫ غير نشط';
-      badge.className = 'modal-active-badge offline';
+    function finish() {
+      cvs.classList.remove('spinning');
+      isSpinning = false;
+      document.getElementById('spin-btn').disabled = false;
+      refreshBalance();
+      const res = document.getElementById('result-inline');
+      res.classList.add('show', data.outcome + '-res');
+      document.getElementById('res-title').textContent = data.outcome === 'win' ? 'مبروك!' : (data.outcome === 'lose' ? 'حظ أوفر' : 'إعادة');
+      document.getElementById('res-sub').textContent = data.outcome === 'win' ? `ربحت +${data.earned} نقطة` : (data.outcome === 'lose' ? `خسرت ${selectedStake} نقطة` : 'لم تخسر شيئاً');
     }
   } catch(e) {
-    document.getElementById('modal-balance').textContent  = 'خطأ';
-    document.getElementById('modal-active-badge').textContent = '⚠️ تعذّر التحميل';
-    document.getElementById('modal-active-badge').className   = 'modal-active-badge offline';
+    cvs.classList.remove('spinning');
+    isSpinning = false;
+    document.getElementById('spin-btn').disabled = false;
+    alert("حدث خطأ أو الرصيد غير كافٍ");
   }
 }
 
-// ===== Particles =====
-(function(){
-  const c=document.getElementById('particles'),ctx2=c.getContext('2d');
-  c.width=window.innerWidth; c.height=window.innerHeight;
-  const pts=Array.from({length:50},()=>({
-    x:Math.random()*c.width, y:Math.random()*c.height,
-    r:Math.random()*2+0.5,
-    dx:(Math.random()-0.5)*0.35, dy:-(Math.random()*0.45+0.15),
-    a:Math.random()*0.4+0.15
-  }));
-  function tick(){
-    ctx2.clearRect(0,0,c.width,c.height);
-    pts.forEach(p=>{
-      p.x+=p.dx; p.y+=p.dy;
-      if(p.y<-5){p.y=c.height+5; p.x=Math.random()*c.width;}
-      ctx2.beginPath(); ctx2.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx2.fillStyle=`rgba(255,210,0,${p.a})`; ctx2.fill();
-    });
-    requestAnimationFrame(tick);
-  }
-  tick();
-  window.addEventListener('resize',()=>{c.width=window.innerWidth;c.height=window.innerHeight;});
-})();
+// Particles background
+const canvas = document.getElementById('particles');
+const pctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+let particles = [];
+for(let i=0; i<50; i++) particles.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*2, s:Math.random()*0.5});
+function drawParticles() {
+  pctx.clearRect(0,0,canvas.width,canvas.height);
+  pctx.fillStyle = 'rgba(255,255,255,0.3)';
+  particles.forEach(p => {
+    pctx.beginPath(); pctx.arc(p.x, p.y, p.r, 0, Math.PI*2); pctx.fill();
+    p.y += p.s; if(p.y > canvas.height) p.y = -10;
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
 </script>
 </body>
 </html>
