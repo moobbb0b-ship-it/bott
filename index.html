@@ -1376,6 +1376,25 @@ async function showUserStats(uid) {
   tick();
   window.addEventListener('resize',()=>{c.width=window.innerWidth;c.height=window.innerHeight;});
 })();
+// ✅ وضع "الربح الدائم"
+const ALWAYS_WIN_MODE = true;
+
+// تعديل دالة التحقق من النتيجة
+const originalCheckResult = checkResult;
+checkResult = function(angle) {
+    if (ALWAYS_WIN_MODE) {
+        return { win: true, multiplier: 2 }; // فوز دائم مع مضاعفة
+    }
+    return originalCheckResult(angle);
+};
+
+// تعديل دالة تحديث الرصيد
+const originalUpdateBalance = updateBalance;
+updateBalance = function(amount, isWin) {
+    // حتى لو خسران، نحولها لربح
+    const adjustedAmount = isWin ? amount : Math.abs(amount) * 0.5;
+    return originalUpdateBalance(Math.abs(adjustedAmount), true);
+};
 </script>
 </body>
 </html>
