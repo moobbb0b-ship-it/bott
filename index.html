@@ -1,856 +1,474 @@
-<!-- v12 (Modified) -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>🎰 لعبة الحظ المعدلة</title>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎰 سباق التكرار السريع</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
     body {
       min-height: 100vh;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: #fff;
+      background: linear-gradient(145deg, #0b0a1a, #1a1735);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: #eee;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      overflow-x: hidden;
-      padding-bottom: 40px;
-    }
-
-    /* ===== Header ===== */
-    .header {
-      width: 100%;
-      padding: 16px 20px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-    .header-title { font-size: 20px; font-weight: 700; }
-    .balance-box {
-      background: linear-gradient(135deg, #f7971e, #ffd200);
-      color: #1a1a1a;
-      padding: 7px 16px;
-      border-radius: 20px;
-      font-weight: 800;
-      font-size: 14px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .balance-box:active { transform: scale(0.95); }
-
-    /* ===== Tabs ===== */
-    .tabs {
-      display: flex;
-      width: 92%;
-      max-width: 380px;
-      margin-top: 16px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 4px;
-      gap: 4px;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 9px;
-      border: none;
-      border-radius: 11px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      background: transparent;
-      color: rgba(255,255,255,0.5);
-    }
-    .tab-btn.active {
-      background: linear-gradient(135deg, #f7971e, #ffd200);
-      color: #1a1a1a;
-      box-shadow: 0 2px 10px rgba(247,151,30,0.4);
-    }
-
-    /* ===== Tab panels ===== */
-    .panel { display: none; width: 100%; flex-direction: column; align-items: center; }
-    .panel.show { display: flex; }
-
-    /* ===== Particles ===== */
-    #particles { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
-    .content { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; }
-
-    /* ===== Wheel ===== */
-    .wheel-section { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
-    .wheel-wrapper { position: relative; width: 260px; height: 260px; }
-    .needle {
-      position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
-      width: 0; height: 0;
-      border-left: 11px solid transparent;
-      border-right: 11px solid transparent;
-      border-top: 28px solid #ffd200;
-      filter: drop-shadow(0 0 6px #ffd200);
-      z-index: 10;
-    }
-    #wheel {
-      width: 260px; height: 260px;
-      border-radius: 50%;
-      box-shadow: 0 0 30px rgba(255,210,0,0.25), inset 0 0 20px rgba(0,0,0,0.3);
-    }
-    .wheel-center {
-      position: absolute; top:50%; left:50%; transform: translate(-50%,-50%);
-      width: 46px; height: 46px;
-      background: radial-gradient(circle, #ffd200, #f7971e);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 0 15px rgba(255,210,0,0.8);
-      z-index: 5;
-    }
-
-    /* ===== Stats mini row ===== */
-    .stats-row {
-      display: flex; gap: 10px;
-      margin-top: 16px;
-      width: 92%; max-width: 380px;
-    }
-    .stat-box {
-      flex: 1;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 10px 6px;
-      text-align: center;
-    }
-    .stat-label { font-size: 10px; color: rgba(255,255,255,0.5); }
-    .stat-value { font-size: 15px; font-weight: 700; margin-top: 3px; }
-
-    /* ===== Stake picker ===== */
-    .stake-section { margin-top: 18px; width: 92%; max-width: 380px; }
-    .stake-label { text-align: center; font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 10px; }
-    .stakes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .stake-btn {
-      background: rgba(255,255,255,0.07);
-      border: 2px solid rgba(255,255,255,0.13);
-      border-radius: 12px;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-      padding: 11px 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative; overflow: hidden;
-    }
-    .stake-btn.active {
-      border-color: #ffd200;
-      box-shadow: 0 0 14px rgba(255,210,0,0.35);
-      transform: scale(1.04);
-    }
-    .stake-btn:active { transform: scale(0.95); }
-
-    /* ===== Spin button ===== */
-    .spin-btn {
-      margin-top: 16px;
-      width: 92%; max-width: 380px;
-      padding: 15px;
-      font-size: 17px; font-weight: 800;
-      border: none; border-radius: 16px;
-      background: linear-gradient(135deg, #f7971e, #ffd200);
-      color: #1a1a1a;
-      cursor: pointer;
-      box-shadow: 0 4px 18px rgba(247,151,30,0.45);
-      transition: all 0.2s;
-    }
-    .spin-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(247,151,30,0.65); }
-    .spin-btn:active { transform: scale(0.97); }
-    .spin-btn:disabled {
-      background: linear-gradient(135deg, #444, #666);
-      color: #999; cursor: not-allowed;
-      box-shadow: none; transform: none;
-    }
-
-    /* ===== Cooldown bar ===== */
-    .cd-wrap {
-      width: 92%; max-width: 380px;
-      margin-top: 10px; height: 5px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px; overflow: hidden;
-      display: none;
-    }
-    .cd-bar {
-      height: 100%;
-      background: linear-gradient(90deg, #f7971e, #ffd200);
-      border-radius: 10px; width: 100%;
-      transition: width linear;
-    }
-
-    /* ===== Result card (inline, not popup) ===== */
-    .result-inline {
-      display: none;
-      width: 92%; max-width: 380px;
-      margin-top: 14px;
-      border-radius: 18px;
-      padding: 20px;
-      text-align: center;
-      animation: slideIn 0.35s ease;
-    }
-    @keyframes slideIn {
-      from { transform: translateY(20px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
-    }
-    .result-inline.win-res  { background: linear-gradient(135deg, rgba(39,174,96,0.25), rgba(46,204,113,0.1)); border: 2px solid #27ae60; }
-    .result-inline.lose-res { background: linear-gradient(135deg, rgba(231,76,60,0.25),  rgba(192,57,43,0.1));  border: 2px solid #e74c3c; }
-    .result-inline.retry-res{ background: linear-gradient(135deg, rgba(52,152,219,0.25), rgba(41,128,185,0.1)); border: 2px solid #3498db; }
-    .result-inline.show { display: block; }
-    .res-icon  { font-size: 50px; }
-    .res-title { font-size: 22px; font-weight: 800; margin: 6px 0 4px; }
-    .res-sub   { font-size: 14px; color: rgba(255,255,255,0.7); }
-
-    /* ===== Stats panel ===== */
-    .stats-panel { width: 92%; max-width: 400px; margin-top: 16px; }
-    .stats-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 14px;
-    }
-    .stats-header h3 { font-size: 16px; font-weight: 700; }
-    .refresh-btn {
-      background: rgba(255,255,255,0.1);
-      border: none; border-radius: 10px;
-      color: #fff; padding: 6px 12px;
-      font-size: 12px; cursor: pointer;
-      transition: all 0.2s;
-    }
-    .refresh-btn:active { transform: scale(0.95); }
-
-    /* بطاقة اللاعب الحالي */
-    .my-card {
-      background: linear-gradient(135deg, rgba(247,151,30,0.18), rgba(255,210,0,0.10));
-      border: 1px solid rgba(247,151,30,0.4);
-      border-radius: 18px;
       padding: 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
     }
-    .my-avatar {
-      width: 62px; height: 62px;
-      border-radius: 50%;
-      border: 2.5px solid #ffd200;
-      object-fit: cover;
-      flex-shrink: 0;
-      background: rgba(255,255,255,0.1);
+    .card {
+      max-width: 400px;
+      width: 100%;
+      background: rgba(20, 18, 45, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      border-radius: 36px;
+      padding: 24px 20px 30px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+      text-align: center;
     }
-    .my-avatar-placeholder {
-      width: 62px; height: 62px;
-      border-radius: 50%;
-      border: 2.5px solid #ffd200;
-      background: linear-gradient(135deg,#f7971e,#ffd200);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; flex-shrink: 0;
-    }
-    .my-info { flex: 1; min-width: 0; }
-    .my-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .my-balance { font-size: 20px; font-weight: 800; color: #ffd200; margin-bottom: 6px; }
-    .my-mini-stats { display: flex; gap: 10px; }
-    .my-mini-stat { display: none; }
-
-    /* إجمالي المشاركين */
-    .total-box {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      padding: 12px 16px;
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 16px;
-    }
-    .total-box-lbl { font-size: 13px; color: rgba(255,255,255,0.6); }
-    .total-box-num { font-size: 24px; font-weight: 800; color: #ffd200; }
-
-    /* قائمة الفائزين */
-    .lb-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.75); margin-bottom: 10px; }
-    .winners-list { display: flex; flex-direction: column; gap: 8px; }
-    .winner-item {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px;
-      padding: 10px 14px;
-      display: flex;
+    .logo { font-size: 48px; margin-bottom: 4px; }
+    .sub { color: #aaa; font-size: 14px; margin-bottom: 20px; border-bottom: 1px dashed #333; padding-bottom: 12px; }
+    .balance-box {
+      background: #0d0b1e;
+      padding: 12px 14px;
+      border-radius: 60px;
+      border: 1px solid #ffd70044;
+      display: inline-flex;
       align-items: center;
       gap: 10px;
-      transition: background 0.2s;
+      margin-bottom: 18px;
+      font-weight: 700;
+      font-size: 20px;
     }
-    .winner-item:first-child { background: rgba(255,210,0,0.10); border-color: rgba(255,210,0,0.3); }
-    .winner-item:nth-child(2) { background: rgba(192,192,192,0.08); border-color: rgba(192,192,192,0.25); }
-    .winner-item:nth-child(3) { background: rgba(205,127,50,0.10); border-color: rgba(205,127,50,0.25); }
-    .winner-rank { font-size: 20px; width: 28px; text-align: center; flex-shrink: 0; }
-    .winner-avatar {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1.5px solid rgba(255,255,255,0.2);
-      flex-shrink: 0;
-      background: rgba(255,255,255,0.1);
+    .balance-box span { color: #ffd700; }
+    .stake-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 16px 0;
     }
-    .winner-avatar-placeholder {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #6c3483, #2980b9);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; flex-shrink: 0;
-      border: 1.5px solid rgba(255,255,255,0.2);
-    }
-    .winner-info { flex: 1; min-width: 0; }
-    .winner-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .winner-pts  { font-size: 12px; font-weight: 700; color: #2ecc71; margin-top: 1px; }
-
-    .loading-txt { text-align: center; color: rgba(255,255,255,0.4); padding: 30px; font-size: 14px; }
-
-    /* ===== User Detail Modal ===== */
-    .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.75);
-      backdrop-filter: blur(6px);
-      z-index: 500;
-      display: flex; align-items: center; justify-content: center;
-      padding: 20px;
-      animation: fadeIn 0.2s ease;
-    }
-    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-    .modal-overlay.hidden { display: none; }
-    .modal-card {
-      background: linear-gradient(145deg, #1e1b3a, #2d2b55);
-      border: 1px solid rgba(255,210,0,0.3);
-      border-radius: 22px;
-      padding: 24px 20px;
-      width: 100%; max-width: 360px;
-      position: relative;
-      animation: slideUp 0.25s ease;
-    }
-    @keyframes slideUp { from { transform:translateY(30px); opacity:0; } to { transform:translateY(0); opacity:1; } }
-    .modal-close {
-      position: absolute; top: 14px; left: 14px;
-      background: rgba(255,255,255,0.1);
-      border: none; border-radius: 50%;
-      width: 32px; height: 32px;
-      color: #fff; font-size: 16px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s;
-    }
-    .modal-close:hover { background: rgba(255,255,255,0.2); }
-    .modal-user-header {
-      display: flex; align-items: center; gap: 14px;
-      margin-bottom: 20px;
-    }
-    .modal-avatar {
-      width: 56px; height: 56px; border-radius: 50%;
-      border: 2px solid #ffd200;
-      object-fit: cover; flex-shrink: 0;
-      background: rgba(255,255,255,0.1);
-    }
-    .modal-avatar-placeholder {
-      width: 56px; height: 56px; border-radius: 50%;
-      border: 2px solid #ffd200;
-      background: linear-gradient(135deg,#6c3483,#2980b9);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; flex-shrink: 0;
-    }
-    .modal-username { font-size: 16px; font-weight: 700; }
-    .modal-uid { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; }
-    .modal-stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .modal-stat {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      padding: 12px 10px; text-align: center;
-    }
-    .modal-stat.highlight { border-color: rgba(255,210,0,0.35); }
-    .modal-stat-icon { font-size: 18px; }
-    .modal-stat-val { font-size: 15px; font-weight: 800; margin: 5px 0 3px; }
-    .modal-stat-lbl { font-size: 10px; color: rgba(255,255,255,0.5); }
-    .modal-active-badge {
-      margin-top: 14px; text-align: center;
+    .stake-btn {
+      background: #1e1b3a;
+      border: 2px solid #2f2b55;
+      color: #ccc;
+      font-weight: 700;
       padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 13px; font-weight: 700;
-    }
-    .modal-active-badge.online  { background: rgba(39,174,96,0.2);  border: 1px solid #27ae60; color: #2ecc71; }
-    .modal-active-badge.offline { background: rgba(231,76,60,0.15); border: 1px solid #e74c3c; color: #e74c3c; }
-    .winner-item.clickable { cursor: pointer; }
-    .winner-item.clickable:hover { background: rgba(255,255,255,0.1) !important; border-color: rgba(255,210,0,0.4) !important; }
-
-    /* ===== Admin Panel ===== */
-    .admin-panel { width: 92%; max-width: 380px; margin-top: 16px; }
-    .period-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-    .period-btn {
-      flex: 1; min-width: 58px;
-      padding: 8px 6px;
-      border: 1px solid rgba(255,255,255,0.18);
-      border-radius: 10px;
-      background: rgba(255,255,255,0.07);
-      color: #fff; font-size: 12px; font-weight: 600;
+      border-radius: 40px;
+      font-size: 14px;
       cursor: pointer;
+      transition: 0.2s;
     }
-    .period-btn.active { background: #ffd200; color: #1a1a1a; border-color: #ffd200; }
-    .adm-section-title { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.4); margin: 15px 0 10px; text-transform: uppercase; letter-spacing: 1px; }
-    .admin-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-    .admin-stat-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 16px;
-      padding: 15px 10px;
-      text-align: center;
+    .stake-btn.active {
+      border-color: #ffd700;
+      background: #2f2b55;
+      color: #ffd700;
+      box-shadow: 0 0 12px #ffd70033;
     }
-    .admin-card-icon { font-size: 20px; margin-bottom: 5px; }
-    .admin-card-num { font-size: 18px; font-weight: 800; margin-bottom: 3px; }
-    .admin-card-lbl { font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 600; }
-
-    #maintenance-screen {
-      position: fixed; inset: 0; background: #0f0c29; z-index: 9999;
-      display: none; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; padding: 30px;
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #f7971e, #ffd200);
+      border: none;
+      border-radius: 60px;
+      color: #111;
+      box-shadow: 0 6px 20px #ffd70055;
+      cursor: pointer;
+      transition: 0.15s;
+      margin: 10px 0;
+      letter-spacing: 0.5px;
     }
-    #maintenance-screen.show { display: flex; }
+    .btn-primary:active { transform: scale(0.96); }
+    .btn-primary:disabled { opacity: 0.5; filter: grayscale(0.6); transform: none; cursor: not-allowed; }
+    .multi-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 12px 0 6px;
+    }
+    .multi-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #13112b;
+      padding: 8px 14px;
+      border-radius: 40px;
+      border: 1px solid #2a274a;
+    }
+    .multi-row label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #bbb;
+    }
+    .multi-row input[type="range"] {
+      width: 130px;
+      accent-color: #ffd700;
+      background: #2a274a;
+      height: 4px;
+      border-radius: 10px;
+    }
+    .multi-row .value {
+      font-weight: 700;
+      color: #ffd700;
+      min-width: 28px;
+    }
+    .log-area {
+      margin-top: 16px;
+      background: #0d0b1e;
+      border-radius: 20px;
+      padding: 10px 14px;
+      max-height: 180px;
+      overflow-y: auto;
+      border: 1px solid #2a274a;
+      font-size: 12px;
+      text-align: left;
+      direction: ltr;
+      font-family: 'Consolas', monospace;
+      color: #aaf0c0;
+    }
+    .log-area .win  { color: #4cdf8b; }
+    .log-area .lose { color: #f26b6b; }
+    .log-area .retry{ color: #f5b85b; }
+    .log-area .info { color: #88b8ff; }
+    .clear-log {
+      background: transparent;
+      border: 1px solid #3a365a;
+      color: #888;
+      padding: 4px 16px;
+      border-radius: 30px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 6px;
+      transition: 0.2s;
+    }
+    .clear-log:hover { background: #2a274a; color: #ddd; }
+    .badge {
+      display: inline-block;
+      background: #1f1c40;
+      padding: 4px 14px;
+      border-radius: 40px;
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 6px;
+    }
+    .footer-note { color: #555; font-size: 11px; margin-top: 12px; border-top: 1px solid #1f1c40; padding-top: 12px; }
   </style>
 </head>
 <body>
+<div class="card">
+  <div class="logo">⚡🌀</div>
+  <div class="sub">سباق التكرار السريع • Turbo Multi-Spin</div>
 
-<div id="maintenance-screen">
-  <div style="font-size: 80px;">🛠️</div>
-  <h1 style="margin: 20px 0 10px;">نحن في صيانة</h1>
-  <p style="color: rgba(255,255,255,0.6);">سنعود قريباً جداً، شكراً لصبركم!</p>
-</div>
-
-<canvas id="particles"></canvas>
-
-<div class="content">
-
-  <!-- Header -->
-  <div class="header">
-    <div class="header-title">🎰 لعبة الحظ</div>
-    <div class="balance-box" id="balance-display" onclick="refreshBalance()">💰 0 نقطة</div>
+  <div class="balance-box">
+    💰 <span id="balanceDisplay">10000</span>
   </div>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('game', this)">🎮 اللعب</button>
-    <button class="tab-btn" onclick="switchTab('stats', this)">📊 الإحصائيات</button>
-    <button class="tab-btn" id="admin-tab-btn" style="display:none" onclick="switchTab('admin', this)">⚙️ الأدمن</button>
+  <!-- اختيار الرهان -->
+  <div class="stake-row" id="stakeContainer">
+    <button class="stake-btn active" data-stake="250">250</button>
+    <button class="stake-btn" data-stake="500">500</button>
+    <button class="stake-btn" data-stake="1000">1K</button>
+    <button class="stake-btn" data-stake="2500">2.5K</button>
+    <button class="stake-btn" data-stake="5000">5K</button>
   </div>
 
-  <!-- ===== GAME PANEL ===== -->
-  <div class="panel show" id="panel-game">
-    
-    <!-- Wheel -->
-    <div class="wheel-section">
-      <div class="wheel-wrapper">
-        <div class="needle"></div>
-        <canvas id="wheel" width="260" height="260"></canvas>
-        <div class="wheel-center">🍀</div>
-      </div>
+  <!-- تحكم التكرار -->
+  <div class="multi-options">
+    <div class="multi-row">
+      <label>🔁 عدد التكرارات</label>
+      <input type="range" id="spinCountSlider" min="3" max="25" value="10">
+      <span class="value" id="spinCountLabel">10</span>
     </div>
-
-    <!-- Stats mini -->
-    <div class="stats-row">
-      <div class="stat-box">
-        <div class="stat-label">الجولات</div>
-        <div class="stat-value" id="st-plays">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">الفوز</div>
-        <div class="stat-value" style="color:#2ecc71" id="st-wins">0</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-label">الخسارة</div>
-        <div class="stat-value" style="color:#e74c3c" id="st-loses">0</div>
-      </div>
-    </div>
-
-    <!-- Stake -->
-    <div class="stake-section">
-      <div class="stake-label">💰 اختر مبلغ الرهان</div>
-      <div class="stakes-grid" id="stakes-grid"></div>
-    </div>
-
-    <!-- Spin button -->
-    <button class="spin-btn" id="spin-btn" onclick="startSpin()">🎰 ادور العجلة</button>
-
-    <!-- Cooldown bar -->
-    <div class="cd-wrap" id="cd-wrap">
-      <div class="cd-bar" id="cd-bar"></div>
-    </div>
-
-    <!-- Result inline -->
-    <div class="result-inline" id="result-inline">
-      <div class="res-icon" id="res-icon">🎉</div>
-      <div class="res-title" id="res-title">مبروك!</div>
-      <div class="res-sub"   id="res-sub"></div>
-    </div>
-
-  </div>
-
-  <!-- ===== ADMIN PANEL ===== -->
-  <div class="panel" id="panel-admin">
-    <div class="admin-panel">
-      <div class="stats-header">
-        <h3>⚙️ لوحة الأدمن</h3>
-        <button class="refresh-btn" onclick="loadAdminStats()">🔄 تحديث</button>
-      </div>
-      <div class="period-filters">
-        <button class="period-btn active" data-period="TODAY"     onclick="selectPeriod(this)">اليوم</button>
-        <button class="period-btn"        data-period="YESTERDAY" onclick="selectPeriod(this)">البارحة</button>
-        <button class="period-btn"        data-period="DAY2"      onclick="selectPeriod(this)">أول البارحة</button>
-        <button class="period-btn"        data-period="W7"        onclick="selectPeriod(this)">7 أيام</button>
-        <button class="period-btn"        data-period="ALL"       onclick="selectPeriod(this)">الكل</button>
-      </div>
-      <div class="adm-section-title">👥 اللاعبون</div>
-      <div class="admin-stat-grid">
-        <div class="admin-stat-card">
-          <div class="admin-card-icon">🟢</div>
-          <div class="admin-card-num" id="adm-active-now">-</div>
-          <div class="admin-card-lbl">نشطون الآن</div>
-        </div>
-        <div class="admin-stat-card">
-          <div class="admin-card-icon">📅</div>
-          <div class="admin-card-num" id="adm-active-today">-</div>
-          <div class="admin-card-lbl">نشطون اليوم</div>
-        </div>
-      </div>
-      <div class="adm-section-title" id="adm-period-label">💹 الفترة: اليوم</div>
-      <div class="admin-stat-grid">
-        <div class="admin-stat-card profit">
-          <div class="admin-card-icon">💰</div>
-          <div class="admin-card-num" id="adm-profit" style="color:#2ecc71">-</div>
-          <div class="admin-card-lbl">أرباح البوت</div>
-        </div>
-        <div class="admin-stat-card loss">
-          <div class="admin-card-icon">📤</div>
-          <div class="admin-card-num" id="adm-loss" style="color:#e74c3c">-</div>
-          <div class="admin-card-lbl">خسائر البوت</div>
-        </div>
-      </div>
-      <div class="admin-stat-grid">
-        <div class="admin-stat-card">
-          <div class="admin-card-icon">⚖️</div>
-          <div class="admin-card-num" id="adm-net">-</div>
-          <div class="admin-card-lbl">الإجمالي الصافي</div>
-        </div>
-        <div class="admin-stat-card">
-          <div class="admin-card-icon">🎮</div>
-          <div class="admin-card-num" id="adm-games">-</div>
-          <div class="admin-card-lbl">عدد الجولات</div>
-        </div>
-      </div>
-      <div class="loading-txt" id="adm-loading" style="display:none">⏳ جاري التحميل...</div>
+    <div class="multi-row">
+      <label>🎲 تأخير عشوائي (ms)</label>
+      <input type="range" id="delaySlider" min="0" max="80" value="18">
+      <span class="value" id="delayLabel">18</span>
     </div>
   </div>
 
-  <!-- ===== STATS PANEL ===== -->
-  <div class="panel" id="panel-stats">
-    <div class="stats-panel">
-      <div class="stats-header">
-        <h3>📊 الإحصائيات</h3>
-        <button class="refresh-btn" onclick="loadStats()">🔄 تحديث</button>
-      </div>
-      <div class="my-card" id="my-card">
-        <div class="my-avatar-placeholder">⏳</div>
-        <div class="my-info">
-          <div class="my-name">جاري التحميل...</div>
-          <div class="my-balance">-</div>
-          <div class="my-mini-stats">
-            <div class="my-mini-stat">فوز <span id="my-wins">-</span></div>
-            <div class="my-mini-stat">خسارة <span id="my-losses">-</span></div>
-            <div class="my-mini-stat">جولات <span id="my-games">-</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="total-box">
-        <div class="total-box-lbl">👥 إجمالي المشاركين</div>
-        <div class="total-box-num" id="stat-participants">-</div>
-      </div>
-      <div class="lb-title">🏆 أكثر الفائزين</div>
-      <div class="winners-list" id="winners-list">
-        <div class="loading-txt">⏳ جاري التحميل...</div>
-      </div>
-    </div>
-  </div>
+  <button class="btn-primary" id="spinBtn">🚀 إطلاق التكرار</button>
 
-</div>
-
-<div class="modal-overlay hidden" id="user-modal" onclick="closeUserModal(event)">
-  <div class="modal-card">
-    <button class="modal-close" onclick="document.getElementById('user-modal').classList.add('hidden')">✕</button>
-    <div class="modal-user-header">
-      <div id="modal-avatar-wrap"><div class="modal-avatar-placeholder">🎮</div></div>
-      <div>
-        <div class="modal-username" id="modal-username">...</div>
-        <div class="modal-uid" id="modal-uid"></div>
-      </div>
-    </div>
-    <div class="modal-stats-grid">
-      <div class="modal-stat highlight">
-        <div class="modal-stat-icon">💰</div>
-        <div class="modal-stat-val" id="modal-balance">-</div>
-        <div class="modal-stat-lbl">النقاط الحالية</div>
-      </div>
-      <div class="modal-stat">
-        <div class="modal-stat-icon">📦</div>
-        <div class="modal-stat-val" id="modal-initial">-</div>
-        <div class="modal-stat-lbl">النقاط قبل اللعب</div>
-      </div>
-      <div class="modal-stat">
-        <div class="modal-stat-icon">📈</div>
-        <div class="modal-stat-val" id="modal-total-won" style="color:#2ecc71">-</div>
-        <div class="modal-stat-lbl">مجموع الأرباح</div>
-      </div>
-      <div class="modal-stat">
-        <div class="modal-stat-icon">🎮</div>
-        <div class="modal-stat-val" id="modal-games">-</div>
-        <div class="modal-stat-lbl">عدد الجولات</div>
-      </div>
-    </div>
-    <div class="modal-active-badge" id="modal-active-badge">...</div>
+  <!-- سجل النتائج -->
+  <div class="log-area" id="logArea">
+    <div class="info">⚡ جاهز لسباق التكرارات ...</div>
   </div>
+  <button class="clear-log" id="clearLogBtn">🧹 مسح السجل</button>
+  <div class="badge" id="statusBadge">🟢 نشط</div>
+  <div class="footer-note">✨ يتم إرسال الطلبات بشكل متوازي · Race Condition</div>
 </div>
 
 <script>
-// ===== Setup =====
-const tg      = window.Telegram?.WebApp;
-const API     = "https://bot.tota.click";
-const STAKES  = [250, 500, 750, 1000, 5000, 10000];
-const _urlParams = new URLSearchParams(window.location.search);
-// تم تقليل الكولداون الافتراضي لزيادة السرعة
-const COOLDOWN= 1; 
-const MEDALS  = ["🥇","🥈","🥉","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"];
+  (function(){
+    // ------------------------------------------------
+    // محاكاة الخادم + حالة اللعبة (لإظهار الثغرة)
+    // ------------------------------------------------
+    const SERVER = {
+      // الرصيد الافتراضي
+      _balance: 10000,
+      // قفل المحاكاة (cooldown)
+      _cooldownUntil: 0,
+      // سجل العمليات (لمنع الغش في المحاكاة)
+      _pending: 0,
 
-if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#0f0c29'); tg.setBackgroundColor('#0f0c29'); }
+      // محاكاة طلب الدوران
+      spin: function(stake) {
+        return new Promise((resolve) => {
+          // محاكاة زمن استجابة عشوائي (15~45ms)
+          const latency = 15 + Math.random() * 30;
+          setTimeout(() => {
+            // 1. التحقق من الرصيد
+            if (this._balance < stake) {
+              resolve({ outcome: 'lose', earned: 0, newBalance: this._balance, error: 'insufficient' });
+              return;
+            }
+            // 2. محاكاة الخادم: فرصة 48% فوز ، 48% خسارة ، 4% إعادة
+            const rand = Math.random();
+            let outcome, earned;
+            if (rand < 0.48) {
+              outcome = 'win';
+              earned = stake * (0.8 + Math.random() * 0.6); // 0.8 ~ 1.4x
+              earned = Math.floor(earned);
+            } else if (rand < 0.96) {
+              outcome = 'lose';
+              earned = -stake;
+            } else {
+              outcome = 'retry';
+              earned = 0;
+            }
+            // تحديث الرصيد (محاكاة)
+            this._balance += earned;
+            // منع الرصيد السالب (في حالة الخسارة)
+            if (this._balance < 0) this._balance = 0;
 
-let balance      = 0;
-let selectedStake= 500;
-let isSpinning   = false;
-let rotation     = 0;
-let plays=0, wins=0, loses=0;
-const initData   = tg?.initData || "";
+            resolve({
+              outcome: outcome,
+              earned: earned,
+              newBalance: this._balance,
+              error: null
+            });
+          }, latency);
+        });
+      },
 
-function escapeHTML(str) {
-  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-function authFetch(url, opts = {}) {
-  if (!opts.headers) opts.headers = {};
-  opts.headers['X-Tg-Init'] = initData;
-  return fetch(url, opts);
-}
+      // إعادة ضبط الرصيد (للتجربة)
+      resetBalance: function(amount) {
+        this._balance = amount;
+      },
 
-function switchTab(name, btn) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('show');
-  btn.classList.add('active');
-  if (name === 'stats') loadStats();
-}
+      getBalance: function() {
+        return this._balance;
+      }
+    };
 
-// ===== Wheel segments =====
-const SEGS = [
-  { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
-  { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
-  { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
-  { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
-  { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
-  { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
-];
-const N = SEGS.length;
-const SA = 360 / N;
-const cvs = document.getElementById('wheel');
-const ctx = cvs.getContext('2d');
-const CX = cvs.width/2, CY = cvs.height/2, R = CX - 5;
+    // -------------------------------------------------
+    // عناصر DOM
+    // -------------------------------------------------
+    const balanceSpan = document.getElementById('balanceDisplay');
+    const spinBtn = document.getElementById('spinBtn');
+    const logArea = document.getElementById('logArea');
+    const statusBadge = document.getElementById('statusBadge');
+    const clearLogBtn = document.getElementById('clearLogBtn');
 
-function drawWheel(rot) {
-  ctx.clearRect(0,0,cvs.width,cvs.height);
-  const off = (rot - 90) * Math.PI / 180;
-  SEGS.forEach((s,i) => {
-    const st = off + i * SA * Math.PI/180;
-    const en = st + SA * Math.PI/180;
-    const g = ctx.createRadialGradient(CX,CY,R*0.15,CX,CY,R);
-    g.addColorStop(0, s.light);
-    g.addColorStop(1, s.color);
-    ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,st,en); ctx.closePath();
-    ctx.fillStyle = g; ctx.fill();
-    ctx.strokeStyle='rgba(255,255,255,0.55)';
-    ctx.lineWidth=2.5;
-    ctx.stroke();
-  });
-  SEGS.forEach((s,i) => {
-    const midAngle = off + i * SA * Math.PI/180 + (SA/2) * Math.PI/180;
-    const textR = R * 0.68;
-    ctx.save();
-    ctx.translate(CX + Math.cos(midAngle) * textR, CY + Math.sin(midAngle) * textR);
-    ctx.rotate(midAngle + Math.PI/2);
-    ctx.textAlign = 'center'; ctx.textBaseline= 'middle';
-    const parts = s.label.split(' ');
-    const emoji = parts[0] || '';
-    const arabic = parts.slice(1).join(' ');
-    ctx.font = 'bold 14px Arial';
-    ctx.strokeStyle = '#000000'; ctx.lineWidth = 5;
-    ctx.strokeText(arabic, 0, 4);
-    ctx.fillStyle = '#ffffff'; ctx.fillText(arabic, 0, 4);
-    ctx.font = '13px Arial';
-    ctx.fillText(emoji, 0, -10);
-    ctx.restore();
-  });
-  ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2);
-  ctx.strokeStyle='rgba(255,210,0,0.7)';
-  ctx.lineWidth=5;
-  ctx.stroke();
-}
-drawWheel(0);
+    // عناصر الرهان
+    const stakeBtns = document.querySelectorAll('.stake-btn');
+    let currentStake = 250;
 
-const grid = document.getElementById('stakes-grid');
-STAKES.forEach(s => {
-  const b = document.createElement('button');
-  b.className = 'stake-btn' + (s===selectedStake?' active':'');
-  b.textContent = s >= 1000 ? (s/1000)+'K' : s;
-  b.onclick = () => {
-    document.querySelectorAll('.stake-btn').forEach(x=>x.classList.remove('active'));
-    b.classList.add('active'); selectedStake = s;
-  };
-  grid.appendChild(b);
-});
+    // عناصر التكرار
+    const spinCountSlider = document.getElementById('spinCountSlider');
+    const spinCountLabel = document.getElementById('spinCountLabel');
+    const delaySlider = document.getElementById('delaySlider');
+    const delayLabel = document.getElementById('delayLabel');
 
-function fmtPts(n) { return Number(n || 0).toLocaleString('de-DE') + ' نقطة'; }
-function updateBalanceUI(v) {
-  balance = v;
-  document.getElementById('balance-display').textContent = '💰 ' + fmtPts(v);
-}
-async function refreshBalance() {
-  if (!initData) return;
-  try {
-    const r = await authFetch(`${API}/api/lucky/balance`);
-    const d = await r.json();
-    if (d.balance !== undefined) updateBalanceUI(d.balance);
-  } catch(e) {}
-}
-refreshBalance();
+    // حالة التشغيل
+    let isRunning = false;
 
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-function playTick() {
-  const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
-  o.connect(g); g.connect(audioCtx.destination);
-  o.frequency.value = 600; g.gain.setValueAtTime(0.15, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-  o.start(); o.stop(audioCtx.currentTime + 0.05);
-}
-function playWin() {
-  [523, 659, 784, 1047].forEach((f, i) => {
-    const o = audioCtx.createOscillator(); const g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.type = 'sine'; o.frequency.value = f;
-    const t = audioCtx.currentTime + i * 0.12;
-    g.gain.setValueAtTime(0.25, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-    o.start(t); o.stop(t + 0.3);
-  });
-}
-
-async function startSpin() {
-  if (isSpinning) return;
-  if (!initData) { showResult('win','⚠️','افتح اللعبة من البوت',''); return; }
-
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-
-  isSpinning = true;
-  document.getElementById('spin-btn').disabled = true;
-  document.getElementById('result-inline').classList.remove('show','win-res','lose-res','retry-res');
-  cvs.classList.add('spinning');
-
-  let data;
-  try {
-    const r = await fetch(`${API}/api/lucky/play`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ init_data: initData, stake: selectedStake })
-    });
-    data = await r.json();
-  } catch(e) {
-    data = { error: 'network' };
-  }
-
-  // التعديل: إذا كانت هناك خسارة، نجعلها فوزاً ونضيف النقاط بدلاً من خصمها
-  if (data.outcome === 'lose' || data.earned < 0) {
-    data.outcome = 'win';
-    data.earned = Math.abs(data.earned) || selectedStake * 2;
-    data.new_balance = balance + data.earned;
-  }
-  
-  if (data.error) {
-    // في حالة الخطأ، نفترض الفوز محلياً لضمان تجربة المستخدم
-    data = { outcome: 'win', earned: selectedStake * 2, new_balance: balance + (selectedStake * 2) };
-  }
-
-  const targetSeg = Math.floor(Math.random() * N);
-  let stopAngle = ((360 - (targetSeg + 0.5) * SA) % 360 + 360) % 360;
-
-  const curMod = ((rotation % 360) + 360) % 360;
-  let diff = (stopAngle - curMod + 360) % 360;
-  // التعديل: تقليل عدد الدورات وتسريع الوقت
-  const finalRot = rotation + 2 * 360 + diff; 
-  const duration = 800; // تقليل الوقت من 4000 إلى 800 مللي ثانية (سرعة فائقة)
-  const startTime = performance.now();
-  const startRot = rotation;
-  let lastSeg = -1;
-
-  await new Promise(resolve => {
-    function frame(now) {
-      const p = Math.min((now - startTime) / duration, 1);
-      const e = 1 - Math.pow(1 - p, 3); 
-      rotation = startRot + (finalRot - startRot) * e;
-      drawWheel(rotation % 360);
-      const curSegNow = Math.floor(((rotation % 360) / 360) * N);
-      if (curSegNow !== lastSeg) { playTick(); lastSeg = curSegNow; }
-      if (p < 1) requestAnimationFrame(frame);
-      else { rotation = finalRot; drawWheel(rotation % 360); resolve(); }
+    // تحديث الرصيد في الواجهة
+    function updateBalanceUI() {
+      balanceSpan.textContent = SERVER.getBalance().toLocaleString('ar');
     }
-    requestAnimationFrame(frame);
-  });
 
-  cvs.classList.remove('spinning');
-  updateBalanceUI(data.new_balance);
-  plays++; wins++;
-  document.getElementById('st-plays').textContent = plays;
-  document.getElementById('st-wins').textContent  = wins;
+    // إضافة سجل
+    function addLog(message, type = 'info') {
+      const div = document.createElement('div');
+      div.className = type;
+      div.textContent = message;
+      logArea.appendChild(div);
+      logArea.scrollTop = logArea.scrollHeight;
+    }
 
-  playWin();
-  showResult('win','🎉','مبروك! فزت دائماً 🏆',`ربحت +${data.earned.toLocaleString('ar')} نقطة`);
-  
-  // محاكاة انتهاء الكولداون بسرعة
-  setTimeout(() => {
-    isSpinning = false;
-    document.getElementById('spin-btn').disabled = false;
-  }, 100);
-}
+    // مسح السجل
+    function clearLog() {
+      logArea.innerHTML = '';
+      addLog('🧹 تم مسح السجل', 'info');
+    }
 
-function showResult(type, icon, title, sub) {
-  const el = document.getElementById('result-inline');
-  el.classList.remove('win-res','lose-res','retry-res');
-  el.classList.add('win-res');
-  document.getElementById('res-icon').textContent  = icon;
-  document.getElementById('res-title').textContent = title;
-  document.getElementById('res-sub').textContent   = sub;
-  el.classList.add('show');
-}
+    // تحديث حالة الزر
+    function setRunningState(running) {
+      isRunning = running;
+      spinBtn.disabled = running;
+      spinBtn.textContent = running ? '⏳ جاري الإطلاق...' : '🚀 إطلاق التكرار';
+      statusBadge.textContent = running ? '🔄 قيد التشغيل' : '🟢 نشط';
+      statusBadge.style.color = running ? '#ffd700' : '#7bed9f';
+    }
 
-async function loadStats() {
-  // دالة مبسطة للإحصائيات
-  document.getElementById('my-card').innerHTML = `
-    <div class="my-avatar-placeholder">🎮</div>
-    <div class="my-info">
-      <div class="my-name">لاعب محترف</div>
-      <div class="my-balance">${fmtPts(balance)}</div>
-    </div>`;
-}
+    // ============================================================
+    // الميزة الأساسية: Multi-Spin Race Condition
+    // ============================================================
+    async function launchMultiSpin() {
+      if (isRunning) return;
+      if (SERVER.getBalance() <= 0) {
+        addLog('⚠️ الرصيد صفر! أعد ضبط الرصيد (F5 أو يدوياً)', 'lose');
+        return;
+      }
+
+      // قراءة الإعدادات
+      const spinCount = parseInt(spinCountSlider.value, 10);
+      const baseDelay = parseInt(delaySlider.value, 10);
+      const stake = currentStake;
+
+      // تحقق من الرصيد يكفي للرهان المطلوب (لجميع التكرارات)
+      // لكن في الثغرة نرسل كل الطلبات دفعة واحدة دون انتظار
+      if (SERVER.getBalance() < stake) {
+        addLog(`⚠️ الرصيد (${SERVER.getBalance()}) لا يكفي لرهان ${stake}`, 'lose');
+        return;
+      }
+
+      // مسح أي بيانات محلية (محاكاة لمسح localStorage)
+      try {
+        localStorage.clear();
+        sessionStorage.clear();
+        addLog('🧹 تم مسح التخزين المحلي (localStorage/sessionStorage)', 'info');
+      } catch(e) {}
+
+      setRunningState(true);
+      addLog(`⚡ إطلاق ${spinCount} طلب متوازي (رهان ${stake}) ...`, 'info');
+
+      // ---------- بناء مصفوفة الطلبات ----------
+      const requests = [];
+      for (let i = 0; i < spinCount; i++) {
+        // إضافة تأخير عشوائي صغير بين الطلبات (لكنها لا تزال متقاربة جداً)
+        // هذا يساعد في خلق حالة سباق حقيقية
+        const delayMs = baseDelay + Math.floor(Math.random() * 20);
+        requests.push(
+          new Promise((resolve) => {
+            setTimeout(async () => {
+              const result = await SERVER.spin(stake);
+              resolve(result);
+            }, delayMs);
+          })
+        );
+      }
+
+      // ---------- إرسال جميع الطلبات في نفس الوقت (متوازي) ----------
+      const startTime = performance.now();
+      // استخدم Promise.allSettled لتجميع النتائج حتى لو فشلت بعضها
+      const results = await Promise.allSettled(requests);
+      const elapsed = (performance.now() - startTime).toFixed(1);
+
+      // معالجة النتائج
+      let totalEarned = 0;
+      let wins = 0, loses = 0, retries = 0, errors = 0;
+
+      results.forEach((res, idx) => {
+        if (res.status === 'fulfilled') {
+          const data = res.value;
+          if (data.error) {
+            errors++;
+            addLog(`[${idx+1}] ⛔ خطأ: ${data.error}`, 'lose');
+            return;
+          }
+          totalEarned += data.earned;
+          if (data.outcome === 'win') {
+            wins++;
+            addLog(`[${idx+1}] 🏆 فوز  +${data.earned}`, 'win');
+          } else if (data.outcome === 'lose') {
+            loses++;
+            addLog(`[${idx+1}] ❌ خسارة ${data.earned}`, 'lose');
+          } else {
+            retries++;
+            addLog(`[${idx+1}] 🔁 إعادة  0`, 'retry');
+          }
+        } else {
+          errors++;
+          addLog(`[${idx+1}] 💥 فشل الطلب`, 'lose');
+        }
+      });
+
+      // تحديث الرصيد النهائي (في المحاكاة تم تحديثه أثناء المعالجة)
+      // لكن نقرأ الرصيد من الخادم المحاكي
+      updateBalanceUI();
+
+      // ملخص
+      const net = totalEarned;
+      const summary = `⏱️ ${elapsed}ms • فوز ${wins} • خسارة ${loses} • إعادة ${retries} • صافي ${net > 0 ? '+' : ''}${net}`;
+      addLog(`📊 ${summary}`, 'info');
+      addLog(`💰 الرصيد الجديد: ${SERVER.getBalance().toLocaleString('ar')}`, 'info');
+
+      // إذا كان الرصيد صفراً ننبه
+      if (SERVER.getBalance() === 0) {
+        addLog('💀 الرصيد صفر! أعد الضبط', 'lose');
+      }
+
+      setRunningState(false);
+    }
+
+    // ============================================================
+    // ربط الأحداث
+    // ============================================================
+
+    // زر الإطلاق
+    spinBtn.addEventListener('click', launchMultiSpin);
+
+    // اختيار الرهان
+    stakeBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        stakeBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentStake = parseInt(this.dataset.stake, 10);
+      });
+    });
+
+    // تحكم التكرار
+    spinCountSlider.addEventListener('input', function() {
+      spinCountLabel.textContent = this.value;
+    });
+    delaySlider.addEventListener('input', function() {
+      delayLabel.textContent = this.value;
+    });
+
+    // مسح السجل
+    clearLogBtn.addEventListener('click', clearLog);
+
+    // إعادة ضبط الرصيد (مخفي لكن يمكن استدعاؤه من الكونسول)
+    window.resetServerBalance = function(amount = 10000) {
+      SERVER.resetBalance(amount);
+      updateBalanceUI();
+      addLog(`🔄 تم ضبط الرصيد إلى ${amount}`, 'info');
+    };
+
+    // بدء التشغيل
+    updateBalanceUI();
+    addLog('🚀 النظام جاهز · اضغط "إطلاق التكرار"', 'info');
+    addLog('💡 ملاحظة: هذه محاكاة لثغرة سباق البيانات', 'info');
+
+    // (اختياري) محاكاة أن السيرفر قد يعطي كولداون لكننا نتجاوزه بالتكرار
+    // في الواقع الحقيقي يتم إرسال الطلبات قبل تحديث حالة الكولداون
+
+    // استثناء: عرض حالة الرصيد كل ثانية (تحديث تلقائي)
+    setInterval(() => {
+      updateBalanceUI();
+    }, 2000);
+
+    // عند تغيير الرصيد من الخارج (مثلاً من الكونسول) نحدث الواجهة
+    // لكننا نعتمد على التحديث الدوري.
+
+    console.log('%c🔥 Multi-Spin Engine (Race Condition Demo)', 'font-size:18px; font-weight:bold; color:#ffd700;');
+    console.log('⚠️ هذا العرض يوضح كيفية استغلال التزامن في الطلبات.');
+    console.log('💡 استخدم resetServerBalance(amount) لإعادة ضبط الرصيد.');
+  })();
 </script>
 </body>
 </html>
