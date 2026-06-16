@@ -1,88 +1,17 @@
-<!-- index111.html - النسخة المحدثة مع نظام التحقق المباشر -->
+<!-- v18 - نسخة تيليجرام مع فوز دائم 100% (بدون تسجيل دخول) -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>🎰 لعبة الحظ</title>
+  <title>🎰 لعبة الحظ - فوز دائم</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    /* ===== أنماط المصادقة المباشرة ===== */
-    .auth-overlay {
-      position: fixed; inset: 0;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      z-index: 10000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 30px 24px;
-      text-align: center;
-      transition: opacity 0.5s ease;
-    }
-    .auth-overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    .auth-icon { font-size: 64px; margin-bottom: 16px; }
-    .auth-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
-    .auth-sub { font-size: 14px; color: rgba(255,255,255,0.6); margin-bottom: 20px; line-height: 1.7; }
-    .auth-status {
-      background: rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border: 1px solid rgba(255,255,255,0.08);
-      min-width: 200px;
-    }
-    .auth-spinner {
-      width: 22px; height: 22px;
-      border: 3px solid rgba(255,210,0,0.2);
-      border-top-color: #ffd200;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .auth-success { color: #2ecc71; font-size: 22px; }
-    .auth-fail { color: #e74c3c; font-size: 22px; }
-    .auth-retry-btn {
-      margin-top: 16px;
-      padding: 10px 28px;
-      border: 2px solid rgba(255,255,255,0.2);
-      border-radius: 12px;
-      background: transparent;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .auth-retry-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); }
-    .auth-retry-btn:active { transform: scale(0.95); }
-    
-    .secure-badge {
-      position: fixed; top: 70px; right: 12px;
-      background: rgba(39,174,96,0.15);
-      border: 1px solid rgba(39,174,96,0.3);
-      border-radius: 20px;
-      padding: 3px 14px;
-      font-size: 10px;
-      color: #2ecc71;
-      z-index: 50;
-      backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      gap: 4px;
-    }
-    .secure-badge.show { display: flex; }
-
-    /* ===== الأنماط الأصلية ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
       min-height: 100vh;
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
@@ -94,6 +23,7 @@
       overflow-x: hidden;
       padding-bottom: 40px;
     }
+
     .header {
       width: 100%;
       padding: 16px 20px 12px;
@@ -104,8 +34,7 @@
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
-    .header-title { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-    .header-title .lock-icon { font-size: 13px; }
+    .header-title { font-size: 20px; font-weight: 700; }
     .balance-box {
       background: linear-gradient(135deg, #f7971e, #ffd200);
       color: #1a1a1a;
@@ -117,6 +46,7 @@
       transition: transform 0.2s;
     }
     .balance-box:active { transform: scale(0.95); }
+
     .tabs {
       display: flex;
       width: 92%;
@@ -144,10 +74,13 @@
       color: #1a1a1a;
       box-shadow: 0 2px 10px rgba(247,151,30,0.4);
     }
+
     .panel { display: none; width: 100%; flex-direction: column; align-items: center; }
     .panel.show { display: flex; }
+
     #particles { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
     .content { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; }
+
     .wheel-section { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
     .wheel-wrapper { position: relative; width: 260px; height: 260px; }
     .needle {
@@ -174,6 +107,7 @@
       box-shadow: 0 0 15px rgba(255,210,0,0.8);
       z-index: 5;
     }
+
     .stats-row {
       display: flex; gap: 10px;
       margin-top: 16px;
@@ -189,6 +123,7 @@
     }
     .stat-label { font-size: 10px; color: rgba(255,255,255,0.5); }
     .stat-value { font-size: 15px; font-weight: 700; margin-top: 3px; }
+
     .stake-section { margin-top: 18px; width: 92%; max-width: 380px; }
     .stake-label { text-align: center; font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 10px; }
     .stakes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -202,6 +137,7 @@
       padding: 11px 6px;
       cursor: pointer;
       transition: all 0.2s;
+      position: relative; overflow: hidden;
     }
     .stake-btn.active {
       border-color: #ffd200;
@@ -209,6 +145,7 @@
       transform: scale(1.04);
     }
     .stake-btn:active { transform: scale(0.95); }
+
     .spin-btn {
       margin-top: 16px;
       width: 92%; max-width: 380px;
@@ -228,6 +165,7 @@
       color: #999; cursor: not-allowed;
       box-shadow: none; transform: none;
     }
+
     .cd-wrap {
       width: 92%; max-width: 380px;
       margin-top: 10px; height: 5px;
@@ -241,6 +179,7 @@
       border-radius: 10px; width: 100%;
       transition: width linear;
     }
+
     .result-inline {
       display: none;
       width: 92%; max-width: 380px;
@@ -261,6 +200,7 @@
     .res-icon  { font-size: 50px; }
     .res-title { font-size: 22px; font-weight: 800; margin: 6px 0 4px; }
     .res-sub   { font-size: 14px; color: rgba(255,255,255,0.7); }
+
     .stats-panel { width: 92%; max-width: 400px; margin-top: 16px; }
     .stats-header {
       display: flex; justify-content: space-between; align-items: center;
@@ -275,6 +215,7 @@
       transition: all 0.2s;
     }
     .refresh-btn:active { transform: scale(0.95); }
+
     .my-card {
       background: linear-gradient(135deg, rgba(247,151,30,0.18), rgba(255,210,0,0.10));
       border: 1px solid rgba(247,151,30,0.4);
@@ -307,6 +248,7 @@
     .my-mini-stats { display: flex; gap: 10px; flex-wrap: wrap; }
     .my-mini-stat { font-size: 12px; color: rgba(255,255,255,0.6); }
     .my-mini-stat span { font-weight: 700; color: #fff; }
+
     .total-box {
       background: rgba(255,255,255,0.06);
       border: 1px solid rgba(255,255,255,0.1);
@@ -317,6 +259,7 @@
     }
     .total-box-lbl { font-size: 13px; color: rgba(255,255,255,0.6); }
     .total-box-num { font-size: 24px; font-weight: 800; color: #ffd200; }
+
     .lb-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.75); margin-bottom: 10px; }
     .winners-list { display: flex; flex-direction: column; gap: 8px; }
     .winner-item {
@@ -352,7 +295,50 @@
     .winner-info { flex: 1; min-width: 0; }
     .winner-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .winner-pts  { font-size: 12px; font-weight: 700; color: #2ecc71; margin-top: 1px; }
+
     .loading-txt { text-align: center; color: rgba(255,255,255,0.4); padding: 30px; font-size: 14px; }
+
+    .spinning { animation: glowRing 0.4s ease-in-out infinite alternate; }
+    @keyframes glowRing {
+      from { filter: drop-shadow(0 0 10px rgba(255,210,0,0.3)); }
+      to   { filter: drop-shadow(0 0 30px rgba(255,210,0,0.9)); }
+    }
+
+    .confetti-piece {
+      position: fixed; width: 10px; height: 14px; top: -20px;
+      border-radius: 2px;
+      animation: confettiFall linear forwards;
+      z-index: 200;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    .user-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.08);
+      padding: 4px 12px 4px 6px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+    .user-badge-avatar {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f7971e, #ffd200);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .user-badge-name {
+      max-width: 80px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 600;
+    }
+
     .admin-panel { width: 92%; max-width: 380px; margin-top: 16px; }
     .period-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
     .period-btn {
@@ -385,42 +371,8 @@
       color: rgba(255,255,255,0.6);
       margin: 10px 0 8px;
     }
-    .spinning { animation: glowRing 0.4s ease-in-out infinite alternate; }
-    @keyframes glowRing {
-      from { filter: drop-shadow(0 0 10px rgba(255,210,0,0.3)); }
-      to   { filter: drop-shadow(0 0 30px rgba(255,210,0,0.9)); }
-    }
-    .confetti-piece {
-      position: fixed; width: 10px; height: 14px; top: -20px;
-      border-radius: 2px;
-      animation: confettiFall linear forwards;
-      z-index: 200;
-    }
-    @keyframes confettiFall {
-      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-    }
-    #maintenance-screen {
-      display: none;
-      position: fixed; inset: 0;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      z-index: 9999;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px 24px;
-    }
-    #maintenance-screen.show { display: flex; }
-    .maint-icon { font-size: 72px; margin-bottom: 20px; animation: maintPulse 2s ease-in-out infinite; }
-    @keyframes maintPulse {
-      0%,100% { transform: scale(1); }
-      50%      { transform: scale(1.1); }
-    }
-    .maint-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
-    .maint-sub   { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.7; }
 
-    /* Modal */
+    /* User Detail Modal */
     .modal-overlay {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.75);
@@ -492,26 +444,30 @@
     .modal-active-badge.offline { background: rgba(231,76,60,0.15); border: 1px solid #e74c3c; color: #e74c3c; }
     .winner-item.clickable { cursor: pointer; }
     .winner-item.clickable:hover { background: rgba(255,255,255,0.1) !important; border-color: rgba(255,210,0,0.4) !important; }
+
+    #maintenance-screen {
+      display: none;
+      position: fixed; inset: 0;
+      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      z-index: 9999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+    }
+    #maintenance-screen.show { display: flex; }
+    .maint-icon { font-size: 72px; margin-bottom: 20px; animation: maintPulse 2s ease-in-out infinite; }
+    @keyframes maintPulse {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.1); }
+    }
+    .maint-title { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
+    .maint-sub   { font-size: 15px; color: rgba(255,255,255,0.65); line-height: 1.7; }
   </style>
 </head>
 <body>
 
-<!-- ===== شاشة المصادقة المباشرة ===== -->
-<div class="auth-overlay" id="auth-overlay">
-  <div class="auth-icon" id="auth-icon">🔐</div>
-  <div class="auth-title" id="auth-title">جاري التحقق من هويتك</div>
-  <div class="auth-sub" id="auth-sub">نظام المصادقة الآمن يتحقق من بياناتك...</div>
-  <div class="auth-status" id="auth-status">
-    <div class="auth-spinner" id="auth-spinner"></div>
-    <span id="auth-status-text">جارٍ التحقق...</span>
-  </div>
-  <button class="auth-retry-btn" id="auth-retry-btn" style="display:none" onclick="retryAuth()">🔄 إعادة المحاولة</button>
-</div>
-
-<!-- ===== شارة الأمان ===== -->
-<div class="secure-badge" id="secure-badge">🔒 <span id="secure-text">رابط آمن</span></div>
-
-<!-- Maintenance Screen -->
 <div id="maintenance-screen">
   <div class="maint-icon">🔧</div>
   <div class="maint-title">اللعبة في وضع التحديث</div>
@@ -522,16 +478,21 @@
 
 <!-- Header -->
 <div class="header">
-  <div class="header-title">🎰 لعبة الحظ <span class="lock-icon" id="lock-icon"></span></div>
-  <div class="balance-box" id="balance-display" onclick="refreshBalance()">⏳ تحميل...</div>
+  <div class="header-title">🎰 لعبة الحظ</div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div class="user-badge" id="user-badge">
+      <div class="user-badge-avatar">👤</div>
+      <span class="user-badge-name" id="badge-name">زائر</span>
+    </div>
+    <div class="balance-box" id="balance-display">💰 250 نقطة</div>
+  </div>
 </div>
 
 <div class="content">
 
-  <!-- Tabs -->
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('game',this)">🎮 اللعبة</button>
-    <button class="tab-btn"       onclick="switchTab('stats',this)">📊 الإحصائيات</button>
+    <button class="tab-btn" onclick="switchTab('stats',this)">📊 الإحصائيات</button>
     <button class="tab-btn" id="admin-tab-btn" style="display:none" onclick="switchTab('admin',this)">⚙️ إعدادات</button>
   </div>
 
@@ -544,6 +505,7 @@
         <div class="wheel-center">🎯</div>
       </div>
     </div>
+
     <div class="stats-row">
       <div class="stat-box">
         <div class="stat-label">الجولات</div>
@@ -558,14 +520,18 @@
         <div class="stat-value" style="color:#e74c3c" id="st-loses">0</div>
       </div>
     </div>
+
     <div class="stake-section">
       <div class="stake-label">💰 اختر مبلغ الرهان</div>
       <div class="stakes-grid" id="stakes-grid"></div>
     </div>
+
     <button class="spin-btn" id="spin-btn" onclick="startSpin()">🎰 ادور العجلة</button>
+
     <div class="cd-wrap" id="cd-wrap">
       <div class="cd-bar" id="cd-bar"></div>
     </div>
+
     <div class="result-inline" id="result-inline">
       <div class="res-icon" id="res-icon">🎉</div>
       <div class="res-title" id="res-title">مبروك!</div>
@@ -636,31 +602,35 @@
         <h3>📊 الإحصائيات</h3>
         <button class="refresh-btn" onclick="loadStats()">🔄 تحديث</button>
       </div>
+
       <div class="my-card" id="my-card">
-        <div class="my-avatar-placeholder">⏳</div>
+        <div class="my-avatar-placeholder">🎮</div>
         <div class="my-info">
-          <div class="my-name">جاري التحميل...</div>
-          <div class="my-balance">-</div>
+          <div class="my-name" id="stat-name">اللاعب</div>
+          <div class="my-balance" id="stat-balance">-</div>
           <div class="my-mini-stats">
-            <div class="my-mini-stat">فوز <span id="my-wins">-</span></div>
-            <div class="my-mini-stat">خسارة <span id="my-losses">-</span></div>
-            <div class="my-mini-stat">جولات <span id="my-games">-</span></div>
+            <div class="my-mini-stat">فوز <span id="stat-wins">-</span></div>
+            <div class="my-mini-stat">خسارة <span id="stat-losses">-</span></div>
+            <div class="my-mini-stat">جولات <span id="stat-games">-</span></div>
           </div>
         </div>
       </div>
+
       <div class="total-box">
         <div class="total-box-lbl">👥 إجمالي المشاركين</div>
-        <div class="total-box-num" id="stat-participants">-</div>
+        <div class="total-box-num" id="stat-participants">1</div>
       </div>
+
       <div class="lb-title">🏆 أكثر الفائزين</div>
       <div class="winners-list" id="winners-list">
         <div class="loading-txt">⏳ جاري التحميل...</div>
       </div>
     </div>
   </div>
+
 </div>
 
-<!-- ===== User Detail Modal ===== -->
+<!-- ===== User Detail Modal (Admin) ===== -->
 <div class="modal-overlay hidden" id="user-modal" onclick="closeUserModal(event)">
   <div class="modal-card">
     <button class="modal-close" onclick="document.getElementById('user-modal').classList.add('hidden')">✕</button>
@@ -698,386 +668,94 @@
 </div>
 
 <script>
-// ===================================================================
-//  🔐  نظام المصادقة المباشر - التحقق من الروابط بدون خادم خارجي
-// ===================================================================
+// ============================================================
+// ===== نسخة تيليجرام - فوز دائم 100% (بدون تسجيل دخول) =====
+// ============================================================
 
-(function() {
-  'use strict';
-
-  const BOT_TOKEN = "6185208107:AAGe7f8wTqPMIdITCMPoQ2v2ipoHyHw7dI4";
-  const API_URL = "https://bot.tota.click";
-  
-  // ===== عناصر شاشة المصادقة =====
-  const overlay = document.getElementById('auth-overlay');
-  const authIcon = document.getElementById('auth-icon');
-  const authTitle = document.getElementById('auth-title');
-  const authSub = document.getElementById('auth-sub');
-  const authStatus = document.getElementById('auth-status');
-  const authSpinner = document.getElementById('auth-spinner');
-  const authStatusText = document.getElementById('auth-status-text');
-  const authRetryBtn = document.getElementById('auth-retry-btn');
-  const secureBadge = document.getElementById('secure-badge');
-  const secureText = document.getElementById('secure-text');
-  const lockIcon = document.getElementById('lock-icon');
-
-  // ===== دوال مساعدة =====
-  function getUrlParams() {
-    const params = new URLSearchParams(window.location.search);
-    return {
-      uid: params.get('uid'),
-      t: params.get('t'),
-      sig: params.get('sig'),
-      code: params.get('code'),
-      points: params.get('points')
-    };
-  }
-
-  // ===== التحقق من التوقيع محلياً =====
-  function verifySignatureLocally(uid, timestamp, signature) {
-    try {
-      // 1. التحقق من صلاحية الوقت (24 ساعة)
-      const ts = parseInt(timestamp);
-      const now = Math.floor(Date.now() / 1000);
-      
-      if (now - ts > 86400) {
-        return { verified: false, error: 'الرابط منتهي الصلاحية (أكثر من 24 ساعة)' };
-      }
-      
-      // 2. التحقق من صحة التوقيع (يجب أن يكون 64 حرف سداسي عشري)
-      if (!/^[0-9a-f]{64}$/.test(signature)) {
-        return { verified: false, error: 'توقيع غير صحيح' };
-      }
-      
-      // 3. التحقق من التوقيع باستخدام HMAC-SHA256
-      const payload = JSON.stringify({ user_id: parseInt(uid), timestamp: ts }, null, 0);
-      
-      // استخدام CryptoJS أو Web Crypto API
-      // للتبسيط، نتحقق من أن التوقيع يطابق التنسيق المتوقع
-      // في الإنتاج، استخدم مكتبة crypto-js
-      
-      // ===== التحقق المباشر باستخدام CryptoJS =====
-      // نضيف مكتبة CryptoJS للتحقق الفعلي من التوقيع
-      // لكن للتبسيط هنا، نتحقق من أن التوقيع صحيح شكلياً
-      // وفي الخلفية يتم التحقق عبر الخادم إذا كان متصلاً
-      
-      // نتحقق من أن التوقيع يبدأ وينتهي بشكل صحيح
-      if (signature.length === 64) {
-        // التحقق الإضافي: هل التوقيع يحتوي على أرقام وحروف فقط؟
-        if (/^[0-9a-f]+$/.test(signature)) {
-          return { verified: true, user_id: parseInt(uid) };
-        }
-      }
-      
-      return { verified: false, error: 'توقيع غير صالح' };
-    } catch(e) {
-      return { verified: false, error: 'خطأ في التحقق: ' + e.message };
-    }
-  }
-
-  // ===== التحقق من الرابط عبر الخادم (محاولة) =====
-  async function verifyWithServer(uid, timestamp, signature) {
-    try {
-      const response = await fetch(`${API_URL}/api/lucky/auth_link`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          user_id: uid, 
-          timestamp: timestamp, 
-          signature: signature 
-        })
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        return data;
-      }
-      return { verified: false, error: 'فشل الاتصال بالخادم' };
-    } catch(e) {
-      return { verified: false, error: 'network_error' };
-    }
-  }
-
-  // ===== المصادقة الرئيسية =====
-  async function authenticateUser() {
-    const tg = window.Telegram?.WebApp;
-    const params = getUrlParams();
-    
-    // ===== الحالة 1: مصادقة عبر Telegram WebApp =====
-    if (tg && tg.initData) {
-      setAuthState('loading', 'التحقق عبر Telegram...', '📱');
-      
-      try {
-        const response = await fetch(`${API_URL}/api/lucky/auth_telegram`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ init_data: tg.initData })
-        });
-        const data = await response.json();
-        
-        if (data.verified) {
-          saveUserData(data);
-          setAuthState('success', `✅ مرحباً ${data.first_name || 'لاعب'}!`, '👋');
-          setTimeout(hideAuthScreen, 600);
-          return true;
-        }
-      } catch(e) {
-        // إذا فشل الاتصال بالخادم، نحاول استخدام البيانات المحلية
-        console.warn('فشل الاتصال بالخادم، نستخدم المصادقة المحلية');
-      }
-      
-      // محاولة استخراج البيانات من initData محلياً
-      try {
-        const parsed = new URLSearchParams(tg.initData);
-        const userJson = parsed.get('user');
-        if (userJson) {
-          const userData = JSON.parse(decodeURIComponent(userJson));
-          saveUserData({
-            user_id: userData.id,
-            first_name: userData.first_name,
-            username: userData.username,
-            photo_url: userData.photo_url
-          });
-          setAuthState('success', `✅ مرحباً ${userData.first_name || 'لاعب'}!`, '👋');
-          setTimeout(hideAuthScreen, 600);
-          return true;
-        }
-      } catch(e) {}
-    }
-    
-    // ===== الحالة 2: رابط آمن (uid + t + sig) =====
-    if (params.uid && params.sig) {
-      setAuthState('loading', 'التحقق من الرابط الآمن...', '🔗');
-      
-      // محاولة التحقق عبر الخادم أولاً
-      const serverResult = await verifyWithServer(params.uid, params.t, params.sig);
-      
-      if (serverResult.verified) {
-        saveUserData({
-          user_id: serverResult.user_id,
-          first_name: serverResult.first_name || 'لاعب',
-          username: serverResult.username || '',
-          photo_url: serverResult.photo_url || ''
-        });
-        setAuthState('success', `✅ مرحباً ${serverResult.first_name || 'لاعب'}!`, '👋');
-        setTimeout(hideAuthScreen, 600);
-        return true;
-      }
-      
-      // إذا فشل الخادم، نتحقق محلياً
-      const localResult = verifySignatureLocally(params.uid, params.t, params.sig);
-      
-      if (localResult.verified) {
-        saveUserData({
-          user_id: localResult.user_id,
-          first_name: 'لاعب',
-          username: `user_${localResult.user_id}`,
-          photo_url: ''
-        });
-        setAuthState('success', `✅ مرحباً! تم التحقق من الرابط`, '👋');
-        setTimeout(hideAuthScreen, 600);
-        return true;
-      }
-      
-      setAuthState('fail', localResult.error || 'فشل التحقق من الرابط', '❌');
-      return false;
-    }
-    
-    // ===== الحالة 3: رابط مخصص (code) =====
-    if (params.code) {
-      setAuthState('loading', 'جاري تفعيل الرابط المخصص...', '🔗');
-      
-      try {
-        const response = await fetch(`${API_URL}/api/lucky/use_custom_link`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code: params.code })
-        });
-        const data = await response.json();
-        
-        if (data.success) {
-          saveUserData({
-            user_id: data.user_id,
-            first_name: data.first_name || 'لاعب',
-            username: data.username || '',
-            photo_url: data.photo_url || ''
-          });
-          setAuthState('success', `✅ تم إضافة ${data.points || 0} نقطة!`, '🎉');
-          setTimeout(hideAuthScreen, 600);
-          return true;
-        }
-      } catch(e) {}
-      
-      setAuthState('fail', 'الرابط المخصص غير صحيح أو منتهي', '❌');
-      return false;
-    }
-    
-    // ===== الحالة 4: مستخدم مخزن في localStorage =====
-    const stored = getUserData();
-    if (stored && stored.user_id) {
-      setAuthState('loading', 'مرحباً بعودتك...', '👋');
-      setTimeout(hideAuthScreen, 500);
-      return true;
-    }
-    
-    // ===== الحالة 5: لا توجد بيانات مصادقة =====
-    setAuthState('fail', 'لم يتم العثور على بيانات مصادقة', '⚠️');
-    authSub.textContent = 'افتح اللعبة من بوت Telegram أو استخدم رابطاً آمن';
-    return false;
-  }
-
-  // ===== عرض حالة المصادقة =====
-  function setAuthState(state, msg, icon) {
-    if (state === 'loading') {
-      authSpinner.style.display = 'block';
-      authStatusText.textContent = msg || 'جارٍ التحقق...';
-      authStatus.style.borderColor = 'rgba(255,255,255,0.08)';
-      authRetryBtn.style.display = 'none';
-      authIcon.textContent = icon || '🔐';
-      authTitle.textContent = 'جاري التحقق من هويتك';
-    } else if (state === 'success') {
-      authSpinner.style.display = 'none';
-      authStatusText.textContent = msg || '✅ تم التحقق بنجاح';
-      authStatus.style.borderColor = 'rgba(46,204,113,0.3)';
-      authRetryBtn.style.display = 'none';
-      authIcon.textContent = '✅';
-      authTitle.textContent = 'تم التحقق بنجاح';
-      authSub.textContent = 'مرحباً بك في لعبة الحظ!';
-    } else if (state === 'fail') {
-      authSpinner.style.display = 'none';
-      authStatusText.textContent = msg || '❌ فشل التحقق';
-      authStatus.style.borderColor = 'rgba(231,76,60,0.3)';
-      authRetryBtn.style.display = 'block';
-      authIcon.textContent = '❌';
-      authTitle.textContent = 'فشل التحقق';
-      authSub.textContent = 'قد يكون الرابط منتهي الصلاحية أو غير صحيح';
-    }
-  }
-
-  // ===== تخزين بيانات المستخدم =====
-  function saveUserData(data) {
-    try {
-      localStorage.setItem('lucky_user', JSON.stringify(data));
-      if (data.user_id) localStorage.setItem('lucky_user_id', data.user_id);
-      if (data.first_name) localStorage.setItem('lucky_user_name', data.first_name);
-    } catch(e) {}
-  }
-
-  function getUserData() {
-    try {
-      const raw = localStorage.getItem('lucky_user');
-      return raw ? JSON.parse(raw) : null;
-    } catch(e) { return null; }
-  }
-
-  // ===== إخفاء شاشة المصادقة =====
-  function hideAuthScreen() {
-    overlay.classList.add('hidden');
-    secureBadge.classList.add('show');
-    secureText.textContent = 'اتصال آمن';
-    lockIcon.textContent = '🔒';
-    document.getElementById('balance-display').style.display = 'block';
-  }
-
-  // ===== إظهار شاشة المصادقة =====
-  function showAuthScreen() {
-    overlay.classList.remove('hidden');
-    secureBadge.classList.remove('show');
-    lockIcon.textContent = '';
-    document.getElementById('balance-display').style.display = 'none';
-  }
-
-  // ===== إعادة المحاولة =====
-  window.retryAuth = function() {
-    setAuthState('loading', 'جاري إعادة المحاولة...', '🔄');
-    setTimeout(() => authenticateUser(), 500);
-  };
-
-  // ===== بدء التطبيق =====
-  window.startApp = async function() {
-    showAuthScreen();
-    setAuthState('loading', 'جارٍ التحقق...', '🔐');
-    
-    const success = await authenticateUser();
-    
-    if (success) {
-      initializeGame();
-    } else {
-      console.warn('⚠️ فشلت المصادقة');
-    }
-  };
-
-  // ===== تصدير الدوال للاستخدام العام =====
-  window.getUserData = getUserData;
-  window.saveUserData = saveUserData;
-  window.authenticateUser = authenticateUser;
-
-})();
-
-// ===================================================================
-//  🎮  الجزء الثاني: اللعبة
-// ===================================================================
-
-// ===== إعدادات =====
 const tg = window.Telegram?.WebApp;
 const API = "https://bot.tota.click";
 const STAKES = [250, 500, 750, 1000, 5000, 10000];
-const _urlParams = new URLSearchParams(window.location.search);
-const COOLDOWN = parseInt(_urlParams.get('cooldown') || '3', 10);
+const COOLDOWN = 3;
+const GIFT_AMOUNT = 250;
 const MEDALS = ["🥇","🥈","🥉","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"];
 
 if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#0f0c29'); tg.setBackgroundColor('#0f0c29'); }
 
-let balance = 0;
+// ===== بيانات المستخدم من تيليجرام =====
+let userData = null;
+let balance = GIFT_AMOUNT;
 let selectedStake = 500;
 let isSpinning = false;
 let rotation = 0;
 let plays = 0, wins = 0, loses = 0;
-const initData = tg?.initData || "";
+let initData = tg?.initData || "";
 
-// ===== دوال مساعدة =====
-function escapeHTML(str) {
-  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+// ===== استخراج بيانات المستخدم من الرابط =====
+function extractUserData() {
+  try {
+    if (!initData) return null;
+    const params = new URLSearchParams(initData);
+    const userStr = params.get('user');
+    if (userStr) {
+      const user = JSON.parse(decodeURIComponent(userStr));
+      return {
+        id: user.id || 'unknown',
+        name: user.first_name || user.username || 'زائر',
+        photo_url: user.photo_url || null,
+        username: user.username || ''
+      };
+    }
+  } catch(e) {}
+  return null;
 }
 
-function getAuthHeaders() {
-  const userData = window.getUserData ? window.getUserData() : null;
-  return {
-    'Content-Type': 'application/json',
-    'X-User-Id': userData?.user_id || '',
-    'X-Tg-Init': initData || ''
-  };
+userData = extractUserData();
+
+// تحديث اسم المستخدم في الواجهة
+if (userData) {
+  document.getElementById('badge-name').textContent = userData.name;
+  if (userData.photo_url) {
+    // عرض الصورة إذا كانت موجودة
+    const badge = document.getElementById('user-badge');
+    badge.innerHTML = `<img src="${userData.photo_url}" style="width:28px;height:28px;border-radius:50%;border:2px solid #ffd200;object-fit:cover;flex-shrink:0;" onerror="this.outerHTML='<div class=\\'user-badge-avatar\\'>👤</div>'">
+      <span class="user-badge-name">${userData.name}</span>`;
+  }
 }
 
-function authFetch(url, opts = {}) {
-  if (!opts.headers) opts.headers = {};
-  const headers = getAuthHeaders();
-  Object.assign(opts.headers, headers);
-  return fetch(url, opts);
+// ===== تحميل الرصيد من localStorage =====
+function loadBalance() {
+  const key = 'lucky_balance_' + (userData?.id || 'guest');
+  const saved = localStorage.getItem(key);
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      balance = data.balance || GIFT_AMOUNT;
+      plays = data.plays || 0;
+      wins = data.wins || 0;
+      loses = data.loses || 0;
+      return;
+    } catch(e) {}
+  }
+  // مستخدم جديد
+  balance = GIFT_AMOUNT;
+  plays = 0; wins = 0; loses = 0;
+  saveBalance();
 }
 
-function fmtPts(n) {
-  return Number(n || 0).toLocaleString('de-DE') + ' نقطة';
+function saveBalance() {
+  const key = 'lucky_balance_' + (userData?.id || 'guest');
+  localStorage.setItem(key, JSON.stringify({
+    balance, plays, wins, loses
+  }));
 }
 
-// ===== تهيئة اللعبة =====
-function initializeGame() {
-  console.log('🎮 تهيئة اللعبة...');
-  refreshBalance();
-  loadStats();
-  checkAdmin();
-  pingPresence();
-  
-  setInterval(pingPresence, 60000);
-  
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'hidden') leavePresence();
-    if (document.visibilityState === 'visible') pingPresence();
-  });
-  window.addEventListener('pagehide', leavePresence);
-}
+loadBalance();
+updateBalanceUI(balance);
+document.getElementById('st-plays').textContent = plays;
+document.getElementById('st-wins').textContent = wins;
+document.getElementById('st-loses').textContent = loses;
 
-// ===== واجهة المستخدم =====
+// ===== Tabs =====
 function switchTab(name, btn) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('show'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1111,9 +789,14 @@ function stopAdminAutoRefresh() {
   }
 }
 
+function authFetch(url, opts = {}) {
+  if (!opts.headers) opts.headers = {};
+  opts.headers['X-Tg-Init'] = initData;
+  return fetch(url, opts);
+}
+
 async function checkAdmin() {
-  const userData = window.getUserData ? window.getUserData() : null;
-  if (!userData?.user_id) return;
+  if (!initData) return;
   try {
     const r = await authFetch(`${API}/api/lucky/admin/check`);
     const d = await r.json();
@@ -1146,58 +829,35 @@ function _updateAdminUI(d) {
 }
 
 async function loadAdminStats() {
-  const userData = window.getUserData ? window.getUserData() : null;
-  if (!userData?.user_id) return;
+  if (!initData) return;
   document.getElementById('adm-loading').style.display = 'block';
+  const ctrl = new AbortController();
+  const timeout = setTimeout(() => ctrl.abort(), 10000);
   try {
-    const r = await authFetch(`${API}/api/lucky/admin/stats?period=${currentPeriod}`);
+    const url = `${API}/api/lucky/admin/stats?period=${currentPeriod}`;
+    const r = await authFetch(url, { signal: ctrl.signal });
     const d = await r.json();
     _updateAdminUI(d.error ? {active_now:0,active_today:0,profit:0,loss:0,total_games:0,label:'لا صلاحية'} : d);
   } catch(e) {
     _updateAdminUI({active_now:0,active_today:0,profit:0,loss:0,total_games:0,label:'خطأ في الاتصال'});
   } finally {
+    clearTimeout(timeout);
     document.getElementById('adm-loading').style.display = 'none';
   }
 }
 
-// ===== Presence =====
-function pingPresence() {
-  const userData = window.getUserData ? window.getUserData() : null;
-  if (!userData?.user_id) return;
-  authFetch(`${API}/api/lucky/ping`).catch(() => {});
-}
+checkAdmin();
 
-function leavePresence() {
-  const userData = window.getUserData ? window.getUserData() : null;
-  if (!userData?.user_id) return;
-  const blob = new Blob([JSON.stringify({ user_id: userData.user_id })], { type: 'application/json' });
-  try { navigator.sendBeacon(`${API}/api/lucky/leave`, blob); } catch(e) {}
-}
-
-// ===== Balance =====
-function updateBalanceUI(v) {
-  balance = v;
-  document.getElementById('balance-display').textContent = '💰 ' + fmtPts(v);
-}
-
-async function refreshBalance() {
-  const userData = window.getUserData ? window.getUserData() : null;
-  if (!userData?.user_id) return;
-  try {
-    const r = await authFetch(`${API}/api/lucky/balance`);
-    const d = await r.json();
-    if (d.balance !== undefined) updateBalanceUI(d.balance);
-  } catch(e) {}
-}
-
-// ===== Wheel =====
+// ============================================================
+// ===== 🎯 WHEEL SEGMENTS - ALL WIN (فوز 100%) =====
+// ============================================================
 const SEGS = [
-  { label:'🏆 فوز',    color:'#1e8449', light:'#27ae60' },
-  { label:'❌ خسارة',  color:'#922b21', light:'#c0392b' },
-  { label:'🔁 إعادة', color:'#1a5276', light:'#2980b9' },
-  { label:'🏆 فوز',   color:'#27ae60', light:'#2ecc71' },
-  { label:'❌ خسارة', color:'#c0392b', light:'#e74c3c' },
-  { label:'🔁 إعادة', color:'#1a5276', light:'#2980b9' },
+  { label:'🏆 فوز', color:'#27ae60', light:'#2ecc71' },
+  { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
+  { label:'🏆 فوز', color:'#2ecc71', light:'#58d68d' },
+  { label:'🏆 فوز', color:'#27ae60', light:'#2ecc71' },
+  { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
+  { label:'🏆 فوز', color:'#2ecc71', light:'#58d68d' },
 ];
 const N = SEGS.length;
 const SA = 360 / N;
@@ -1208,6 +868,7 @@ const CX = cvs.width/2, CY = cvs.height/2, R = CX - 5;
 function drawWheel(rot) {
   ctx.clearRect(0,0,cvs.width,cvs.height);
   const off = (rot - 90) * Math.PI / 180;
+
   SEGS.forEach((s,i) => {
     const st = off + i * SA * Math.PI/180;
     const en = st + SA * Math.PI/180;
@@ -1220,29 +881,27 @@ function drawWheel(rot) {
     ctx.lineWidth=2.5;
     ctx.stroke();
   });
+
   SEGS.forEach((s,i) => {
     const midAngle = off + i * SA * Math.PI/180 + (SA/2) * Math.PI/180;
     const textR = R * 0.68;
     ctx.save();
     ctx.translate(CX + Math.cos(midAngle) * textR, CY + Math.sin(midAngle) * textR);
     ctx.rotate(midAngle + Math.PI/2);
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    const parts = s.label.split(' ');
-    const emoji = parts[0] || '';
-    const arabic = parts.slice(1).join(' ');
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.font = 'bold 14px Arial';
     ctx.lineJoin = 'round';
     ctx.strokeStyle = '#000000';
     ctx.lineWidth = 5;
-    ctx.strokeText(arabic, 0, 4);
+    ctx.strokeText('فوز', 0, 4);
     ctx.fillStyle = '#ffffff';
-    ctx.fillText(arabic, 0, 4);
+    ctx.fillText('فوز', 0, 4);
     ctx.font = '13px Arial';
     ctx.fillStyle = '#ffffff';
-    ctx.fillText(emoji, 0, -10);
+    ctx.fillText('🏆', 0, -10);
     ctx.restore();
   });
+
   ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2);
   ctx.strokeStyle='rgba(255,210,0,0.7)';
   ctx.lineWidth=5;
@@ -1263,122 +922,62 @@ STAKES.forEach(s => {
   grid.appendChild(b);
 });
 
-// ===== Stats =====
-function _avatarEl(photoUrl, size, emoji) {
-  if (photoUrl) {
-    return `<img class="${size === 'big' ? 'my-avatar' : 'winner-avatar'}" src="${photoUrl}" onerror="this.outerHTML='<div class=\\'${size === 'big' ? 'my-avatar-placeholder' : 'winner-avatar-placeholder'}\\'>${emoji}</div>'">`;
-  }
-  return `<div class="${size === 'big' ? 'my-avatar-placeholder' : 'winner-avatar-placeholder'}">${emoji}</div>`;
+// ===== Balance Functions =====
+function fmtPts(n) {
+  return Number(n || 0).toLocaleString('de-DE') + ' نقطة';
 }
 
-async function loadStats() {
-  const userData = window.getUserData ? window.getUserData() : null;
-  if (!userData?.user_id) return;
-  
-  document.getElementById('winners-list').innerHTML = '<div class="loading-txt">⏳ جاري التحميل...</div>';
-  
-  try {
-    const [meRes, statsRes] = await Promise.all([
-      authFetch(`${API}/api/lucky/me`),
-      authFetch(`${API}/api/lucky/stats`)
-    ]);
-    
-    const me = await meRes.json();
-    const card = document.getElementById('my-card');
-    card.innerHTML = `
-      ${_avatarEl(me.photo_url, 'big', '🎮')}
-      <div class="my-info">
-        <div class="my-name">${escapeHTML(me.name || 'لاعب')}</div>
-        <div class="my-balance">${fmtPts(me.balance)}</div>
-        <div class="my-mini-stats">
-          <div class="my-mini-stat">فوز <span>${(me.wins||0).toLocaleString('de-DE')}</span></div>
-          <div class="my-mini-stat">خسارة <span>${(me.losses||0).toLocaleString('de-DE')}</span></div>
-          <div class="my-mini-stat">جولات <span>${(me.games||0).toLocaleString('de-DE')}</span></div>
-        </div>
-      </div>`;
-    
-    const d = await statsRes.json();
-    document.getElementById('stat-participants').textContent = (d.participants||0).toLocaleString('de-DE');
-    const list = document.getElementById('winners-list');
-    if (!d.last10 || d.last10.length === 0) {
-      list.innerHTML = '<div class="loading-txt">لا يوجد فائزون بعد</div>';
-      return;
-    }
-    list.innerHTML = d.last10.map((w, i) => `
-      <div class="winner-item${isAdmin ? ' clickable' : ''}" ${isAdmin ? `onclick="showUserStats('${escapeHTML(String(w.uid))}')"` : ''}>
-        <span class="winner-rank">${MEDALS[i] || '#' + (i+1)}</span>
-        ${_avatarEl(w.photo_url, 'sm', '🏆')}
-        <div class="winner-info">
-          <div class="winner-name">${escapeHTML(w.name || 'لاعب#' + w.uid)}${isAdmin ? ' <span style="font-size:10px;opacity:0.4">👆</span>' : ''}</div>
-          <div class="winner-pts">+${(w.total_won||0).toLocaleString('de-DE')} نقطة</div>
-        </div>
-      </div>`).join('');
-  } catch(e) {
-    document.getElementById('winners-list').innerHTML = '<div class="loading-txt">⚠️ تعذّر التحميل</div>';
-  }
+function updateBalanceUI(v) {
+  balance = v;
+  document.getElementById('balance-display').textContent = '💰 ' + fmtPts(v);
 }
 
 // ===== Sound Effects =====
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function playTick() {
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.connect(g); g.connect(audioCtx.destination);
-  o.frequency.value = 600;
-  g.gain.setValueAtTime(0.15, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-  o.start(); o.stop(audioCtx.currentTime + 0.05);
+  try {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value = 600;
+    g.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+    o.start(); o.stop(audioCtx.currentTime + 0.05);
+  } catch(e) {}
 }
 
 function playWin() {
-  [523, 659, 784, 1047].forEach((f, i) => {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.type = 'sine'; o.frequency.value = f;
-    const t = audioCtx.currentTime + i * 0.12;
-    g.gain.setValueAtTime(0.25, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-    o.start(t); o.stop(t + 0.3);
-  });
+  try {
+    [523, 659, 784, 1047].forEach((f, i) => {
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination);
+      o.type = 'sine'; o.frequency.value = f;
+      const t = audioCtx.currentTime + i * 0.12;
+      g.gain.setValueAtTime(0.25, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+      o.start(t); o.stop(t + 0.3);
+    });
+  } catch(e) {}
 }
 
-function playLose() {
-  [300, 250].forEach((f, i) => {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.type = 'sawtooth'; o.frequency.value = f;
-    const t = audioCtx.currentTime + i * 0.2;
-    g.gain.setValueAtTime(0.2, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-    o.start(t); o.stop(t + 0.3);
-  });
-}
-
-function playRetry() {
-  const o = audioCtx.createOscillator();
-  const g = audioCtx.createGain();
-  o.connect(g); g.connect(audioCtx.destination);
-  o.type = 'sine'; o.frequency.value = 440;
-  g.gain.setValueAtTime(0.2, audioCtx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-  o.start(); o.stop(audioCtx.currentTime + 0.4);
-}
-
-// ===== Spin =====
+// ============================================================
+// ===== 🎰 SPIN - فوز دائم 100% (لا يرسل خسارة للخادم) =====
+// ============================================================
 async function startSpin() {
   if (isSpinning) return;
-  
-  const userData = window.getUserData ? window.getUserData() : null;
-  if (!userData?.user_id) {
-    showResult('error','⚠️','غير مصرح','افتح اللعبة من البوت');
+
+  // التحقق من الرصيد
+  if (selectedStake > balance) {
+    showResult('error','😕','رصيدك لا يكفي','اختر رهاناً أقل');
     return;
   }
 
+  // الكولداون
   const now = Date.now();
-  const lastSpin = parseInt(localStorage.getItem('_lgs') || '0');
+  const key = '_lgs_' + (userData?.id || 'guest');
+  const lastSpin = parseInt(localStorage.getItem(key) || '0');
   if (now - lastSpin < COOLDOWN * 1000) {
     const rem = Math.ceil((COOLDOWN * 1000 - (now - lastSpin)) / 1000);
     showResult('error','⏳','انتظر قليلاً',`المحاولة التالية بعد ${rem} ثانية`);
@@ -1392,47 +991,33 @@ async function startSpin() {
   document.getElementById('result-inline').classList.remove('show','win-res','lose-res','retry-res');
   cvs.classList.add('spinning');
 
-  let data;
-  try {
-    const r = await authFetch(`${API}/api/lucky/play`, {
-      method: 'POST',
-      body: JSON.stringify({ stake: selectedStake })
-    });
-    data = await r.json();
-  } catch(e) {
-    data = { error: 'network' };
-  }
+  // ==========================================================
+  // 🎯 حساب النتيجة محلياً - دائماً فوز 100%
+  // ==========================================================
+  const earned = Math.round(selectedStake * (0.8 + Math.random() * 1.2));
+  const outcome = 'win';
 
-  if (data.error) {
-    cvs.classList.remove('spinning');
-    const msgs = {
-      cooldown: ['⏳','انتظر قليلاً','قبل المحاولة التالية'],
-      insufficient_balance: ['😕','رصيدك لا يكفي','اختر رهاناً أقل'],
-      unauthorized: ['🔒','غير مصرح','افتح اللعبة من البوت'],
-      tx_failed: ['⚠️','خطأ في العملية','حاول لاحقاً'],
-      network: ['📡','خطأ في الاتصال','تحقق من الإنترنت'],
-      maintenance: ['🔧','اللعبة في التحديث','سنعود قريباً'],
-      daily_limit: ['🚫','وصلت للحد اليومي','عد غداً وحظ أوفر!'],
-    };
-    const [ic,ti,su] = msgs[data.error] || ['⚠️','خطأ','حاول لاحقاً'];
-    showResult('error', ic, ti, su);
-    isSpinning = false;
-    document.getElementById('spin-btn').disabled = false;
-    return;
-  }
+  // تحديث الرصيد فوراً
+  balance += earned;
+  plays++;
+  wins++;
 
-  localStorage.setItem('_lgs', Date.now().toString());
+  // حفظ في localStorage
+  saveBalance();
 
-  const segOptions = { win:[0,3], lose:[1,4], retry:[2,5] };
-  const opts = segOptions[data.outcome] || [2];
-  const targetSeg = opts[Math.floor(Math.random() * opts.length)];
+  // تحديث الواجهة فوراً
+  updateBalanceUI(balance);
+  document.getElementById('st-plays').textContent = plays;
+  document.getElementById('st-wins').textContent = wins;
+  document.getElementById('st-loses').textContent = loses;
 
+  localStorage.setItem(key, Date.now().toString());
+
+  // ==========================================================
+  // 🎯 دوران العجلة
+  // ==========================================================
+  const targetSeg = Math.floor(Math.random() * N);
   let stopAngle = ((360 - (targetSeg + 0.5) * SA) % 360 + 360) % 360;
-
-  if (data.outcome === 'lose') {
-    const nearMissOffset = SA * 0.30;
-    stopAngle = ((stopAngle + nearMissOffset) % 360 + 360) % 360;
-  }
 
   const curMod = ((rotation % 360) + 360) % 360;
   let diff = (stopAngle - curMod + 360) % 360;
@@ -1450,8 +1035,10 @@ async function startSpin() {
       const e = 1 - Math.pow(1 - p, 4);
       rotation = startRot + (finalRot - startRot) * e;
       drawWheel(rotation % 360);
+
       const curSegNow = Math.floor(((rotation % 360) / 360) * N);
       if (curSegNow !== lastSeg) { playTick(); lastSeg = curSegNow; }
+
       if (p < 1) requestAnimationFrame(frame);
       else { rotation = finalRot; drawWheel(rotation % 360); resolve(); }
     }
@@ -1460,25 +1047,12 @@ async function startSpin() {
 
   cvs.classList.remove('spinning');
 
-  updateBalanceUI(data.new_balance);
-  plays++;
-  if (data.outcome==='win') wins++;
-  if (data.outcome==='lose') loses++;
-  document.getElementById('st-plays').textContent = plays;
-  document.getElementById('st-wins').textContent = wins;
-  document.getElementById('st-loses').textContent = loses;
-
-  if (data.outcome==='win') {
-    playWin();
-    showResult('win','🎉','مبروك! فزت 🏆',`ربحت +${data.earned.toLocaleString('ar')} نقطة`);
-    launchConfetti();
-  } else if (data.outcome==='lose') {
-    playLose();
-    showResult('lose','😢','للأسف خسرت ❌',`خسرت ${Math.abs(data.earned).toLocaleString('ar')} نقطة`);
-  } else {
-    playRetry();
-    showResult('retry','🔁','إعادة!','لا خصم ولا إضافة — جرّب مجدداً');
-  }
+  // ==========================================================
+  // 🎉 عرض النتيجة - دائماً فوز
+  // ==========================================================
+  playWin();
+  showResult('win', '🎉', 'مبروك! فوز 🏆', `ربحت +${earned.toLocaleString('ar')} نقطة`);
+  launchConfetti();
 
   startCooldown();
 }
@@ -1487,8 +1061,7 @@ function showResult(type, icon, title, sub) {
   const el = document.getElementById('result-inline');
   el.classList.remove('win-res','lose-res','retry-res');
   if (type==='win') el.classList.add('win-res');
-  if (type==='lose') el.classList.add('lose-res');
-  if (type==='retry') el.classList.add('retry-res');
+  if (type==='error') el.classList.add('retry-res');
   document.getElementById('res-icon').textContent = icon;
   document.getElementById('res-title').textContent = title;
   document.getElementById('res-sub').textContent = sub;
@@ -1526,70 +1099,36 @@ function launchConfetti() {
   }
 }
 
-// ===== User Modal =====
-function closeUserModal(e) {
-  if (e.target === document.getElementById('user-modal')) {
-    document.getElementById('user-modal').classList.add('hidden');
-  }
+// ===== Stats =====
+function loadStats() {
+  document.getElementById('stat-name').textContent = userData?.name || 'اللاعب';
+  document.getElementById('stat-balance').textContent = fmtPts(balance);
+  document.getElementById('stat-wins').textContent = wins.toLocaleString('de-DE');
+  document.getElementById('stat-losses').textContent = loses.toLocaleString('de-DE');
+  document.getElementById('stat-games').textContent = plays.toLocaleString('de-DE');
+  document.getElementById('stat-participants').textContent = '1';
+
+  const list = document.getElementById('winners-list');
+  list.innerHTML = `
+    <div class="winner-item">
+      <span class="winner-rank">🥇</span>
+      <div class="winner-avatar-placeholder">🏆</div>
+      <div class="winner-info">
+        <div class="winner-name">${escapeHTML(userData?.name || 'اللاعب')}</div>
+        <div class="winner-pts">${wins.toLocaleString('de-DE')} فوز</div>
+      </div>
+    </div>
+    <div class="loading-txt" style="padding:10px">💪 أنت المتصدر!</div>
+  `;
 }
 
-async function showUserStats(uid) {
-  if (!isAdmin) return;
-  
-  const modal = document.getElementById('user-modal');
-  document.getElementById('modal-username').textContent = '...';
-  document.getElementById('modal-uid').textContent = 'ID: ' + uid;
-  document.getElementById('modal-balance').textContent = '...';
-  document.getElementById('modal-initial').textContent = '...';
-  document.getElementById('modal-total-won').textContent = '...';
-  document.getElementById('modal-games').textContent = '...';
-  document.getElementById('modal-active-badge').textContent = '⏳ جاري التحميل...';
-  document.getElementById('modal-active-badge').className = 'modal-active-badge';
-  
-  const avatarWrap = document.getElementById('modal-avatar-wrap');
-  avatarWrap.innerHTML = '<div class="modal-avatar-placeholder">🎮</div>';
-  
-  modal.classList.remove('hidden');
-  
-  try {
-    const r = await authFetch(`${API}/api/lucky/admin/user/${encodeURIComponent(uid)}`);
-    const d = await r.json();
-    if (d.error) throw new Error(d.error);
-    
-    const fmt = n => Number(n || 0).toLocaleString('de-DE');
-    document.getElementById('modal-username').textContent = d.name || ('لاعب #' + uid);
-    document.getElementById('modal-balance').textContent = fmt(d.balance) + ' نقطة';
-    document.getElementById('modal-initial').textContent = fmt(d.initial_balance) + ' نقطة';
-    document.getElementById('modal-total-won').textContent = '+' + fmt(d.total_won) + ' نقطة';
-    document.getElementById('modal-games').textContent = fmt(d.games) + ' جولة';
-    
-    if (d.photo_url) {
-      const img = document.createElement('img');
-      img.className = 'modal-avatar';
-      img.src = d.photo_url;
-      img.onerror = () => { avatarWrap.innerHTML = '<div class="modal-avatar-placeholder">🎮</div>'; };
-      avatarWrap.innerHTML = '';
-      avatarWrap.appendChild(img);
-    }
-    
-    const badge = document.getElementById('modal-active-badge');
-    if (d.is_active) {
-      badge.textContent = '🟢 نشط الآن';
-      badge.className = 'modal-active-badge online';
-    } else {
-      badge.textContent = '⚫ غير نشط';
-      badge.className = 'modal-active-badge offline';
-    }
-  } catch(e) {
-    document.getElementById('modal-balance').textContent = 'خطأ';
-    document.getElementById('modal-active-badge').textContent = '⚠️ تعذّر التحميل';
-    document.getElementById('modal-active-badge').className = 'modal-active-badge offline';
-  }
+function escapeHTML(str) {
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // ===== Particles =====
 (function(){
-  const c=document.getElementById('particles'), ctx2=c.getContext('2d');
+  const c=document.getElementById('particles'),ctx2=c.getContext('2d');
   c.width=window.innerWidth; c.height=window.innerHeight;
   const pts=Array.from({length:50},()=>({
     x:Math.random()*c.width, y:Math.random()*c.height,
@@ -1611,16 +1150,29 @@ async function showUserStats(uid) {
   window.addEventListener('resize',()=>{c.width=window.innerWidth;c.height=window.innerHeight;});
 })();
 
-// ===== بدء التطبيق =====
-document.addEventListener('DOMContentLoaded', function() {
-  // بدء المصادقة
-  if (window.startApp) {
-    window.startApp();
-  } else {
-    // إذا لم يتم تحميل المصادقة، نبدأ اللعبة مباشرة
-    initializeGame();
-  }
-});
+// ===== Maintenance Check =====
+(async function checkMaintenance() {
+  try {
+    const r = await fetch(`${API}/api/lucky/maintenance`);
+    const d = await r.json();
+    if (d.maintenance) {
+      document.getElementById('maintenance-screen').classList.add('show');
+    }
+  } catch(e) {}
+})();
+
+// ============================================================
+// ===== دالة لإرسال الخسائر بعد 24 ساعة (اختياري) =====
+// ============================================================
+// ملاحظة: بما أننا نجعل كل شيء فوزاً، لا توجد خسائر لإرسالها.
+// هذه الدالة محجوزة للاستخدام المستقبلي
+function sendLossAfter24h() {
+  // حالياً لا توجد خسائر، لأن كل شيء فوز
+  console.log('✅ لا توجد خسائر لإرسالها - كل شيء فوز 100%');
+}
+
+console.log('🎯 اللعبة تعمل بنظام فوز دائم 100%');
+console.log('💰 الرصيد الحالي:', balance);
 </script>
 </body>
 </html>
