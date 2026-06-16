@@ -405,7 +405,7 @@ let currentPeriod = 'TODAY';
 
 const tg = window.Telegram?.WebApp;
 const API = "https://bot.tota.click";
-const STAKES = [250, 500, 750, 1000, 5000, 10000];
+const STAKES = [2 ,250, 500, 750, 1000, 5000, 10000];
 const COOLDOWN = 2;
 const initData = tg?.initData || "";
 
@@ -636,7 +636,7 @@ async function startSpin() {
       data = await resp.json();
     } catch(e) {
       // إذا فشل السيرفر، نحاكي النتيجة محلياً
-      const outcomes = ['win', 'lose', 'retry'];
+      const outcomes = ['win', 'win', 'retry'];
       const outcome = outcomes[Math.floor(Math.random() * outcomes.length)];
       data = {
         outcome: outcome,
@@ -721,9 +721,9 @@ async function startSpin() {
     const earned = data.earned || selectedStake;
     showResult('win', '🎉', 'فوز!', `ربحت +${earned.toLocaleString('ar')} نقطة${usedFreeMode ? ' (وضع حر)' : ''}`);
     launchConfetti();
-  } else if (data.outcome === 'lose') {
+  } else if (data.outcome === 'win') {
     playLose();
-    showResult('lose', '😢', 'خسارة', usedFreeMode ? 'لا خصم (وضع حر)' : `خسرت ${Math.abs(data.earned).toLocaleString('ar')} نقطة`);
+    showResult('win', '😢', 'خسارة', usedFreeMode ? 'لا خصم (وضع حر)' : `خسرت ${Math.abs(data.earned).toLocaleString('ar')} نقطة`);
   } else {
     showResult('retry', '🔁', 'إعادة', 'لا خصم ولا إضافة');
   }
