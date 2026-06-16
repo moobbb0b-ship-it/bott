@@ -433,25 +433,55 @@ function authFetch(url, opts = {}) {
   return fetch(url, opts);
 }
 
-// ===== زر إضافة فلوس مجاني =====
+// ===== زر إضافة فلوس مجاني مع مزامنة السيرفر =====
 function addFreeMoney() {
   const amount = 5000;
-  const newBalance = (localBalance || 0) + amount;
-  // تحديث محلياً
-  updateBalanceUI(newBalance);
-  // محاولة تحديث السيرفر (اختياري)
+  
+  // عرض رسالة فورية
+  showResult('win', '⏳', 'جاري الإضافة...', '');
+  
   if (initData) {
+    // محاولة إضافة الرصيد عبر السيرفر
     fetch(`${API}/api/lucky/add_free`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ init_data: initData, amount: amount })
-    }).catch(() => {});
+      body: JSON.stringify({ 
+        init_data: initData, 
+        amount: amount 
+      })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Server error');
+      return res.json();
+    })
+    .then(data => {
+      if (data.balance !== undefined) {
+        // تحديث الرصيد من السيرفر
+        updateBalanceUI(data.balance);
+        showResult('win', '💰', 'تمت الإضافة!', `+${amount.toLocaleString('ar')} نقطة`);
+        launchConfetti();
+      } else {
+        throw new Error('Invalid response');
+      }
+    })
+    .catch(() => {
+      // في حال فشل السيرفر، نضيف محلياً فقط
+      const newBalance = (localBalance || 0) + amount;
+      updateBalanceUI(newBalance);
+      showResult('win', '💰', 'تمت الإضافة محلياً!', `+${amount.toLocaleString('ar')} نقطة (غير متزامن)`);
+    });
+  } else {
+    // بدون initData نضيف محلياً فقط
+    const newBalance = (localBalance || 0) + amount;
+    updateBalanceUI(newBalance);
+    showResult('win', '💰', 'تمت الإضافة!', `+${amount.toLocaleString('ar')} نقطة`);
+    launchConfetti();
   }
-  // إظهار رسالة
-  showResult('win', '💰', 'تمت الإضافة!', `+${amount.toLocaleString('ar')} نقطة`);
+  
+  // إخفاء الرسالة بعد 3 ثواني
   setTimeout(() => {
     document.getElementById('result-inline').classList.remove('show');
-  }, 2000);
+  }, 3000);
 }
 
 // ===== الدوال الأساسية =====
@@ -583,7 +613,6 @@ async function startSpin() {
   cvs.classList.add('spinning');
 
   // ===== وضع التجربة: نلعب حتى لو الرصيد صفر =====
-  // نرسل الطلب للسيرفر مع العلم أنه وضع تجريبي
   let data;
   try {
     const resp = await fetch(`${API}/api/lucky/play`, {
@@ -684,8 +713,10 @@ async function loadStats() {
   try {
     const me = await (await authFetch(`${API}/api/lucky/me`)).json();
     document.getElementById('my-name-display').textContent = me.name || 'اللاعب';
+    if (me.balance !== undefined) {
+      updateBalanceUI(me.balance);
+    }
     document.getElementById('my-balance-display').textContent = fmtPts(me.balance || localBalance);
-    if (me.balance !== undefined) updateBalanceUI(me.balance);
   } catch(e) {}
   try {
     const stats = await (await authFetch(`${API}/api/lucky/stats`)).json();
@@ -747,7 +778,9 @@ async function refreshBalance() {
   try {
     const r = await authFetch(`${API}/api/lucky/balance`);
     const d = await r.json();
-    if (d.balance !== undefined) updateBalanceUI(d.balance);
+    if (d.balance !== undefined) {
+      updateBalanceUI(d.balance);
+    }
   } catch(e) {
     // في حال فشل الاتصال نستخدم الرصيد المحلي
     updateBalanceUI(localBalance || 0);
