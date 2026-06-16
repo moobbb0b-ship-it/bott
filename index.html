@@ -1,10 +1,10 @@
-<!-- v13 - 100% Win Rate -->
+<!-- v15 - Win = 100x Stake, Lose = Stake -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>🎰 لعبة الحظ - فوز دائم</title>
+  <title>🎰 لعبة الحظ</title>
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -196,6 +196,10 @@
     .result-inline.win-res {
       background: linear-gradient(135deg, rgba(39,174,96,0.25), rgba(46,204,113,0.1));
       border: 2px solid #27ae60;
+    }
+    .result-inline.lose-res {
+      background: linear-gradient(135deg, rgba(231,76,60,0.25), rgba(192,57,43,0.1));
+      border: 2px solid #e74c3c;
     }
     .result-inline.show { display: block; }
     .res-icon  { font-size: 50px; }
@@ -725,7 +729,8 @@
 // ===== Setup =====
 const tg      = window.Telegram?.WebApp;
 const API     = "https://bot.tota.click";
-const STAKES  = [250, 500, 750, 1000, 5000, 10000];
+// مبالغ الرهان الجديدة
+const STAKES  = [5, 10, 25, 50, 100, 250];
 const _urlParams = new URLSearchParams(window.location.search);
 const COOLDOWN= parseInt(_urlParams.get('cooldown') || '3', 10);
 const MEDALS  = ["🥇","🥈","🥉","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"];
@@ -743,7 +748,7 @@ if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#0f0c29'); tg.setBackgroun
 })();
 
 let balance      = 0;
-let selectedStake= 500;
+let selectedStake= 5;
 let isSpinning   = false;
 let rotation     = 0;
 let plays=0, wins=0, loses=0;
@@ -869,14 +874,14 @@ document.addEventListener('visibilitychange', () => {
 });
 window.addEventListener('pagehide', leavePresence);
 
-// ===== Wheel segments - ALL WIN =====
+// ===== Wheel segments - 3 WIN + 3 LOSE =====
 const SEGS = [
   { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
-  { label:'⭐ فوز', color:'#27ae60', light:'#2ecc71' },
+  { label:'❌ خسارة', color:'#922b21', light:'#c0392b' },
+  { label:'🏆 فوز', color:'#27ae60', light:'#2ecc71' },
+  { label:'❌ خسارة', color:'#c0392b', light:'#e74c3c' },
   { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
-  { label:'⭐ فوز', color:'#27ae60', light:'#2ecc71' },
-  { label:'🏆 فوز', color:'#1e8449', light:'#27ae60' },
-  { label:'⭐ فوز', color:'#27ae60', light:'#2ecc71' },
+  { label:'❌ خسارة', color:'#922b21', light:'#c0392b' },
 ];
 const N = SEGS.length;
 const SA = 360 / N;
@@ -947,7 +952,7 @@ const grid = document.getElementById('stakes-grid');
 STAKES.forEach(s => {
   const b = document.createElement('button');
   b.className = 'stake-btn' + (s===selectedStake?' active':'');
-  b.textContent = s >= 1000 ? (s/1000)+'K' : s;
+  b.textContent = s;
   b.onclick = () => {
     document.querySelectorAll('.stake-btn').forEach(x=>x.classList.remove('active'));
     b.classList.add('active'); selectedStake = s;
@@ -1110,16 +1115,29 @@ function playWin() {
   });
 }
 
-// ===== Spin - 100% WIN =====
+function playLose() {
+  [300, 250].forEach((f, i) => {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type = 'sawtooth'; o.frequency.value = f;
+    const t = audioCtx.currentTime + i * 0.2;
+    g.gain.setValueAtTime(0.2, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+    o.start(t); o.stop(t + 0.3);
+  });
+}
+
+// ===== Spin - Win = 100x Stake, Lose = Stake =====
 async function startSpin() {
   if (isSpinning) return;
-  if (!initData) { showResult('win','⚠️','افتح اللعبة من البوت',''); return; }
+  if (!initData) { showResult('error','⚠️','افتح اللعبة من البوت',''); return; }
 
   const now = Date.now();
   const lastSpin = parseInt(localStorage.getItem('_lgs') || '0');
   if (now - lastSpin < COOLDOWN * 1000) {
     const rem = Math.ceil((COOLDOWN * 1000 - (now - lastSpin)) / 1000);
-    showResult('win','⏳','انتظر قليلاً',`المحاولة التالية بعد ${rem} ثانية`);
+    showResult('error','⏳','انتظر قليلاً',`المحاولة التالية بعد ${rem} ثانية`);
     return;
   }
 
@@ -1127,10 +1145,10 @@ async function startSpin() {
 
   isSpinning = true;
   document.getElementById('spin-btn').disabled = true;
-  document.getElementById('result-inline').classList.remove('show','win-res','lose-res','retry-res');
+  document.getElementById('result-inline').classList.remove('show','win-res','lose-res');
   cvs.classList.add('spinning');
 
-  // Call API for balance update only - we force WIN
+  // جلب النتيجة من الخادم
   let data;
   try {
     const r = await fetch(`${API}/api/lucky/play`, {
@@ -1143,24 +1161,47 @@ async function startSpin() {
     data = { error: 'network' };
   }
 
-  // ==== FORCE 100% WIN ====
-  if (!data.error) {
-    data.outcome = 'win';
-    data.earned = selectedStake * 2;
-    data.new_balance = (balance || 0) + data.earned;
-  } else {
-    data = {
-      outcome: 'win',
-      earned: selectedStake * 2,
-      new_balance: (balance || 0) + selectedStake * 2
+  if (data.error) {
+    cvs.classList.remove('spinning');
+    const msgs = {
+      cooldown:             ['⏳','انتظر قليلاً','قبل المحاولة التالية'],
+      insufficient_balance: ['😕','رصيدك لا يكفي','اختر رهاناً أقل'],
+      unauthorized:         ['🔒','غير مصرح','افتح اللعبة من البوت'],
+      tx_failed:            ['⚠️','خطأ في العملية','حاول لاحقاً'],
+      network:              ['📡','خطأ في الاتصال','تحقق من الإنترنت'],
+      maintenance:          ['🔧','اللعبة في التحديث','سنعود قريباً'],
+      daily_limit:          ['🚫','وصلت للحد اليومي','عد غداً وحظ أوفر!'],
     };
+    const [ic,ti,su] = msgs[data.error] || ['⚠️','خطأ','حاول لاحقاً'];
+    showResult('error', ic, ti, su);
+    isSpinning = false;
+    document.getElementById('spin-btn').disabled = false;
+    return;
   }
 
   localStorage.setItem('_lgs', Date.now().toString());
 
-  // Pick random segment (all are WIN)
-  const targetSeg = Math.floor(Math.random() * 6);
+  // ===== تحديد النتيجة الفعلية من الخادم =====
+  // القطاعات: 0=فوز, 1=خسارة, 2=فوز, 3=خسارة, 4=فوز, 5=خسارة
+  const segMap = { win: [0,2,4], lose: [1,3,5] };
+  const opts = segMap[data.outcome] || [0];
+  const targetSeg = opts[Math.floor(Math.random() * opts.length)];
+
+  // حساب زاوية التوقف
   let stopAngle = ((360 - (targetSeg + 0.5) * SA) % 360 + 360) % 360;
+
+  // تأثير "كاد يفوز" للخسارة
+  if (data.outcome === 'lose') {
+    // نوقف العجلة قريباً من حافة قطاع الفوز المجاور
+    let nearMissOffset = SA * 0.25;
+    // إذا كان القطاع 1 (خسارة) نقترب من قطاع 0 (فوز)
+    if (targetSeg === 1) nearMissOffset = SA * 0.20;
+    // إذا كان القطاع 3 (خسارة) نقترب من قطاع 2 (فوز)
+    if (targetSeg === 3) nearMissOffset = SA * 0.20;
+    // إذا كان القطاع 5 (خسارة) نقترب من قطاع 4 (فوز)
+    if (targetSeg === 5) nearMissOffset = SA * 0.20;
+    stopAngle = ((stopAngle + nearMissOffset) % 360 + 360) % 360;
+  }
 
   const curMod   = ((rotation % 360) + 360) % 360;
   let   diff     = (stopAngle - curMod + 360) % 360;
@@ -1190,26 +1231,32 @@ async function startSpin() {
 
   cvs.classList.remove('spinning');
 
-  // Update balance and stats - always WIN
+  // ===== تحديث الرصيد والإحصائيات =====
+  // الرصيد الجديد من الخادم
   updateBalanceUI(data.new_balance);
   plays++;
-  wins++;
+  if (data.outcome === 'win') {
+    wins++;
+    playWin();
+    showResult('win','🎉','مبروك! فزت 🏆',`ربحت ${data.earned.toLocaleString('ar')} نقطة! (${selectedStake} × 100)`);
+    launchConfetti();
+  } else {
+    loses++;
+    playLose();
+    showResult('lose','😢','للأسف خسرت ❌',`خسرت ${Math.abs(data.earned).toLocaleString('ar')} نقطة`);
+  }
   document.getElementById('st-plays').textContent = plays;
   document.getElementById('st-wins').textContent  = wins;
-  document.getElementById('st-loses').textContent = 0;
-
-  // Show WIN result
-  playWin();
-  showResult('win','🎉','مبروك! فزت 🏆',`ربحت +${data.earned.toLocaleString('ar')} نقطة`);
-  launchConfetti();
+  document.getElementById('st-loses').textContent = loses;
 
   startCooldown();
 }
 
 function showResult(type, icon, title, sub) {
   const el = document.getElementById('result-inline');
-  el.classList.remove('win-res','lose-res','retry-res');
-  el.classList.add('win-res');
+  el.classList.remove('win-res','lose-res');
+  if (type === 'win') el.classList.add('win-res');
+  else if (type === 'lose') el.classList.add('lose-res');
   document.getElementById('res-icon').textContent  = icon;
   document.getElementById('res-title').textContent = title;
   document.getElementById('res-sub').textContent   = sub;
