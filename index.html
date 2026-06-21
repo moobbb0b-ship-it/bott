@@ -1,379 +1,79 @@
-<!-- v12.2 - Original Design Restored with Security Layer -->
+<!-- v12.3 - Final Fix for Connection & Points -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>🎰 لعبة الحظ</title>
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      font-family: 'Segoe UI', Arial, sans-serif;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow-x: hidden;
-      padding-bottom: 40px;
-    }
-
-    /* ===== Header ===== */
-    .header {
-      width: 100%;
-      padding: 16px 20px 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
+    body { min-height: 100vh; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); font-family: 'Segoe UI', Arial, sans-serif; color: #fff; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; padding-bottom: 40px; }
+    .header { width: 100%; padding: 16px 20px 12px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
     .header-title { font-size: 20px; font-weight: 700; }
-    .balance-box {
-      background: linear-gradient(135deg, #f7971e, #ffd200);
-      color: #1a1a1a;
-      padding: 7px 16px;
-      border-radius: 20px;
-      font-weight: 800;
-      font-size: 14px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .balance-box:active { transform: scale(0.95); }
-
-    /* ===== Tabs ===== */
-    .tabs {
-      display: flex;
-      width: 92%;
-      max-width: 380px;
-      margin-top: 16px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 4px;
-      gap: 4px;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 9px;
-      border: none;
-      border-radius: 11px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      background: transparent;
-      color: rgba(255,255,255,0.5);
-    }
-    .tab-btn.active {
-      background: linear-gradient(135deg, #f7971e, #ffd200);
-      color: #1a1a1a;
-      box-shadow: 0 2px 10px rgba(247,151,30,0.4);
-    }
-
-    /* ===== Tab panels ===== */
+    .balance-box { background: linear-gradient(135deg, #f7971e, #ffd200); color: #1a1a1a; padding: 7px 16px; border-radius: 20px; font-weight: 800; font-size: 14px; cursor: pointer; }
+    .tabs { display: flex; width: 92%; max-width: 380px; margin-top: 16px; background: rgba(255,255,255,0.06); border-radius: 14px; padding: 4px; gap: 4px; }
+    .tab-btn { flex: 1; padding: 9px; border: none; border-radius: 11px; font-size: 13px; font-weight: 700; cursor: pointer; background: transparent; color: rgba(255,255,255,0.5); }
+    .tab-btn.active { background: linear-gradient(135deg, #f7971e, #ffd200); color: #1a1a1a; }
     .panel { display: none; width: 100%; flex-direction: column; align-items: center; }
     .panel.show { display: flex; }
-
-    /* ===== Wheel ===== */
-    .wheel-section { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
+    .wheel-section { margin-top: 20px; position: relative; }
     .wheel-wrapper { position: relative; width: 260px; height: 260px; }
-    .needle {
-      position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
-      width: 0; height: 0;
-      border-left: 11px solid transparent;
-      border-right: 11px solid transparent;
-      border-top: 28px solid #ffd200;
-      filter: drop-shadow(0 0 6px #ffd200);
-      z-index: 10;
-    }
-    #wheel {
-      width: 260px; height: 260px;
-      border-radius: 50%;
-      box-shadow: 0 0 30px rgba(255,210,0,0.25), inset 0 0 20px rgba(0,0,0,0.3);
-    }
-    .wheel-center {
-      position: absolute; top:50%; left:50%; transform: translate(-50%,-50%);
-      width: 46px; height: 46px;
-      background: radial-gradient(circle, #ffd200, #f7971e);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 0 15px rgba(255,210,0,0.8);
-      z-index: 5;
-    }
-
-    /* ===== Stats mini row ===== */
-    .stats-row {
-      display: flex; gap: 10px;
-      margin-top: 16px;
-      width: 92%; max-width: 380px;
-    }
-    .stat-box {
-      flex: 1;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 10px 6px;
-      text-align: center;
-    }
+    .needle { position: absolute; top: -16px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 11px solid transparent; border-right: 11px solid transparent; border-top: 28px solid #ffd200; z-index: 10; }
+    #wheel { width: 260px; height: 260px; border-radius: 50%; box-shadow: 0 0 30px rgba(255,210,0,0.25); }
+    .wheel-center { position: absolute; top:50%; left:50%; transform: translate(-50%,-50%); width: 46px; height: 46px; background: radial-gradient(circle, #ffd200, #f7971e); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; z-index: 5; }
+    .stats-row { display: flex; gap: 10px; margin-top: 16px; width: 92%; max-width: 380px; }
+    .stat-box { flex: 1; background: rgba(255,255,255,0.06); border-radius: 12px; padding: 10px 6px; text-align: center; }
     .stat-label { font-size: 10px; color: rgba(255,255,255,0.5); }
-    .stat-value { font-size: 15px; font-weight: 700; margin-top: 3px; }
-
-    /* ===== Stake picker ===== */
-    .stake-section { margin-top: 18px; width: 92%; max-width: 380px; }
-    .stake-label { text-align: center; font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 10px; }
-    .stakes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .stake-btn {
-      background: rgba(255,255,255,0.07);
-      border: 2px solid rgba(255,255,255,0.13);
-      border-radius: 12px;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-      padding: 11px 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative; overflow: hidden;
-    }
-    .stake-btn.active {
-      border-color: #ffd200;
-      box-shadow: 0 0 14px rgba(255,210,0,0.35);
-      transform: scale(1.04);
-    }
-    .stake-btn:active { transform: scale(0.95); }
-
-    /* ===== Spin button ===== */
-    .spin-btn {
-      margin-top: 16px;
-      width: 92%; max-width: 380px;
-      padding: 15px;
-      font-size: 17px; font-weight: 800;
-      border: none; border-radius: 16px;
-      background: linear-gradient(135deg, #f7971e, #ffd200);
-      color: #1a1a1a;
-      cursor: pointer;
-      box-shadow: 0 4px 18px rgba(247,151,30,0.45);
-      transition: all 0.2s;
-    }
-    .spin-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(247,151,30,0.65); }
-    .spin-btn:active { transform: scale(0.97); }
-    .spin-btn:disabled {
-      background: linear-gradient(135deg, #444, #666);
-      color: #999; cursor: not-allowed;
-      box-shadow: none; transform: none;
-    }
-
-    /* ===== Cooldown bar ===== */
-    .cd-wrap {
-      width: 92%; max-width: 380px;
-      margin-top: 10px; height: 5px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px; overflow: hidden;
-      display: none;
-    }
-    .cd-bar {
-      height: 100%;
-      background: linear-gradient(90deg, #f7971e, #ffd200);
-      border-radius: 10px; width: 100%;
-      transition: width linear;
-    }
-
-    /* ===== Result inline ===== */
-    .result-inline {
-      display: none;
-      width: 92%; max-width: 380px;
-      margin-top: 14px;
-      border-radius: 18px;
-      padding: 20px;
-      text-align: center;
-      animation: slideIn 0.35s ease;
-    }
-    @keyframes slideIn {
-      from { transform: translateY(20px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
-    }
-    .result-inline.win-res  { background: linear-gradient(135deg, rgba(39,174,96,0.25), rgba(46,204,113,0.1)); border: 2px solid #27ae60; }
-    .result-inline.lose-res { background: linear-gradient(135deg, rgba(231,76,60,0.25),  rgba(192,57,43,0.1));  border: 2px solid #e74c3c; }
-    .result-inline.retry-res{ background: linear-gradient(135deg, rgba(52,152,219,0.25), rgba(41,128,185,0.1)); border: 2px solid #3498db; }
+    .stat-value { font-size: 15px; font-weight: 700; }
+    .stakes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 15px; width: 92%; max-width: 380px; }
+    .stake-btn { background: rgba(255,255,255,0.07); border: 2px solid rgba(255,255,255,0.13); border-radius: 12px; color: #fff; padding: 11px; cursor: pointer; font-weight: bold; }
+    .stake-btn.active { border-color: #ffd200; background: rgba(255,210,0,0.1); }
+    .spin-btn { margin-top: 20px; width: 92%; max-width: 380px; padding: 15px; font-size: 18px; font-weight: 800; border: none; border-radius: 16px; background: linear-gradient(135deg, #f7971e, #ffd200); color: #1a1a1a; cursor: pointer; }
+    .spin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .result-inline { display: none; width: 92%; max-width: 380px; margin-top: 14px; border-radius: 18px; padding: 20px; text-align: center; border: 2px solid transparent; }
     .result-inline.show { display: block; }
-    .res-icon  { font-size: 50px; }
-    .res-title { font-size: 22px; font-weight: 800; margin: 6px 0 4px; }
-    .res-sub   { font-size: 14px; color: rgba(255,255,255,0.7); }
-
-    /* ===== Admin Panel ===== */
-    .admin-panel { width: 92%; max-width: 380px; margin-top: 16px; }
-    .admin-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-    .admin-stat-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 15px; text-align: center; }
-    .admin-card-num { font-size: 20px; font-weight: 800; color: #ffd200; }
-    .admin-card-lbl { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px; }
-
-    /* ===== Stats panel ===== */
-    .stats-panel { width: 92%; max-width: 400px; margin-top: 16px; }
-    .stats-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .stats-header h3 { font-size: 16px; font-weight: 700; }
-    .refresh-btn { background: rgba(255,255,255,0.1); border: none; border-radius: 10px; color: #fff; padding: 6px 12px; font-size: 12px; cursor: pointer; }
-
-    .my-card {
-      background: linear-gradient(135deg, rgba(247,151,30,0.18), rgba(255,210,0,0.10));
-      border: 1px solid rgba(247,151,30,0.4);
-      border-radius: 18px;
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-    .my-avatar-placeholder { width: 62px; height: 62px; border-radius: 50%; border: 2.5px solid #ffd200; background: linear-gradient(135deg,#f7971e,#ffd200); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
-    .my-info { flex: 1; min-width: 0; }
-    .my-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .my-balance { font-size: 20px; font-weight: 800; color: #ffd200; margin-bottom: 6px; }
-
-    .total-box { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-    .total-box-lbl { font-size: 13px; color: rgba(255,255,255,0.6); }
-    .total-box-num { font-size: 24px; font-weight: 800; color: #ffd200; }
-
-    .lb-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.75); margin-bottom: 10px; }
-    .winners-list { display: flex; flex-direction: column; gap: 8px; }
-    .winner-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
-    .winner-rank { font-size: 20px; width: 28px; text-align: center; }
-    .winner-info { flex: 1; }
-    .winner-name { font-size: 13px; font-weight: 600; }
-    .winner-pts  { font-size: 12px; font-weight: 700; color: #2ecc71; }
-
-    .loading-txt { text-align: center; color: rgba(255,255,255,0.4); padding: 30px; font-size: 14px; }
-
-    .confetti-piece { position: fixed; width: 10px; height: 10px; top: -20px; z-index: 1000; animation: confetti-fall linear forwards; }
-    @keyframes confetti-fall { to { transform: translateY(110vh) rotate(720deg); } }
+    .result-inline.win-res { background: rgba(39,174,96,0.2); border-color: #27ae60; }
+    .result-inline.lose-res { background: rgba(231,76,60,0.2); border-color: #e74c3c; }
+    .result-inline.retry-res { background: rgba(52,152,219,0.2); border-color: #3498db; }
   </style>
 </head>
 <body>
-
   <div class="header">
     <div class="header-title">🎰 لعبة الحظ</div>
-    <div class="balance-box" id="balance-display" onclick="refreshBalance()">💰 0 نقطة</div>
+    <div class="balance-box" id="balance-display">💰 0 نقطة</div>
   </div>
-
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('game', this)">🎮 اللعب</button>
     <button class="tab-btn" onclick="switchTab('stats', this)">📊 المتصدرون</button>
-    <button class="tab-btn" id="admin-tab-btn" style="display:none" onclick="switchTab('admin', this)">⚙️ الأدمن</button>
   </div>
-
-  <div class="content">
-    <!-- ===== GAME PANEL ===== -->
+  <div class="content" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
     <div class="panel show" id="panel-game">
-      <div class="wheel-section">
-        <div class="wheel-wrapper">
-          <div class="needle"></div>
-          <canvas id="wheel" width="260" height="260"></canvas>
-          <div class="wheel-center">🎡</div>
-        </div>
-      </div>
-
+      <div class="wheel-section"><div class="wheel-wrapper"><div class="needle"></div><canvas id="wheel" width="260" height="260"></canvas><div class="wheel-center">🎡</div></div></div>
       <div class="stats-row">
-        <div class="stat-box">
-          <div class="stat-label">الجولات</div>
-          <div class="stat-value" id="st-plays">0</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">الفوز</div>
-          <div class="stat-value" style="color:#2ecc71" id="st-wins">0</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">الخسارة</div>
-          <div class="stat-value" style="color:#e74c3c" id="st-loses">0</div>
-        </div>
+        <div class="stat-box"><div class="stat-label">الجولات</div><div class="stat-value" id="st-plays">0</div></div>
+        <div class="stat-box"><div class="stat-label">الفوز</div><div class="stat-value" id="st-wins" style="color:#2ecc71">0</div></div>
+        <div class="stat-box"><div class="stat-label">الخسارة</div><div class="stat-value" id="st-loses" style="color:#e74c3c">0</div></div>
       </div>
-
-      <div class="stake-section">
-        <div class="stake-label">💰 اختر مبلغ الرهان</div>
-        <div class="stakes-grid" id="stakes-grid"></div>
-      </div>
-
+      <div class="stakes-grid" id="stakes-grid"></div>
       <button class="spin-btn" id="spin-btn" onclick="startSpin()">🎰 ادور العجلة</button>
-
-      <div class="cd-wrap" id="cd-wrap">
-        <div class="cd-bar" id="cd-bar"></div>
-      </div>
-
-      <div class="result-inline" id="result-inline">
-        <div class="res-icon" id="res-icon">🎉</div>
-        <div class="res-title" id="res-title">مبروك!</div>
-        <div class="res-sub"   id="res-sub"></div>
-      </div>
+      <div class="result-inline" id="result-inline"><div id="res-icon" style="font-size:40px"></div><div id="res-title" style="font-size:20px; font-weight:bold"></div><div id="res-sub"></div></div>
     </div>
-
-    <!-- ===== ADMIN PANEL ===== -->
-    <div class="panel" id="panel-admin">
-      <div class="admin-panel">
-        <div class="stats-header"><h3>⚙️ لوحة الأدمن</h3></div>
-        <div class="admin-stat-grid">
-          <div class="admin-stat-card">
-            <div class="admin-card-num" id="adm-active-now">0</div>
-            <div class="admin-card-lbl">نشطون الآن</div>
-          </div>
-          <div class="admin-stat-card">
-            <div class="admin-card-num" id="adm-profit">0</div>
-            <div class="admin-card-lbl">أرباح البوت</div>
-          </div>
-        </div>
-        <div class="loading-txt" id="adm-loading">⏳ جاري تحميل بيانات الأدمن...</div>
-      </div>
-    </div>
-
-    <!-- ===== STATS PANEL ===== -->
-    <div class="panel" id="panel-stats">
-      <div class="stats-panel">
-        <div class="stats-header">
-          <h3>📊 الإحصائيات</h3>
-          <button class="refresh-btn" onclick="loadStats()">🔄 تحديث</button>
-        </div>
-
-        <div class="my-card" id="my-card">
-          <div class="my-avatar-placeholder">🎮</div>
-          <div class="my-info">
-            <div class="my-name" id="my-name">لاعب</div>
-            <div class="my-balance" id="my-balance-stat">0 نقطة</div>
-          </div>
-        </div>
-
-        <div class="total-box">
-          <div class="total-box-lbl">👥 إجمالي المشاركين</div>
-          <div class="total-box-num" id="stat-participants">0</div>
-        </div>
-
-        <div class="lb-title">🏆 أكثر الفائزين</div>
-        <div class="winners-list" id="winners-list">
-          <div class="loading-txt">⏳ جاري التحميل...</div>
-        </div>
-      </div>
+    <div class="panel" id="panel-stats" style="width: 92%; max-width: 380px; margin-top: 20px;">
+      <h3>📊 المتصدرون</h3>
+      <div id="winners-list" style="margin-top: 15px;"></div>
     </div>
   </div>
-
 <script>
   const tg = window.Telegram?.WebApp;
-  const API = "https://bot.tota.click"; // رابط السيرفر الأصلي كما هو
+  // الرابط الجديد للسيرفر (يجب أن يكون HTTPS ليعمل على الجوال)
+  const API = "https://5000-i5nm21p7k72sruii71ebj-5d89b684.us1.manus.computer"; 
   const STAKES = [250, 500, 750, 1000, 5000, 10000];
-  const COOLDOWN = 3;
   const initData = tg?.initData || "";
-
   if (tg) { tg.ready(); tg.expand(); }
 
-  let balance = 0;
-  let selectedStake = 500;
-  let isSpinning = false;
-  let rotation = 0;
-  let plays=0, wins=0, loses=0;
-  let isAdmin = false;
+  let balance = 0, selectedStake = 500, isSpinning = false, rotation = 0, plays=0, wins=0, loses=0;
 
-  // وظيفة التحقق المطلوبة
   async function authFetch(url, opts = {}) {
     if (!opts.headers) opts.headers = {};
     opts.headers['X-Tg-Init'] = initData;
@@ -387,206 +87,73 @@
     document.getElementById('panel-' + name).classList.add('show');
     btn.classList.add('active');
     if (name === 'stats') loadStats();
-    if (name === 'admin') loadAdminStats();
   }
 
-  // ===== Wheel Design =====
-  const SEGS = [
-    { label:'🏆 فوز',    color:'#1e8449', light:'#27ae60' },
-    { label:'❌ خسارة',  color:'#922b21', light:'#c0392b' },
-    { label:'🔁 إعادة', color:'#1a5276', light:'#2980b9' },
-    { label:'🏆 فوز',   color:'#27ae60', light:'#2ecc71' },
-    { label:'❌ خسارة', color:'#c0392b', light:'#e74c3c' },
-    { label:'🔁 إعادة', color:'#1a5276', light:'#2980b9' },
-  ];
-  const N = SEGS.length;
-  const SA = 360 / N;
-  const cvs = document.getElementById('wheel');
-  const ctx = cvs.getContext('2d');
-  const CX = cvs.width/2, CY = cvs.height/2, R = CX - 5;
-
+  const SEGS = [{label:'فوز',c:'#1e8449'},{label:'خسارة',c:'#922b21'},{label:'إعادة',c:'#1a5276'},{label:'فوز',c:'#27ae60'},{label:'خسارة',c:'#c0392b'},{label:'إعادة',c:'#1a5276'}];
+  const cvs = document.getElementById('wheel'), ctx = cvs.getContext('2d'), CX = 130, CY = 130, R = 125;
   function drawWheel(rot) {
-    ctx.clearRect(0,0,cvs.width,cvs.height);
+    ctx.clearRect(0,0,260,260);
     const off = (rot - 90) * Math.PI / 180;
     SEGS.forEach((s,i) => {
-      const st = off + i * SA * Math.PI/180;
-      const en = st + SA * Math.PI/180;
-      const g = ctx.createRadialGradient(CX,CY,R*0.15,CX,CY,R);
-      g.addColorStop(0, s.light); g.addColorStop(1, s.color);
-      ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,st,en); ctx.closePath();
-      ctx.fillStyle = g; ctx.fill();
-      ctx.strokeStyle='rgba(255,255,255,0.5)'; ctx.lineWidth=2; ctx.stroke();
-    });
-    SEGS.forEach((s,i) => {
-      const midAngle = off + i * SA * Math.PI/180 + (SA/2) * Math.PI/180;
-      ctx.save();
-      ctx.translate(CX + Math.cos(midAngle) * R * 0.65, CY + Math.sin(midAngle) * R * 0.65);
-      ctx.rotate(midAngle + Math.PI/2);
-      ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.font = 'bold 14px Arial';
-      ctx.fillText(s.label, 0, 0);
-      ctx.restore();
+      const st = off + i * (60 * Math.PI/180), en = st + (60 * Math.PI/180);
+      ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,st,en); ctx.fillStyle = s.c; ctx.fill();
+      ctx.strokeStyle = 'white'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.save(); ctx.translate(CX+Math.cos(st+0.5)*R*0.7, CY+Math.sin(st+0.5)*R*0.7); ctx.rotate(st+0.5+Math.PI/2);
+      ctx.textAlign='center'; ctx.fillStyle='white'; ctx.font='bold 12px Arial'; ctx.fillText(s.label,0,0); ctx.restore();
     });
   }
   drawWheel(0);
 
-  // ===== Logic =====
   const grid = document.getElementById('stakes-grid');
   STAKES.forEach(s => {
-    const b = document.createElement('button');
-    b.className = 'stake-btn' + (s===selectedStake?' active':'');
-    b.textContent = s >= 1000 ? (s/1000)+'K' : s;
-    b.onclick = () => {
-      document.querySelectorAll('.stake-btn').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active'); selectedStake = s;
-    };
+    const b = document.createElement('button'); b.className = 'stake-btn' + (s===selectedStake?' active':''); b.textContent = s;
+    b.onclick = () => { document.querySelectorAll('.stake-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); selectedStake = s; };
     grid.appendChild(b);
   });
 
-  function updateBalanceUI(v) {
-    balance = v;
-    const txt = Number(v).toLocaleString() + ' نقطة';
-    document.getElementById('balance-display').textContent = '💰 ' + txt;
-    if(document.getElementById('my-balance-stat')) document.getElementById('my-balance-stat').textContent = txt;
-  }
-
   async function refreshBalance() {
-    if (!initData) return;
     try {
       const r = await authFetch(`${API}/api/lucky/balance`);
       const d = await r.json();
-      if (d.balance !== undefined) updateBalanceUI(d.balance);
-    } catch(e) {}
+      if (d.balance !== undefined) { balance = d.balance; document.getElementById('balance-display').textContent = '💰 ' + balance.toLocaleString() + ' نقطة'; }
+    } catch(e) { console.error("Balance Error:", e); }
   }
 
   async function startSpin() {
     if (isSpinning) return;
-    if (!initData) { alert('افتح اللعبة من تليجرام'); return; }
-
-    isSpinning = true;
-    document.getElementById('spin-btn').disabled = true;
-    document.getElementById('result-inline').classList.remove('show');
-
+    isSpinning = true; document.getElementById('spin-btn').disabled = true;
     try {
-      const r = await authFetch(`${API}/api/lucky/play`, {
-        method: 'POST',
-        body: JSON.stringify({ stake: selectedStake })
-      });
+      const r = await authFetch(`${API}/api/lucky/play`, { method: 'POST', body: JSON.stringify({ stake: selectedStake }) });
       const data = await r.json();
-
-      if (data.error) {
-        alert(data.error === 'insufficient_balance' ? 'رصيدك لا يكفي' : 'خطأ في العملية');
-        isSpinning = false;
-        document.getElementById('spin-btn').disabled = false;
-        return;
+      if (data.error) { alert("رصيدك غير كافٍ"); isSpinning = false; document.getElementById('spin-btn').disabled = false; return; }
+      const targetSeg = {win:0, lose:1, retry:2}[data.outcome];
+      const finalRot = rotation + 360 * 5 + (360 - targetSeg * 60 - 30);
+      const start = performance.now();
+      function anim(now) {
+        const p = Math.min((now - start) / 4000, 1), ease = 1 - Math.pow(1 - p, 3);
+        rotation = rotation + (finalRot - rotation) * ease; drawWheel(rotation % 360);
+        if (p < 1) requestAnimationFrame(anim);
+        else {
+          isSpinning = false; document.getElementById('spin-btn').disabled = false;
+          refreshBalance();
+          const res = document.getElementById('result-inline'); res.className = 'result-inline show ' + data.outcome + '-res';
+          document.getElementById('res-icon').textContent = data.outcome === 'win' ? '🎉' : '😢';
+          document.getElementById('res-title').textContent = data.outcome === 'win' ? 'مبروك فزت!' : 'حظ أوفر';
+          document.getElementById('res-sub').textContent = `النتيجة: ${data.earned}`;
+        }
       }
-
-      const segOptions = { win:[0,3], lose:[1,4], retry:[2,5] };
-      const targetSeg = segOptions[data.outcome][Math.floor(Math.random()*2)];
-      const stopAngle = 360 - (targetSeg * SA) - (SA/2);
-      const finalRot = rotation + 360 * 5 + stopAngle;
-
-      const startTime = performance.now();
-      const duration = 4000;
-      const startRot = rotation;
-
-      function animate(now) {
-        const p = Math.min((now - startTime) / duration, 1);
-        const ease = 1 - Math.pow(1 - p, 3);
-        rotation = startRot + (finalRot - startRot) * ease;
-        drawWheel(rotation % 360);
-        if (p < 1) requestAnimationFrame(animate);
-        else finishSpin(data);
-      }
-      requestAnimationFrame(animate);
-
-    } catch(e) {
-      alert('خطأ في الاتصال بالسيرفر');
-      isSpinning = false;
-      document.getElementById('spin-btn').disabled = false;
-    }
-  }
-
-  function finishSpin(data) {
-    updateBalanceUI(data.new_balance);
-    plays++;
-    if (data.outcome==='win') wins++;
-    if (data.outcome==='lose') loses++;
-    document.getElementById('st-plays').textContent = plays;
-    document.getElementById('st-wins').textContent = wins;
-    document.getElementById('st-loses').textContent = loses;
-
-    const res = document.getElementById('result-inline');
-    res.classList.remove('win-res','lose-res','retry-res');
-    res.classList.add(data.outcome + '-res');
-    document.getElementById('res-icon').textContent = data.outcome==='win' ? '🎉' : (data.outcome==='lose' ? '😢' : '🔁');
-    document.getElementById('res-title').textContent = data.outcome==='win' ? 'مبروك! فزت' : (data.outcome==='lose' ? 'خسرت' : 'إعادة');
-    document.getElementById('res-sub').textContent = data.outcome==='retry' ? 'لم تخسر شيئاً' : `المبلغ: ${data.earned}`;
-    res.classList.add('show');
-
-    if (data.outcome==='win') launchConfetti();
-
-    setTimeout(() => {
-      isSpinning = false;
-      document.getElementById('spin-btn').disabled = false;
-    }, COOLDOWN * 1000);
+      requestAnimationFrame(anim);
+    } catch(e) { alert("خطأ في الاتصال"); isSpinning = false; document.getElementById('spin-btn').disabled = false; }
   }
 
   async function loadStats() {
     try {
       const r = await authFetch(`${API}/api/lucky/stats`);
       const d = await r.json();
-      document.getElementById('my-name').textContent = tg?.initDataUnsafe?.user?.first_name || 'لاعب';
-      document.getElementById('stat-participants').textContent = d.participants || 0;
-      const list = document.getElementById('winners-list');
-      if (d.last10) {
-        list.innerHTML = d.last10.map((w, i) => `
-          <div class="winner-item">
-            <span class="winner-rank">${i+1}</span>
-            <div class="winner-info">
-              <div class="winner-name">${w.name}</div>
-              <div class="winner-pts">+${w.total_won} نقطة</div>
-            </div>
-          </div>
-        `).join('');
-      }
+      document.getElementById('winners-list').innerHTML = d.last10.map(w => `<div style="padding:10px; background:rgba(255,255,255,0.05); margin-bottom:5px; border-radius:10px;">${w.name}: ${w.total_won} نقطة</div>`).join('');
     } catch(e) {}
   }
 
-  async function checkAdmin() {
-    try {
-      const r = await authFetch(`${API}/api/lucky/admin/check`);
-      const d = await r.json();
-      if (d.is_admin) {
-        isAdmin = true;
-        document.getElementById('admin-tab-btn').style.display = '';
-      }
-    } catch(e) {}
-  }
-
-  async function loadAdminStats() {
-    if (!isAdmin) return;
-    try {
-      const r = await authFetch(`${API}/api/lucky/admin/stats`);
-      const d = await r.json();
-      document.getElementById('adm-active-now').textContent = d.active_now;
-      document.getElementById('adm-profit').textContent = d.profit;
-      document.getElementById('adm-loading').style.display = 'none';
-    } catch(e) {}
-  }
-
-  function launchConfetti() {
-    for(let i=0; i<30; i++) {
-      const c = document.createElement('div');
-      c.className = 'confetti-piece';
-      c.style.left = Math.random() * 100 + 'vw';
-      c.style.backgroundColor = ['#ffd200','#2ecc71','#e74c3c','#3498db'][Math.floor(Math.random()*4)];
-      c.style.animationDuration = (Math.random() * 2 + 1) + 's';
-      document.body.appendChild(c);
-      setTimeout(() => c.remove(), 3000);
-    }
-  }
-
-  checkAdmin();
   refreshBalance();
 </script>
 </body>
