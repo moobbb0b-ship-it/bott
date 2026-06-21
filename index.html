@@ -1,4 +1,4 @@
-<!-- v12.1 - Enhanced Security & Unified API -->
+<!-- v12.2 - Original Design Restored with Security Layer -->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -80,10 +80,6 @@
     /* ===== Tab panels ===== */
     .panel { display: none; width: 100%; flex-direction: column; align-items: center; }
     .panel.show { display: flex; }
-
-    /* ===== Particles ===== */
-    #particles { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
-    .content { position: relative; z-index: 1; width: 100%; display: flex; flex-direction: column; align-items: center; }
 
     /* ===== Wheel ===== */
     .wheel-section { margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
@@ -189,7 +185,7 @@
       transition: width linear;
     }
 
-    /* ===== Result card (inline, not popup) ===== */
+    /* ===== Result inline ===== */
     .result-inline {
       display: none;
       width: 92%; max-width: 380px;
@@ -211,21 +207,18 @@
     .res-title { font-size: 22px; font-weight: 800; margin: 6px 0 4px; }
     .res-sub   { font-size: 14px; color: rgba(255,255,255,0.7); }
 
+    /* ===== Admin Panel ===== */
+    .admin-panel { width: 92%; max-width: 380px; margin-top: 16px; }
+    .admin-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+    .admin-stat-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 15px; text-align: center; }
+    .admin-card-num { font-size: 20px; font-weight: 800; color: #ffd200; }
+    .admin-card-lbl { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+
     /* ===== Stats panel ===== */
     .stats-panel { width: 92%; max-width: 400px; margin-top: 16px; }
-    .stats-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 14px;
-    }
+    .stats-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
     .stats-header h3 { font-size: 16px; font-weight: 700; }
-    .refresh-btn {
-      background: rgba(255,255,255,0.1);
-      border: none; border-radius: 10px;
-      color: #fff; padding: 6px 12px;
-      font-size: 12px; cursor: pointer;
-      transition: all 0.2s;
-    }
-    .refresh-btn:active { transform: scale(0.95); }
+    .refresh-btn { background: rgba(255,255,255,0.1); border: none; border-radius: 10px; color: #fff; padding: 6px 12px; font-size: 12px; cursor: pointer; }
 
     .my-card {
       background: linear-gradient(135deg, rgba(247,151,30,0.18), rgba(255,210,0,0.10));
@@ -237,40 +230,18 @@
       gap: 14px;
       margin-bottom: 16px;
     }
-    .my-avatar-placeholder {
-      width: 62px; height: 62px;
-      border-radius: 50%;
-      border: 2.5px solid #ffd200;
-      background: linear-gradient(135deg,#f7971e,#ffd200);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; flex-shrink: 0;
-    }
+    .my-avatar-placeholder { width: 62px; height: 62px; border-radius: 50%; border: 2.5px solid #ffd200; background: linear-gradient(135deg,#f7971e,#ffd200); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
     .my-info { flex: 1; min-width: 0; }
     .my-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .my-balance { font-size: 20px; font-weight: 800; color: #ffd200; margin-bottom: 6px; }
 
-    .total-box {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      padding: 12px 16px;
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 16px;
-    }
+    .total-box { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
     .total-box-lbl { font-size: 13px; color: rgba(255,255,255,0.6); }
     .total-box-num { font-size: 24px; font-weight: 800; color: #ffd200; }
 
     .lb-title { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.75); margin-bottom: 10px; }
     .winners-list { display: flex; flex-direction: column; gap: 8px; }
-    .winner-item {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .winner-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
     .winner-rank { font-size: 20px; width: 28px; text-align: center; }
     .winner-info { flex: 1; }
     .winner-name { font-size: 13px; font-weight: 600; }
@@ -278,16 +249,8 @@
 
     .loading-txt { text-align: center; color: rgba(255,255,255,0.4); padding: 30px; font-size: 14px; }
 
-    .confetti-piece {
-      position: fixed;
-      width: 10px; height: 10px;
-      top: -20px;
-      z-index: 1000;
-      animation: confetti-fall linear forwards;
-    }
-    @keyframes confetti-fall {
-      to { transform: translateY(110vh) rotate(720deg); }
-    }
+    .confetti-piece { position: fixed; width: 10px; height: 10px; top: -20px; z-index: 1000; animation: confetti-fall linear forwards; }
+    @keyframes confetti-fall { to { transform: translateY(110vh) rotate(720deg); } }
   </style>
 </head>
 <body>
@@ -300,6 +263,7 @@
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('game', this)">🎮 اللعب</button>
     <button class="tab-btn" onclick="switchTab('stats', this)">📊 المتصدرون</button>
+    <button class="tab-btn" id="admin-tab-btn" style="display:none" onclick="switchTab('admin', this)">⚙️ الأدمن</button>
   </div>
 
   <div class="content">
@@ -346,6 +310,24 @@
       </div>
     </div>
 
+    <!-- ===== ADMIN PANEL ===== -->
+    <div class="panel" id="panel-admin">
+      <div class="admin-panel">
+        <div class="stats-header"><h3>⚙️ لوحة الأدمن</h3></div>
+        <div class="admin-stat-grid">
+          <div class="admin-stat-card">
+            <div class="admin-card-num" id="adm-active-now">0</div>
+            <div class="admin-card-lbl">نشطون الآن</div>
+          </div>
+          <div class="admin-stat-card">
+            <div class="admin-card-num" id="adm-profit">0</div>
+            <div class="admin-card-lbl">أرباح البوت</div>
+          </div>
+        </div>
+        <div class="loading-txt" id="adm-loading">⏳ جاري تحميل بيانات الأدمن...</div>
+      </div>
+    </div>
+
     <!-- ===== STATS PANEL ===== -->
     <div class="panel" id="panel-stats">
       <div class="stats-panel">
@@ -377,7 +359,7 @@
 
 <script>
   const tg = window.Telegram?.WebApp;
-  const API = ""; // استخدام مسار نسبي لسهولة الربط
+  const API = "https://bot.tota.click"; // رابط السيرفر الأصلي كما هو
   const STAKES = [250, 500, 750, 1000, 5000, 10000];
   const COOLDOWN = 3;
   const initData = tg?.initData || "";
@@ -389,7 +371,9 @@
   let isSpinning = false;
   let rotation = 0;
   let plays=0, wins=0, loses=0;
+  let isAdmin = false;
 
+  // وظيفة التحقق المطلوبة
   async function authFetch(url, opts = {}) {
     if (!opts.headers) opts.headers = {};
     opts.headers['X-Tg-Init'] = initData;
@@ -403,9 +387,10 @@
     document.getElementById('panel-' + name).classList.add('show');
     btn.classList.add('active');
     if (name === 'stats') loadStats();
+    if (name === 'admin') loadAdminStats();
   }
 
-  // ===== Wheel =====
+  // ===== Wheel Design =====
   const SEGS = [
     { label:'🏆 فوز',    color:'#1e8449', light:'#27ae60' },
     { label:'❌ خسارة',  color:'#922b21', light:'#c0392b' },
@@ -449,7 +434,7 @@
   STAKES.forEach(s => {
     const b = document.createElement('button');
     b.className = 'stake-btn' + (s===selectedStake?' active':'');
-    b.textContent = s;
+    b.textContent = s >= 1000 ? (s/1000)+'K' : s;
     b.onclick = () => {
       document.querySelectorAll('.stake-btn').forEach(x=>x.classList.remove('active'));
       b.classList.add('active'); selectedStake = s;
@@ -467,7 +452,7 @@
   async function refreshBalance() {
     if (!initData) return;
     try {
-      const r = await authFetch(`${API}/api/balance`);
+      const r = await authFetch(`${API}/api/lucky/balance`);
       const d = await r.json();
       if (d.balance !== undefined) updateBalanceUI(d.balance);
     } catch(e) {}
@@ -482,7 +467,7 @@
     document.getElementById('result-inline').classList.remove('show');
 
     try {
-      const r = await authFetch(`${API}/api/play`, {
+      const r = await authFetch(`${API}/api/lucky/play`, {
         method: 'POST',
         body: JSON.stringify({ stake: selectedStake })
       });
@@ -548,11 +533,44 @@
 
   async function loadStats() {
     try {
-      const r = await authFetch(`${API}/api/balance`); // نستخدم نفس المسار لتبسيط الكود حالياً
+      const r = await authFetch(`${API}/api/lucky/stats`);
       const d = await r.json();
       document.getElementById('my-name').textContent = tg?.initDataUnsafe?.user?.first_name || 'لاعب';
-      updateBalanceUI(d.balance);
-      document.getElementById('winners-list').innerHTML = '<div class="loading-txt">سيتم عرض المتصدرين قريباً</div>';
+      document.getElementById('stat-participants').textContent = d.participants || 0;
+      const list = document.getElementById('winners-list');
+      if (d.last10) {
+        list.innerHTML = d.last10.map((w, i) => `
+          <div class="winner-item">
+            <span class="winner-rank">${i+1}</span>
+            <div class="winner-info">
+              <div class="winner-name">${w.name}</div>
+              <div class="winner-pts">+${w.total_won} نقطة</div>
+            </div>
+          </div>
+        `).join('');
+      }
+    } catch(e) {}
+  }
+
+  async function checkAdmin() {
+    try {
+      const r = await authFetch(`${API}/api/lucky/admin/check`);
+      const d = await r.json();
+      if (d.is_admin) {
+        isAdmin = true;
+        document.getElementById('admin-tab-btn').style.display = '';
+      }
+    } catch(e) {}
+  }
+
+  async function loadAdminStats() {
+    if (!isAdmin) return;
+    try {
+      const r = await authFetch(`${API}/api/lucky/admin/stats`);
+      const d = await r.json();
+      document.getElementById('adm-active-now').textContent = d.active_now;
+      document.getElementById('adm-profit').textContent = d.profit;
+      document.getElementById('adm-loading').style.display = 'none';
     } catch(e) {}
   }
 
@@ -568,6 +586,7 @@
     }
   }
 
+  checkAdmin();
   refreshBalance();
 </script>
 </body>
